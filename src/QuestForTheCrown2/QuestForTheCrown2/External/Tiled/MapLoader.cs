@@ -19,8 +19,8 @@ namespace QuestForTheCrown2.External.Tiled
             #region Create Map
             XElement mapElement = doc.Element("map");
             string name = Path.GetFileName(tmxFile).Replace(".tmx", "");
-            Vector2 size = new Vector2(float.Parse( mapElement.Attribute("width").Value ), float.Parse( mapElement.Attribute("height").Value ) );
-            Vector2 tileSize = new Vector2(float.Parse(mapElement.Attribute("tilewidth").Value), float.Parse(mapElement.Attribute("tileheight").Value));
+            Point size = new Point(int.Parse(mapElement.Attribute("width").Value), int.Parse(mapElement.Attribute("height").Value));
+            Point tileSize = new Point(int.Parse(mapElement.Attribute("tilewidth").Value), int.Parse(mapElement.Attribute("tileheight").Value));
 
             map = new Map(name, size, tileSize);
             #endregion Create Map
@@ -30,10 +30,10 @@ namespace QuestForTheCrown2.External.Tiled
             {
                 int firstgid = int.Parse(set.Attribute("firstgid").Value);
                 string tilename = set.Attribute("name").Value;
-                Vector2 tilesSize = new Vector2(float.Parse(set.Attribute("tilewidth").Value), float.Parse(set.Attribute("tileheight").Value));
+                Point tilesSize = new Point(int.Parse(set.Attribute("tilewidth").Value), int.Parse(set.Attribute("tileheight").Value));
                 XElement image = set.Element("image");
                 string imageSource = image.Attribute("source").Value.Replace("../", ""); //Removes relative path (since we'll use Content)
-                Vector2 imageSize = new Vector2(float.Parse(image.Attribute("width").Value), float.Parse(image.Attribute("height").Value));
+                Point imageSize = new Point(int.Parse(image.Attribute("width").Value), int.Parse(image.Attribute("height").Value));
 
                 Tileset tileset = new Tileset(firstgid, name, tilesSize,  imageSource, imageSize);
 
@@ -56,11 +56,10 @@ namespace QuestForTheCrown2.External.Tiled
             foreach( XElement lay in mapElement.Elements("layer") )
             {
                 string layerName = lay.Attribute("name").Value;
-                int width = int.Parse(lay.Attribute("width").Value);
-                int height = int.Parse(lay.Attribute("height").Value);
+                Point layersize = new Point( int.Parse(lay.Attribute("width").Value), int.Parse(lay.Attribute("height").Value) );
                 string csvdata = lay.Element("data").Value;
 
-                Layer layer = new Layer( layerName,  width, height, csvdata );
+                Layer layer = new Layer(layerName, layersize, csvdata);
                 map.Layers.Add(layer);
             }
             #endregion Layers

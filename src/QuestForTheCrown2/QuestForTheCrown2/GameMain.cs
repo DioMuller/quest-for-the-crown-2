@@ -22,6 +22,7 @@ namespace QuestForTheCrown2
         SpriteBatch spriteBatch;
 
         Map map;
+        Texture2D tilesetTest;
 
         public GameMain()
             : base()
@@ -53,8 +54,7 @@ namespace QuestForTheCrown2
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             map = MapLoader.LoadMap("Content\\maps\\Overworld01.tmx");
-
-            // TODO: use this.Content to load your game content here
+            tilesetTest = Content.Load<Texture2D>(map.Tilesets[0].Source);
         }
 
         /// <summary>
@@ -89,7 +89,18 @@ namespace QuestForTheCrown2
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            foreach( Layer layer in map.Layers )
+            {
+                for( int y = 0; y < layer.Size.Y; y++ )
+                {
+                    for( int x = 0; x < layer.Size.X; x++ )
+                    {
+                        spriteBatch.Draw(tilesetTest, new Rectangle( x * map.TileSize.X, y * map.TileSize.Y, map.TileSize.X, map.TileSize.Y), map.Tilesets[0].GetRect( layer.GetData(x,y) ), Color.White);
+                    }
+                } 
+            }
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

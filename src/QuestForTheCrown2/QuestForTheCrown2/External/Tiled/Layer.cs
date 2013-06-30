@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace QuestForTheCrown2.External.Tiled
 {
@@ -26,12 +27,7 @@ namespace QuestForTheCrown2.External.Tiled
         /// <summary>
         /// Layer Width
         /// </summary>
-        public int Width { get; private set; }
-
-        /// <summary>
-        /// Layer Height
-        /// </summary>
-        public int Height { get; private set; }
+        public Point Size { get; private set; }
         #endregion Properties
 
         #region Constructor
@@ -42,20 +38,19 @@ namespace QuestForTheCrown2.External.Tiled
         /// <param name="width">Layer width</param>
         /// <param name="height">Layer height</param>
         /// <param name="csvdata">CSV Data</param>
-        public Layer(string name, int width, int height, string csvdata)
+        public Layer(string name, Point size, string csvdata)
         {
             Name = name;
-            Width = width;
-            Height = height;
+            Size = size;
 
-            _data = new int[Width,Height];
+            _data = new int[Size.X, Size.Y];
             string[] separated = csvdata.Split(',');
 
-            if( separated.Length != (Width * Height) ) throw new InvalidOperationException("The csv data size is different from the Layer data size");
+            if (separated.Length != (Size.X * Size.Y)) throw new InvalidOperationException("The csv data size is different from the Layer data size");
 
             for( int i = 0; i < separated.Length; i++ )
             {
-                _data[ i % Width, i / Width] = int.Parse(separated[i]);
+                _data[i % Size.X, i / Size.X] = int.Parse(separated[i]);
             }
         }
         #endregion Constructor

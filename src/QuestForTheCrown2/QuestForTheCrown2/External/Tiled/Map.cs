@@ -17,12 +17,12 @@ namespace QuestForTheCrown2.External.Tiled
         /// <summary>
         /// Map size (in tiles).
         /// </summary>
-        public Vector2 Size { get; private set; }
+        public Point Size { get; private set; }
 
         /// <summary>
         /// Tile Size
         /// </summary>
-        public Vector2 TileSize { get; private set; }
+        public Point TileSize { get; private set; }
 
         /// <summary>
         /// Tilesets.
@@ -36,7 +36,7 @@ namespace QuestForTheCrown2.External.Tiled
         #endregion Properties
 
         #region Constructor
-        public Map(string name, Vector2 size, Vector2 tileSize)
+        public Map(string name, Point size, Point tileSize)
         {
             Name = name;
             Size = size;

@@ -26,7 +26,7 @@ namespace QuestForTheCrown2.External.Tiled
         /// <summary>
         /// Tile size.
         /// </summary>
-        public Vector2 TileSize { get; private set; }
+        public Point TileSize { get; private set; }
 
         /// <summary>
         /// Image source path.
@@ -36,12 +36,26 @@ namespace QuestForTheCrown2.External.Tiled
         /// <summary>
         /// Image size.
         /// </summary>
-        public Vector2 Size { get; private set; }
+        public Point Size { get; private set; }
 
         /// <summary>
         /// Tiles list.
         /// </summary>
         public List<Tile> Tiles { get; private set; }
+
+        public int NumRows { get; private set; }
+        public int NumCols { get; private set; }
+
+        /// <summary>
+        /// First tile id
+        /// </summary>
+        public int FirstTileId
+        {
+            get
+            {
+                return Tiles.First().Id;
+            }
+        }
         #endregion Properties
 
         #region Constructor
@@ -53,7 +67,7 @@ namespace QuestForTheCrown2.External.Tiled
         /// <param name="tileSize">Tile size</param>
         /// <param name="imageSource">Image source path</param>
         /// <param name="imageSize">Image size in pixels</param>
-        public Tileset(int firstgid, string name, Vector2 tileSize, string imageSource, Vector2 imageSize)
+        public Tileset(int firstgid, string name, Point tileSize, string imageSource, Point imageSize)
         {
             FirstGID = firstgid;
             Name = name;
@@ -61,8 +75,37 @@ namespace QuestForTheCrown2.External.Tiled
             Source = imageSource;
             Size = imageSize;
 
+            NumRows = Size.Y / TileSize.Y;
+            NumCols = Size.X / TileSize.X;
+
             Tiles = new List<Tile>();
         }
         #endregion Constructor
+
+        #region Methods
+        /// <summary>
+        /// Get rectangle for the specified tile.
+        /// </summary>
+        /// <param name="tileId">Tile id.</param>
+        /// <returns></returns>
+        public Rectangle GetRect(int tileId)
+        {
+            tileId -= FirstTileId;
+
+            if (tileId < 0)
+                return Rectangle.Empty;
+
+            int row = tileId / NumCols;
+            
+
+            if (row >= NumRows)
+                return Rectangle.Empty;
+
+            int col = (tileId % NumCols) - 1;
+
+            Rectangle rect = new Rectangle(col * TileSize.X, row * TileSize.Y, TileSize.X, TileSize.Y);
+            return rect;
+        }
+        #endregion Methods
     }
 }
