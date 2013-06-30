@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
 #endregion
 
+using QuestForTheCrown2.External.Tiled;
+
 namespace QuestForTheCrown2
 {
     /// <summary>
@@ -18,6 +20,8 @@ namespace QuestForTheCrown2
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        Map map;
 
         public GameMain()
             : base()
@@ -47,6 +51,8 @@ namespace QuestForTheCrown2
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            map = MapLoader.LoadMap("Content\\maps\\Overworld01.tmx");
 
             // TODO: use this.Content to load your game content here
         }

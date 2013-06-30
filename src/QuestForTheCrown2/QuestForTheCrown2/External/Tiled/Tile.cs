@@ -5,7 +5,37 @@ using System.Text;
 
 namespace QuestForTheCrown2.External.Tiled
 {
-    class Tile
+    /// <summary>
+    /// Tile info.
+    /// </summary>
+    public class Tile
     {
+        #region Attributes
+        /// <summary>
+        /// Tile terrain.
+        /// </summary>
+        private int[] _terrain;
+        #endregion Attributes
+
+        #region Properties
+        /// <summary>
+        /// Tile id.
+        /// </summary>
+        public int Id { get; private set; }
+        #endregion Properties
+
+        #region Constructor
+        /// <summary>
+        /// Creates instance from the data.
+        /// </summary>
+        /// <param name="id">Tile id.</param>
+        /// <param name="terrain">Terrain id.</param>
+        public Tile( int id, string terrain )
+        {
+            Id = id;
+            string[] terrains = terrain.Split(',');
+            _terrain = (from t in terrains select int.Parse(t)).ToArray<int>();
+        }
+        #endregion Constructor
     }
 }

@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="External\Tiled\Layer.cs" />
     <Compile Include="External\Tiled\Map.cs" />
+    <Compile Include="External\Tiled\MapLoader.cs" />
     <Compile Include="External\Tiled\Tile.cs" />
     <Compile Include="External\Tiled\Tileset.cs" />
     <Compile Include="GameMain.cs" />
@@ -53,6 +54,7 @@
     <Reference Include="Lidgren.Network">
       <HintPath>$(MSBuildExtensionsPath)\..\MonoGame\v3.0\Assemblies\WindowsGL\Lidgren.Network.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Tao.Sdl">
       <HintPath>$(MSBuildExtensionsPath)\..\MonoGame\v3.0\Assemblies\WindowsGL\Tao.Sdl.dll</HintPath>
     </Reference>
@@ -64,14 +66,19 @@
       <Link>SDL.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\tiles\overworld.png" />
+    <Content Include="Content\tiles\overworld.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\sprites\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\maps\Overworld01.tmx" />
+    <Content Include="Content\maps\Overworld01.tmx">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
