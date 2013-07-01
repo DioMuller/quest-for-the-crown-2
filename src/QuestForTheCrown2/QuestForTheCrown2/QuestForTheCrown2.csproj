@@ -69,12 +69,14 @@
     <Content Include="lib\x64\OpenAL32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lib\x64\opengl32.dll" />
     <Content Include="lib\x64\wrap_oal.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="lib\x86\OpenAL32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lib\x86\opengl32.dll" />
     <Content Include="lib\x86\wrap_oal.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
