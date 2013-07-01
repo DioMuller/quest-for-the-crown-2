@@ -6,6 +6,17 @@ using System.Text;
 namespace QuestForTheCrown2.External.Tiled
 {
     /// <summary>
+    /// Collision position enumeration
+    /// </summary>
+    public enum CollisionPosition
+    {
+        UpperLeft = 0,
+        UpperRight = 1,
+        DownLeft = 2,
+        DownRight = 3
+    }
+
+    /// <summary>
     /// Tile info.
     /// </summary>
     public class Tile
@@ -37,5 +48,12 @@ namespace QuestForTheCrown2.External.Tiled
             _terrain = (from t in terrains select int.Parse(t)).ToArray<int>();
         }
         #endregion Constructor
+
+        #region Methods
+        public int GetCollision(CollisionPosition position)
+        {
+            return _terrain[(int) position];
+        }
+        #endregion Methods
     }
 }

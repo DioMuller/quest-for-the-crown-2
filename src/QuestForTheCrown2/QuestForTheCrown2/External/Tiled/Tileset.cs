@@ -56,6 +56,14 @@ namespace QuestForTheCrown2.External.Tiled
                 return Tiles.First().Id;
             }
         }
+
+        public int LastTileId
+        {
+            get
+            {
+                return Tiles.Last().Id;
+            }
+        }
         #endregion Properties
 
         #region Constructor
@@ -105,6 +113,16 @@ namespace QuestForTheCrown2.External.Tiled
 
             Rectangle rect = new Rectangle(col * TileSize.X, row * TileSize.Y, TileSize.X, TileSize.Y);
             return rect;
+        }
+
+        /// <summary>
+        /// Gets the tile by the Id value.
+        /// </summary>
+        /// <param name="tileId">Desired tile Id.</param>
+        /// <returns>Tile instance.</returns>
+        public Tile GetTileById(int tileId)
+        {
+            return (from Tile tile in Tiles where tile.Id == tileId select tile).FirstOrDefault();
         }
         #endregion Methods
     }
