@@ -109,7 +109,7 @@ namespace QuestForTheCrown2.External.Tiled
             if (row >= NumRows)
                 return Rectangle.Empty;
 
-            int col = (tileId % NumCols) - 1;
+            int col = (tileId % NumCols);
 
             Rectangle rect = new Rectangle(col * TileSize.X, row * TileSize.Y, TileSize.X, TileSize.Y);
             return rect;

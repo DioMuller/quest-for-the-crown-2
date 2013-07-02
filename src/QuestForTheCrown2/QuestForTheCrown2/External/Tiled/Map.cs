@@ -6,9 +6,15 @@ using Microsoft.Xna.Framework;
 
 namespace QuestForTheCrown2.External.Tiled
 {
+    /// <summary>
+    /// Represents the map, with all the layers.
+    /// </summary>
     public class Map
     {
         #region Attributes
+        /// <summary>
+        /// Collision map.
+        /// </summary>
         private int[,] _collisionMap;
         #endregion Attributes
 
@@ -55,11 +61,39 @@ namespace QuestForTheCrown2.External.Tiled
 
         #region Methods
 
+        #region Public Methods
+        public bool Collides(Rectangle rect)
+        {
+            int result = 0;
+            int mod_x = (TileSize.X / 2);
+            int mod_y = (TileSize.Y / 2);
+            int min_x = rect.X / mod_x;
+            int min_y = rect.Y / mod_y;
+            int max_x = rect.X / mod_x + ( rect.X % mod_x == 0 ? 1 : 2 );
+            int max_y = rect.Y / mod_y + (rect.Y % mod_y == 0 ? 1 : 2);
+
+            for( int x = min_x; x < max_x; x++ )
+            {
+                for( int y = min_y; y < max_y; y++ )
+                {
+                    result += _collisionMap[x,y];
+                }
+            }
+
+            return (result != 0); //If everything is 0; it won't collide.
+        }
+        #endregion Public Methods
+
         #region Private Methods
+        /// <summary>
+        /// Gets tile referent to the ID.
+        /// </summary>
+        /// <param name="tileId">Tile id.</param>
+        /// <returns>Desired tile.</returns>
         private Tile GetTile(int tileId)
         {
             Tileset set = (from Tileset ts in Tilesets
-                where ts.FirstTileId >= tileId && ts.LastTileId <= tileId
+                where ts.FirstTileId <= tileId && ts.LastTileId >= tileId
                 select ts).FirstOrDefault();
 
             if( set == null ) return null;
@@ -69,6 +103,9 @@ namespace QuestForTheCrown2.External.Tiled
         #endregion Private Methods
 
         #region Internal Methods
+        /// <summary>
+        /// Updates collision map.
+        /// </summary>
         internal void UpdateCollision()
         {
             for (int y = 0; y < Size.Y; y+=2)

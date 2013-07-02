@@ -77,6 +77,9 @@ namespace QuestForTheCrown2
                 Exit();
 
             // TODO: Add your update logic here
+            //Bounding Box test!
+            Rectangle rect = new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 32, 32);
+            bool test = map.Collides(rect);
 
             base.Update(gameTime);
         }

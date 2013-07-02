@@ -50,7 +50,7 @@ namespace QuestForTheCrown2.External.Tiled
 
             for( int i = 0; i < separated.Length; i++ )
             {
-                _data[i % Size.X, i / Size.X] = int.Parse(separated[i]);
+                _data[i % Size.X, i / Size.X] = int.Parse(separated[i]) - 1;
             }
         }
         #endregion Constructor

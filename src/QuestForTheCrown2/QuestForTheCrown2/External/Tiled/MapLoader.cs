@@ -9,8 +9,16 @@ using Microsoft.Xna.Framework;
 
 namespace QuestForTheCrown2.External.Tiled
 {
+    /// <summary>
+    /// Class responsible to loading the maps
+    /// </summary>
     public static class MapLoader
     {
+        /// <summary>
+        /// Loads map from the Tiled "tmx" file.
+        /// </summary>
+        /// <param name="tmxFile">TMX File path.</param>
+        /// <returns>Loaded map.</returns>
         public static Map LoadMap(string tmxFile)
         {
             Map map = null;
@@ -63,6 +71,9 @@ namespace QuestForTheCrown2.External.Tiled
                 map.Layers.Add(layer);
             }
             #endregion Layers
+
+            //Updates collision map
+            map.UpdateCollision();
 
             return map;
         }
