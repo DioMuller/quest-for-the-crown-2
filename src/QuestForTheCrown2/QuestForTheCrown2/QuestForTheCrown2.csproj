@@ -35,6 +35,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Base\Input.cs" />
     <Compile Include="External\Tiled\Layer.cs" />
     <Compile Include="External\Tiled\Map.cs" />
     <Compile Include="External\Tiled\MapLoader.cs" />

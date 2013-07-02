@@ -24,6 +24,9 @@ namespace QuestForTheCrown2
         Map map;
         Texture2D tilesetTest;
 
+        Base.Input input = new Base.Input(Base.InputType.Controller);
+        Base.Input input2 = new Base.Input(Base.InputType.Keyboard);
+
         public GameMain()
             : base()
         {
@@ -73,13 +76,8 @@ namespace QuestForTheCrown2
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (input.QuitButton || input2.QuitButton)
                 Exit();
-
-            // TODO: Add your update logic here
-            //Bounding Box test!
-            Rectangle rect = new Rectangle(Mouse.GetState().X, Mouse.GetState().Y, 32, 32);
-            bool test = map.Collides(rect);
 
             base.Update(gameTime);
         }
