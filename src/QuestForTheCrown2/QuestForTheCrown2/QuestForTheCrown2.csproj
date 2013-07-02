@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Base\Input.cs" />
     <Compile Include="Entities\Base\Animation.cs" />
+    <Compile Include="Entities\Base\GameContent.cs" />
     <Compile Include="Entities\Base\Entity.cs" />
     <Compile Include="Entities\Characters\MainCharacter.cs" />
     <Compile Include="External\Tiled\Layer.cs" />

@@ -14,6 +14,7 @@ namespace QuestForTheCrown2.Entities.Characters
         public MainCharacter()
             : base(GameMain.MainCharacterSpriteSheet)
         {
+
         }
 
         public override void Update(GameTime gameTime)
