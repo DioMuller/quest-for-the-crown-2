@@ -62,6 +62,11 @@ namespace QuestForTheCrown2.External.Tiled
         #region Methods
 
         #region Public Methods
+        /// <summary>
+        /// Tests collision with the map.
+        /// </summary>
+        /// <param name="rect">Collision rectangle.</param>
+        /// <returns>Is colliding?</returns>
         public bool Collides(Rectangle rect)
         {
             int result = 0;
