@@ -29,7 +29,6 @@ namespace QuestForTheCrown2
         Base.Input input = new Base.Input(Base.InputType.Controller);
         Base.Input input2 = new Base.Input(Base.InputType.Keyboard);
 
-        static internal SpriteSheet MainCharacterSpriteSheet;
         // Teste
         MainCharacter mainCharacter;
 
@@ -53,35 +52,19 @@ namespace QuestForTheCrown2
             base.Initialize();
         }
 
-        #region Content Management
-
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
         protected override void LoadContent()
         {
+            GameContent.Initialize(Content);
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             map = MapLoader.LoadMap("Content\\maps\\Overworld01.tmx");
             tilesetTest = Content.Load<Texture2D>(map.Tilesets[0].Source);
-
-            #region MainCharacter
-            var texture = Content.Load<Texture2D>(@"C:\Users\joao\Desktop\Lucas_RPG_Maker_Spritesheet_by_Boonzeet.png");
-
-            TimeSpan mainCharacterWalkFrameDuration = TimeSpan.FromMilliseconds(100);
-            MainCharacterSpriteSheet = new QuestForTheCrown2.Entities.Base.SpriteSheet(texture, new Point(45, 57));
-            MainCharacterSpriteSheet.AddAnimation("stopped", "down", line: 0, count: 1, frameDuration: mainCharacterWalkFrameDuration);
-            MainCharacterSpriteSheet.AddAnimation("stopped", "left", line: 1, count: 1, frameDuration: mainCharacterWalkFrameDuration);
-            MainCharacterSpriteSheet.AddAnimation("stopped", "right", line: 2, count: 1, frameDuration: mainCharacterWalkFrameDuration);
-            MainCharacterSpriteSheet.AddAnimation("stopped", "up", line: 3, count: 1, frameDuration: mainCharacterWalkFrameDuration);
-
-            MainCharacterSpriteSheet.AddAnimation("walking", "down", line: 0, frameDuration: mainCharacterWalkFrameDuration);
-            MainCharacterSpriteSheet.AddAnimation("walking", "left", line: 1, frameDuration: mainCharacterWalkFrameDuration);
-            MainCharacterSpriteSheet.AddAnimation("walking", "right", line: 2, frameDuration: mainCharacterWalkFrameDuration);
-            MainCharacterSpriteSheet.AddAnimation("walking", "up", line: 3, frameDuration: mainCharacterWalkFrameDuration);
-            #endregion
 
             // Teste
             mainCharacter = new MainCharacter();
@@ -95,7 +78,6 @@ namespace QuestForTheCrown2
         {
             // TODO: Unload any non ContentManager content here
         }
-        #endregion
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,

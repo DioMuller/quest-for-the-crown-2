@@ -11,7 +11,7 @@ namespace QuestForTheCrown2.Entities.Base
     class SpriteSheet
     {
         public Texture2D Texture { get; private set; }
-        public Dictionary<string, List<Animation>> Animations { get; private set; }
+        public Dictionary<string, Dictionary<string, Animation>> Animations { get; private set; }
         public Point FrameSize { get; private set; }
 
         public SpriteSheet(Texture2D texture, Point frameSize)
@@ -23,24 +23,12 @@ namespace QuestForTheCrown2.Entities.Base
             Texture = texture;
             FrameSize = frameSize;
 
-            Animations = new Dictionary<string, List<Animation>>();
+            Animations = new Dictionary<string, Dictionary<string, Animation>>();
         }
 
         public void AddAnimation(string name, string view, int[] frameIndexes, TimeSpan frameDuration)
         {
-            AddAnimation(name, new Animation(view, frameIndexes, frameDuration));
-        }
-
-        public void AddAnimation(string name, Animation animation)
-        {
-            List<Animation> existingAnimations;
-            if (!Animations.TryGetValue(name, out existingAnimations))
-            {
-                existingAnimations = new List<Animation>();
-                Animations.Add(name, existingAnimations);
-            }
-
-            existingAnimations.Add(animation);
+            AddAnimation(name, view, new Animation(frameIndexes, frameDuration));
         }
 
         public void AddAnimation(string name, string view, int line, TimeSpan frameDuration)
@@ -56,25 +44,26 @@ namespace QuestForTheCrown2.Entities.Base
             AddAnimation(name, view, indexes, frameDuration);
         }
 
-        public void AddAnimations(string name, IEnumerable<Animation> animations)
+        public void AddAnimation(string name, string view, Animation animation)
         {
-            foreach (var animation in animations)
-                AddAnimation(name, animation);
+            Dictionary<string, Animation> existingAnimations;
+            if (!Animations.TryGetValue(name, out existingAnimations))
+            {
+                existingAnimations = new Dictionary<string, Animation>();
+                Animations.Add(name, existingAnimations);
+            }
+
+            existingAnimations.Add(view, animation);
         }
     }
 
-    [DebuggerDisplay("{View}")]
     class Animation
     {
-        public string View { get; private set; }
-
         public int[] FrameIndexes { get; private set; }
-
         public TimeSpan FrameDuration { get; private set; }
 
-        public Animation(/*string name, */string view, int[] frameIndexes, TimeSpan frameDuration)
+        public Animation(int[] frameIndexes, TimeSpan frameDuration)
         {
-            View = view;
             FrameIndexes = frameIndexes;
             FrameDuration = frameDuration;
         }

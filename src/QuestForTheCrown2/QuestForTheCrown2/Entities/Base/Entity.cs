@@ -16,7 +16,8 @@ namespace QuestForTheCrown2.Entities.Base
     class Entity
     {
         #region Attributes
-        int currentFrameIndex;
+        int _currentFrameIndex;
+        readonly int _framesPerLine;
         #endregion
 
         #region Properties
@@ -24,20 +25,24 @@ namespace QuestForTheCrown2.Entities.Base
         public Vector2 Location { get; set; }
         public SpriteSheet SpriteSheet { get; private set; }
 
-        public string CurrentView { get; set; }
+        /// <summary>
+        /// Indicates the current entity animation.
+        /// Examples are: "walking", "stopped" and "running".
+        /// </summary>
         public string CurrentAnimation { get; set; }
+
+        /// <summary>
+        /// Indicates the current animation view.
+        /// Examples are: "left", "bottom", "right" and "down".
+        /// </summary>
+        public string CurrentView { get; set; }
         #endregion
 
         #region Constructors
-        public Entity(SpriteSheet spriteSheet)
+        public Entity(string spriteSheetPath, Point frameSize)
         {
-            if (spriteSheet == null || !spriteSheet.Animations.Any() || !spriteSheet.Animations.First().Value.Any())
-                throw new InvalidOperationException("The SpriteSheet content was not loaded");
-
-            SpriteSheet = spriteSheet;
-
-            CurrentAnimation = spriteSheet.Animations.First().Key;
-            CurrentView = spriteSheet.Animations.First().Value[0].View;
+            SpriteSheet = new SpriteSheet(GameContent.LoadContent<Texture2D>(spriteSheetPath), frameSize);
+            _framesPerLine = SpriteSheet.Texture.Width / SpriteSheet.FrameSize.X;
         }
         #endregion
 
@@ -45,22 +50,39 @@ namespace QuestForTheCrown2.Entities.Base
         {
             get
             {
-                var bestAnimation = SpriteSheet.Animations[CurrentAnimation].FirstOrDefault(a => a.View == CurrentView);
-
-                var framesPerLine = SpriteSheet.Texture.Width / SpriteSheet.FrameSize.X;
-
-                var index = bestAnimation.FrameIndexes[currentFrameIndex];
+                Animation animation = SelectAnimation();
+                var index = animation.FrameIndexes[_currentFrameIndex];
 
                 return new Frame
                 {
                     Texture = SpriteSheet.Texture,
                     Rectangle = new Rectangle(
-                        (index % framesPerLine) * SpriteSheet.FrameSize.X,
-                        (index / framesPerLine) * SpriteSheet.FrameSize.Y,
+                        (index % _framesPerLine) * SpriteSheet.FrameSize.X,
+                        (index / _framesPerLine) * SpriteSheet.FrameSize.Y,
                         SpriteSheet.FrameSize.X,
                         SpriteSheet.FrameSize.Y)
                 };
             }
+        }
+
+        /// <summary>
+        /// Selects the best animation based on the current view and animation name.
+        /// </summary>
+        /// <returns>The animation matching the entity's current view and animation</returns>
+        Animation SelectAnimation()
+        {
+            Animation bestAnimation;
+            Dictionary<string, Animation> bestAnimations;
+
+            if (CurrentAnimation == null || !SpriteSheet.Animations.ContainsKey(CurrentAnimation))
+                CurrentAnimation = SpriteSheet.Animations.First().Key;
+            bestAnimations = SpriteSheet.Animations[CurrentAnimation];
+
+            if (CurrentView == null || !bestAnimations.ContainsKey(CurrentView))
+                CurrentView = bestAnimations.First().Key;
+            bestAnimation = bestAnimations[CurrentView];
+
+            return bestAnimation;
         }
 
         #region Update
