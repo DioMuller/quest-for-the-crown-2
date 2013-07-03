@@ -27,8 +27,7 @@ namespace QuestForTheCrown2
         Map map;
         Texture2D tilesetTest;
 
-        Base.Input input = new Base.Input(Base.InputType.Controller);
-        Base.Input input2 = new Base.Input(Base.InputType.Keyboard);
+        Base.Input input = new Base.Input();
 
         // Teste
         MainCharacter mainCharacter;
@@ -69,7 +68,7 @@ namespace QuestForTheCrown2
 
             // Teste
             mainCharacter = new MainCharacter { Position = new Vector2(32 * 4, 32 * 4) };
-            mainCharacter.AddBehavior(new InputWalkBehavior(input2));
+            mainCharacter.AddBehavior(new InputWalkBehavior(input));
         }
 
         /// <summary>
@@ -88,7 +87,7 @@ namespace QuestForTheCrown2
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (input.QuitButton || input2.QuitButton)
+            if (input.QuitButton)
                 Exit();
 
             // TODO: Add your update logic here

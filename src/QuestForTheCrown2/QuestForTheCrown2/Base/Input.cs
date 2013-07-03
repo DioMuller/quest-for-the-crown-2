@@ -29,6 +29,7 @@ namespace QuestForTheCrown2.Base
                     case InputType.Controller:
                         return GamePad.GetState((PlayerIndex) Index).ThumbSticks.Left;
                     case InputType.Keyboard:
+                    case InputType.KeyboardAndMouse:
                         var state = Keyboard.GetState((PlayerIndex)Index);
                         var movement = new Vector2(
                             x: (state.IsKeyDown(Keys.Left)? -1 : 0) + (state.IsKeyDown(Keys.Right)? +1 : 0),
@@ -75,6 +76,20 @@ namespace QuestForTheCrown2.Base
         #endregion Properties
 
         #region Constructor
+        public Input()
+        {
+            if (GamePad.GetState(PlayerIndex.One).IsConnected)
+            {
+                this.Type = InputType.Controller;
+            }
+            else
+            {
+                this.Type = InputType.KeyboardAndMouse;
+            }
+
+            this.Index = 0;
+        }
+
         public Input(InputType inputType) : this(inputType, 0)
         {
             //Nothing else to do.
