@@ -33,6 +33,8 @@ namespace QuestForTheCrown2.Base
                         var movement = new Vector2(
                             x: (state.IsKeyDown(Keys.Left)? -1 : 0) + (state.IsKeyDown(Keys.Right)? +1 : 0),
                             y: (state.IsKeyDown(Keys.Up) ? -1 : 0) + (state.IsKeyDown(Keys.Down) ? +1 : 0));
+                        if (movement.X != 0 && movement.Y != 0)
+                            movement.Normalize();
                         return movement;
                     default:
                         return Vector2.Zero;
