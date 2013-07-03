@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace QuestForTheCrown2.External.Tiled
+namespace QuestForTheCrown2.Levels.Mapping
 {
     /// <summary>
     /// Map layer.

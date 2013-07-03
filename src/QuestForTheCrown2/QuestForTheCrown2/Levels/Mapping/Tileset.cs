@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace QuestForTheCrown2.External.Tiled
+namespace QuestForTheCrown2.Levels.Mapping
 {
     /// <summary>
     /// Represents a tileset.

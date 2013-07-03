@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
 #endregion
 
-using QuestForTheCrown2.External.Tiled;
+using QuestForTheCrown2.Levels.Mapping;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Characters;
 using QuestForTheCrown2.Entities.Behaviors;

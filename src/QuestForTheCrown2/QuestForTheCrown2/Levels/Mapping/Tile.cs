@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace QuestForTheCrown2.External.Tiled
+namespace QuestForTheCrown2.Levels.Mapping
 {
     /// <summary>
     /// Collision position enumeration

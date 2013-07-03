@@ -22,7 +22,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
             get { return _input.IsConnected; }
         }
 
-        public override void Update(Microsoft.Xna.Framework.GameTime gameTime, External.Tiled.Map map)
+        public override void Update(Microsoft.Xna.Framework.GameTime gameTime, Levels.Mapping.Map map)
         {
             if (_input.Movement.X > 0)
                 Entity.CurrentView = "right";

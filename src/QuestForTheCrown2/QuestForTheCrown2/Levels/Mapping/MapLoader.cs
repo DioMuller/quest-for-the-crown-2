@@ -7,7 +7,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 
-namespace QuestForTheCrown2.External.Tiled
+namespace QuestForTheCrown2.Levels.Mapping
 {
     /// <summary>
     /// Class responsible to loading the maps
