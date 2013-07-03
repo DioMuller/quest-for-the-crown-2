@@ -11,15 +11,15 @@ namespace QuestForTheCrown2.Entities.Behaviors
     {
         Input _input;
 
-        public InputWalkBehavior(Input input)
+        public InputWalkBehavior(InputType input, int index = 0)
         {
             Group = "movement";
-            _input = input;
+            _input = new Input(input, index);
         }
 
         public override bool Active
         {
-            get { return true; }
+            get { return _input.IsConnected; }
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, External.Tiled.Map map)

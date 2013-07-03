@@ -73,6 +73,23 @@ namespace QuestForTheCrown2.Base
                 }
             }
         }
+
+        public bool IsConnected
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case InputType.Controller:
+                        return GamePad.GetState((PlayerIndex)Index).IsConnected;
+                    case InputType.Keyboard:
+                    case InputType.KeyboardAndMouse:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
         #endregion Properties
 
         #region Constructor

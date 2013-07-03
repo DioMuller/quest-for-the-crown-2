@@ -68,7 +68,10 @@ namespace QuestForTheCrown2
 
             // Teste
             mainCharacter = new MainCharacter { Position = new Vector2(32 * 4, 32 * 4) };
-            mainCharacter.AddBehavior(new InputWalkBehavior(input));
+            mainCharacter.AddBehavior(
+                new InputWalkBehavior(Base.InputType.Controller), 
+                new InputWalkBehavior(Base.InputType.Keyboard)
+                );
         }
 
         /// <summary>
