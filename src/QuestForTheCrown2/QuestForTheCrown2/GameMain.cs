@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using QuestForTheCrown2.External.Tiled;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Characters;
+using QuestForTheCrown2.Entities.Behaviors;
 
 namespace QuestForTheCrown2
 {
@@ -67,7 +68,8 @@ namespace QuestForTheCrown2
             tilesetTest = Content.Load<Texture2D>(map.Tilesets[0].Source);
 
             // Teste
-            mainCharacter = new MainCharacter();
+            mainCharacter = new MainCharacter { Position = new Vector2(32 * 4, 32 * 4) };
+            mainCharacter.AddBehavior(new InputWalkBehavior(input2));
         }
 
         /// <summary>
@@ -122,7 +124,7 @@ namespace QuestForTheCrown2
 
             // Teste
             spriteBatch.Draw(mainCharacter.CurrentFrame.Texture,
-                mainCharacter.Location,
+                mainCharacter.Position,
                 mainCharacter.CurrentFrame.Rectangle, Color.White);
 
             spriteBatch.End();

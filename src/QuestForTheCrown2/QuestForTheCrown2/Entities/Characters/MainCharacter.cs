@@ -11,10 +11,10 @@ namespace QuestForTheCrown2.Entities.Characters
 {
     class MainCharacter : Entity
     {
-        const string spriteSheetPath = @"C:\Users\joao\Desktop\Lucas_RPG_Maker_Spritesheet_by_Boonzeet.png";
+        const string spriteSheetPath = @"sprites\MainCharacter.png";
 
         public MainCharacter()
-            : base(spriteSheetPath, new Point(45, 57))
+            : base(spriteSheetPath, new Point(22, 28))
         {
             TimeSpan walkFrameDuration = TimeSpan.FromMilliseconds(100);
             SpriteSheet.AddAnimation("stopped", "down", line: 0, count: 1, frameDuration: walkFrameDuration);
@@ -26,6 +26,8 @@ namespace QuestForTheCrown2.Entities.Characters
             SpriteSheet.AddAnimation("walking", "left", line: 1, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("walking", "right", line: 2, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("walking", "up", line: 3, frameDuration: walkFrameDuration);
+
+            Speed *= 2;
         }
 
         public override void Update(GameTime gameTime)

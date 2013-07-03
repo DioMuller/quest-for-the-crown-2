@@ -28,6 +28,12 @@ namespace QuestForTheCrown2.Base
                 {
                     case InputType.Controller:
                         return GamePad.GetState((PlayerIndex) Index).ThumbSticks.Left;
+                    case InputType.Keyboard:
+                        var state = Keyboard.GetState((PlayerIndex)Index);
+                        var movement = new Vector2(
+                            x: (state.IsKeyDown(Keys.Left)? -1 : 0) + (state.IsKeyDown(Keys.Right)? +1 : 0),
+                            y: (state.IsKeyDown(Keys.Up) ? -1 : 0) + (state.IsKeyDown(Keys.Down) ? +1 : 0));
+                        return movement;
                     default:
                         return Vector2.Zero;
                 }

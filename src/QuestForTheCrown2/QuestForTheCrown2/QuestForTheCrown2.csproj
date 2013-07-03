@@ -37,8 +37,11 @@
   <ItemGroup>
     <Compile Include="Base\Input.cs" />
     <Compile Include="Entities\Base\Animation.cs" />
+    <Compile Include="Entities\Base\Frame.cs" />
     <Compile Include="Entities\Base\GameContent.cs" />
     <Compile Include="Entities\Base\Entity.cs" />
+    <Compile Include="Entities\Base\EntityUpdateBehavior.cs" />
+    <Compile Include="Entities\Behaviors\InputWalkBehavior.cs" />
     <Compile Include="Entities\Characters\MainCharacter.cs" />
     <Compile Include="External\Tiled\Layer.cs" />
     <Compile Include="External\Tiled\Map.cs" />
@@ -67,6 +70,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\sprites\MainCharacter.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\tiles\overworld.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -90,9 +96,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\sprites\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Content\maps\Overworld01.tmx">
       <SubType>Designer</SubType>
