@@ -107,6 +107,8 @@ namespace QuestForTheCrown2
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            var camera = GetCameraPosition(mainCharacter, map.PixelSize, Window.ClientBounds);
+
             spriteBatch.Begin();
             foreach (Layer layer in map.Layers)
             {
@@ -115,21 +117,45 @@ namespace QuestForTheCrown2
                     for (int x = 0; x < layer.Size.X; x++)
                     {
                         spriteBatch.Draw(tilesetTest,
-                            new Rectangle(x * map.TileSize.X, y * map.TileSize.Y, map.TileSize.X, map.TileSize.Y),
+                            new Rectangle((int)(x * map.TileSize.X - camera.X + Window.ClientBounds.Width / 2),
+                                (int)(y * map.TileSize.Y - camera.Y + Window.ClientBounds.Height / 2),
+                                map.TileSize.X,
+                                map.TileSize.Y),
                             map.Tilesets[0].GetRect(layer.GetData(x, y)),
                             Color.White);
                     }
                 }
             }
 
-            // Teste
             spriteBatch.Draw(mainCharacter.CurrentFrame.Texture,
-                mainCharacter.Position,
+                new Vector2(
+                    mainCharacter.Position.X - camera.X + Window.ClientBounds.Width / 2,
+                    mainCharacter.Position.Y - camera.Y + Window.ClientBounds.Height / 2),
                 mainCharacter.CurrentFrame.Rectangle, Color.White);
 
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        static Vector2 GetCameraPosition(Entity entity, Point mapSize, Rectangle screenSize)
+        {
+            var camera = entity.Position;
+            var newX = entity.Position.X;
+            var newY = entity.Position.Y;
+
+            if (newX < screenSize.Width / 2)
+                newX = screenSize.Width / 2;
+            else if (newX > mapSize.X - screenSize.Width / 2)
+                newX = mapSize.X - screenSize.Width / 2;
+
+            if (newY < screenSize.Height / 2)
+                newY = screenSize.Height / 2;
+            else if (newY > mapSize.Y - screenSize.Height / 2)
+                newY = mapSize.Y - screenSize.Height / 2;
+
+            camera = new Vector2(newX, newY);
+            return camera;
         }
     }
 }

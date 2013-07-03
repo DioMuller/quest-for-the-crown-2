@@ -35,6 +35,11 @@ namespace QuestForTheCrown2.External.Tiled
         public Point TileSize { get; private set; }
 
         /// <summary>
+        /// Map size in pixels
+        /// </summary>
+        public Point PixelSize { get; private set; }
+
+        /// <summary>
         /// Tilesets.
         /// </summary>
         public List<Tileset> Tilesets { get; private set; }
@@ -51,6 +56,7 @@ namespace QuestForTheCrown2.External.Tiled
             Name = name;
             Size = size;
             TileSize = tileSize;
+            PixelSize = new Point(TileSize.X * Size.X, TileSize.Y * size.Y);
 
             _collisionMap = new int[Size.X * 2, Size.Y * 2];
 
