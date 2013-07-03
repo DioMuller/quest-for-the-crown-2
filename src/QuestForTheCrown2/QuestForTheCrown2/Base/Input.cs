@@ -24,15 +24,18 @@ namespace QuestForTheCrown2.Base
         {
             get
             {
-                switch(Type)
+                switch (Type)
                 {
                     case InputType.Controller:
-                        return GamePad.GetState((PlayerIndex) Index).ThumbSticks.Left;
+                        var leftStick = GamePad.GetState((PlayerIndex)Index).ThumbSticks.Left;
+                        return new Vector2(
+                            x: leftStick.X,
+                            y: -leftStick.Y);
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
                         var state = Keyboard.GetState((PlayerIndex)Index);
                         var movement = new Vector2(
-                            x: (state.IsKeyDown(Keys.Left)? -1 : 0) + (state.IsKeyDown(Keys.Right)? +1 : 0),
+                            x: (state.IsKeyDown(Keys.Left) ? -1 : 0) + (state.IsKeyDown(Keys.Right) ? +1 : 0),
                             y: (state.IsKeyDown(Keys.Up) ? -1 : 0) + (state.IsKeyDown(Keys.Down) ? +1 : 0));
                         if (movement.X != 0 && movement.Y != 0)
                             movement.Normalize();
@@ -107,7 +110,8 @@ namespace QuestForTheCrown2.Base
             this.Index = 0;
         }
 
-        public Input(InputType inputType) : this(inputType, 0)
+        public Input(InputType inputType)
+            : this(inputType, 0)
         {
             //Nothing else to do.
         }
