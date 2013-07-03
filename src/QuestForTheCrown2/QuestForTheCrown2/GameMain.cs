@@ -94,7 +94,7 @@ namespace QuestForTheCrown2
             // TODO: Add your update logic here
 
             // Teste
-            mainCharacter.Update(gameTime);
+            mainCharacter.Update(gameTime, map);
 
             base.Update(gameTime);
         }

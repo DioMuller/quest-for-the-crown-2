@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using QuestForTheCrown2.External.Tiled;
 
 namespace QuestForTheCrown2.Entities.Base
 {
@@ -32,6 +33,6 @@ namespace QuestForTheCrown2.Entities.Base
         /// Executes an update logic on the attached entity.
         /// </summary>
         /// <param name="deltaTime"></param>
-        public abstract void Update(GameTime deltaTime);
+        public abstract void Update(GameTime deltaTime, Map map);
     }
 }

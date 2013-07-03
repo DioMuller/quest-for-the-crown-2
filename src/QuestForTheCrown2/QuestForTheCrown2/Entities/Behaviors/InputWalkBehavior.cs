@@ -22,7 +22,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
             get { return true; }
         }
 
-        public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
+        public override void Update(Microsoft.Xna.Framework.GameTime gameTime, External.Tiled.Map map)
         {
             if (_input.Movement.X > 0)
                 Entity.CurrentView = "right";
@@ -40,9 +40,15 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
             var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
 
-            Entity.Position = new Microsoft.Xna.Framework.Vector2(
-                x: (float)(Entity.Position.X + _input.Movement.X * Entity.Speed.X * timeFactor),
-                y: (float)(Entity.Position.Y + _input.Movement.Y * Entity.Speed.Y * timeFactor));
+            float newX = (float)(Entity.Position.X + _input.Movement.X * Entity.Speed.X * timeFactor);
+            float newY = (float)(Entity.Position.Y + _input.Movement.Y * Entity.Speed.Y * timeFactor);
+
+            if( !map.Collides( new Microsoft.Xna.Framework.Rectangle((int) newX, (int) newY, Entity.Size.X, Entity.Size.Y) ) )
+            {
+                Entity.Position = new Microsoft.Xna.Framework.Vector2(
+                    x: newX,
+                    y: newY);
+            }
         }
     }
 }

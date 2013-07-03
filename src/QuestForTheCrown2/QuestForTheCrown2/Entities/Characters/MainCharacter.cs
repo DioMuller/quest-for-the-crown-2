@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using QuestForTheCrown2.External.Tiled;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
@@ -30,9 +31,9 @@ namespace QuestForTheCrown2.Entities.Characters
             Speed *= 2;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime, Map map)
         {
-            base.Update(gameTime);
+            base.Update(gameTime, map);
         }
     }
 }

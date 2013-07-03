@@ -113,9 +113,9 @@ namespace QuestForTheCrown2.External.Tiled
         /// </summary>
         internal void UpdateCollision()
         {
-            for (int y = 0; y < Size.Y; y+=2)
+            for (int y = 0; y < Size.Y * 2; y+=2)
             {
-                for (int x = 0; x < Size.X; x+=2)
+                for (int x = 0; x < Size.X * 2; x+=2)
                 {
                     foreach (Layer layer in Layers)
                     {

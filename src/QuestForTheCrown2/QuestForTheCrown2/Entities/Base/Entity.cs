@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using QuestForTheCrown2.External.Tiled;
 
 namespace QuestForTheCrown2.Entities.Base
 {
@@ -21,6 +22,17 @@ namespace QuestForTheCrown2.Entities.Base
         public Vector2 Position { get; set; }
         public SpriteSheet SpriteSheet { get; private set; }
         public Vector2 Speed { get; set; }
+
+        /// <summary>
+        /// Entity size
+        /// </summary>
+        public Point Size
+        {
+            get
+            {
+                return SpriteSheet.FrameSize;
+            }
+        }
 
         public Dictionary<string, List<EntityUpdateBehavior>> Behaviors { get; private set; }
 
@@ -107,7 +119,7 @@ namespace QuestForTheCrown2.Entities.Base
         }
 
         #region Update
-        public virtual void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime, Map map)
         {
             if (Behaviors != null)
             {
@@ -115,12 +127,12 @@ namespace QuestForTheCrown2.Entities.Base
                 {
                     if (behaviorGroup.Key == string.Empty)
                         foreach (var behavior in behaviorGroup.Value.Where(b => b.Active))
-                            behavior.Update(gameTime);
+                            behavior.Update(gameTime, map);
                     else
                     {
                         var bh = behaviorGroup.Value.Where(b => b.Active).FirstOrDefault();
                         if (bh != null)
-                            bh.Update(gameTime);
+                            bh.Update(gameTime, map);
                     }
                 }
             }
