@@ -15,6 +15,35 @@ namespace QuestForTheCrown2.Levels.Mapping
     public static class MapLoader
     {
         /// <summary>
+        /// Load Level Collection.
+        /// </summary>
+        /// <param name="path">QFC file path</param>
+        /// <returns></returns>
+        public static LevelCollection LoadLevels(string path)
+        {
+            LevelCollection collection = new LevelCollection();
+            XDocument doc = XDocument.Load(path);
+            XElement root = doc.Element("collection");
+
+            foreach (XElement el in root.Element("levels").Elements("level"))
+            {
+                int id = int.Parse(el.Attribute("id").Value);
+                int[] neighbors = (from string element in el.Attribute("neighbors").Value.Split(',') select int.Parse(element)).ToArray<int>();
+                Map map = LoadMap(el.Attribute("path").Value);
+
+                Level level = new Level(id, map);
+                for( int i = 0; i < 4; i++ )
+                {
+                    level.SetNeighbor((Direction)i, neighbors[i]);
+                }
+
+                collection.AddLevel(level);
+            }
+
+            return collection;
+        }
+
+        /// <summary>
         /// Loads map from the Tiled "tmx" file.
         /// </summary>
         /// <param name="tmxFile">TMX File path.</param>

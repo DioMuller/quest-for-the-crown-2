@@ -7,22 +7,27 @@ using System.Text;
 
 namespace QuestForTheCrown2.Levels
 {
-    class LevelCollection
+    public class LevelCollection
     {
         #region Attributes
         /// <summary>
         /// This world/dungeon levels.
         /// </summary>
         List<Level> _levels;
+        
         /// <summary>
         /// Current level visited by the player.
         /// </summary>
         Level _currentLevel;
+        
         /// <summary>
         /// Dungeons on this world/dungeon.
         /// </summary>
         List<LevelCollection> _dungeons;
 
+        /// <summary>
+        /// Current dungeon.
+        /// </summary>
         LevelCollection _currentDungeon;
         #endregion Attributes
 
@@ -74,6 +79,7 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Update(GameTime gameTime)
         {
+            CurrentLevel.Update(gameTime);
         }
 
         /// <summary>
@@ -83,6 +89,20 @@ namespace QuestForTheCrown2.Levels
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 camera)
         {
             CurrentLevel.Draw(gameTime, spriteBatch, camera);
+        }
+
+        /// <summary>
+        /// Adds a level to the collection.
+        /// </summary>
+        /// <param name="level">Level to be added.</param>
+        public bool AddLevel(Level level)
+        {
+            int count = (from Level lv in _levels where lv.Id == level.Id select lv).Count();
+
+            if( count != 0 ) return false;
+
+            _levels.Add(level);
+            return true;
         }
         #endregion Public Methods
 

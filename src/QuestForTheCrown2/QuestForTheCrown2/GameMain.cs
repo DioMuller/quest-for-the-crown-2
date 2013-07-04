@@ -26,6 +26,7 @@ namespace QuestForTheCrown2
         SpriteBatch spriteBatch;
 
         Map map;
+        Levels.LevelCollection overworld;
 
         Base.Input input = new Base.Input();
 
@@ -64,6 +65,7 @@ namespace QuestForTheCrown2
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             map = MapLoader.LoadMap("Content\\maps\\Overworld-01.tmx");
+            overworld = MapLoader.LoadLevels("Content/dungeons/Overworld.qfc");
 
             // Teste
             mainCharacter = new Enemy1 { Position = new Vector2(32 * 4, 32 * 4) };

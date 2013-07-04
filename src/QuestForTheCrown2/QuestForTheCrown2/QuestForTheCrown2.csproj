@@ -50,7 +50,7 @@
     <Compile Include="Levels\LevelCollection.cs" />
     <Compile Include="Levels\Mapping\Layer.cs" />
     <Compile Include="Levels\Mapping\Map.cs" />
-    <Compile Include="Levels\Mapping\MapLoader.cs" />
+    <Compile Include="Levels\MapLoader.cs" />
     <Compile Include="Levels\Mapping\Tile.cs" />
     <Compile Include="Levels\Mapping\Tileset.cs" />
     <Compile Include="GameMain.cs" />
@@ -128,9 +128,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Content\dungeons\Overworld.qfc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Content\maps\Overworld-01.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\maps\Overworld-02.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\Overworld-03.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

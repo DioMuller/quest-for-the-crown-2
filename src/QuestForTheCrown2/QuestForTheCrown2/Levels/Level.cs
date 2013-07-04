@@ -58,6 +58,18 @@ namespace QuestForTheCrown2.Levels
         }
 
         /// <summary>
+        /// Updates the level.
+        /// </summary>
+        /// <param name="gameTime">Game time.</param>
+        public void Update(GameTime gameTime)
+        {
+            foreach (Entity e in _entities)
+            {
+                e.Update(gameTime, _map);
+            }
+        }
+
+        /// <summary>
         /// Gets neighbor ID
         /// </summary>
         /// <param name="direction">Desired direction</param>
