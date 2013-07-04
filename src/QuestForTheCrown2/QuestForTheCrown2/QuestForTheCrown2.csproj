@@ -38,7 +38,7 @@
     <Compile Include="Base\Input.cs" />
     <Compile Include="Entities\Base\Animation.cs" />
     <Compile Include="Entities\Base\Frame.cs" />
-    <Compile Include="Entities\Base\GameContent.cs" />
+    <Compile Include="Base\GameContent.cs" />
     <Compile Include="Entities\Base\Entity.cs" />
     <Compile Include="Entities\Base\EntityUpdateBehavior.cs" />
     <Compile Include="Entities\Behaviors\WalkBehavior.cs" />
@@ -81,7 +81,25 @@
     <Content Include="Content\sprites\MainCharacter.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\tiles\overworld.png">
+    <Content Include="Content\tiles\dungeon_01.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\tiles\dungeon_02.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\tiles\dungeon_03.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\tiles\dungeon_04.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\tiles\overworld_01.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\tiles\overworld_02.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\tiles\overworld_03.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
@@ -110,12 +128,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="External\Tiled\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\maps\Overworld01.tmx">
-      <SubType>Designer</SubType>
+    <Content Include="Content\maps\Overworld-01.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

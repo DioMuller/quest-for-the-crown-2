@@ -49,10 +49,12 @@ namespace QuestForTheCrown2.Levels.Mapping
                 foreach( XElement element in set.Elements("tile") )
                 {
                     int id = int.Parse(element.Attribute("id").Value);
-                    string terrain = element.Attribute("terrain").Value;
-                    Tile tile = new Tile( id, terrain );
-
-                    tileset.Tiles.Add(tile);
+                    string[] terrain = element.Attribute("terrain").Value.Split(',');
+                    
+                    tileset.Tiles[id].SetCollision(CollisionPosition.UpperLeft, int.Parse(terrain[0]));
+                    tileset.Tiles[id].SetCollision(CollisionPosition.UpperRight, int.Parse(terrain[1]));
+                    tileset.Tiles[id].SetCollision(CollisionPosition.DownLeft, int.Parse(terrain[2]));
+                    tileset.Tiles[id].SetCollision(CollisionPosition.DownRight, int.Parse(terrain[3]));
                 }
                 #endregion Tiles
 

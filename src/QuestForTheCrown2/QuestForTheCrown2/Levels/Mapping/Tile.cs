@@ -41,11 +41,10 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// </summary>
         /// <param name="id">Tile id.</param>
         /// <param name="terrain">Terrain id.</param>
-        public Tile( int id, string terrain )
+        public Tile( int id)
         {
             Id = id;
-            string[] terrains = terrain.Split(',');
-            _terrain = (from t in terrains select int.Parse(t)).ToArray<int>();
+            _terrain = new int[4]{0,0,0,0};
         }
         #endregion Constructor
 
@@ -53,6 +52,11 @@ namespace QuestForTheCrown2.Levels.Mapping
         public int GetCollision(CollisionPosition position)
         {
             return _terrain[(int) position];
+        }
+
+        public void SetCollision(CollisionPosition position, int value)
+        {
+            _terrain[(int)position] = value;
         }
         #endregion Methods
     }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Levels.Mapping;
+using QuestForTheCrown2.Base;
 
 namespace QuestForTheCrown2.Entities.Base
 {

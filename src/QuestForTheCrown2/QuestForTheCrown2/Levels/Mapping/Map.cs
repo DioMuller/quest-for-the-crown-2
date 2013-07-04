@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace QuestForTheCrown2.Levels.Mapping
 {
@@ -93,6 +94,32 @@ namespace QuestForTheCrown2.Levels.Mapping
 
             return (result != 0); //If everything is 0; it won't collide.
         }
+
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 camera)
+        {
+            foreach (Layer layer in Layers)
+            {
+                for (int y = 0; y < layer.Size.Y; y++)
+                {
+                    for (int x = 0; x < layer.Size.X; x++)
+                    {
+                        int tileId = layer.GetData(x, y);
+                        if (tileId != 0)
+                        {
+                            Tileset set = GetTileset(tileId);
+                            spriteBatch.Draw(set.Texture,
+                                new Rectangle(
+                                    (int)(x * TileSize.X - camera.X),
+                                    (int)(y * TileSize.Y - camera.Y),
+                                    TileSize.X,
+                                    TileSize.Y),
+                                set.GetRect(tileId),
+                                Color.White);
+                        }
+                    }
+                }
+            }
+        }
         #endregion Public Methods
 
         #region Private Methods
@@ -103,13 +130,20 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// <returns>Desired tile.</returns>
         private Tile GetTile(int tileId)
         {
-            Tileset set = (from Tileset ts in Tilesets
-                where ts.FirstTileId <= tileId && ts.LastTileId >= tileId
-                select ts).FirstOrDefault();
+            if (tileId == 0) return null;
+
+            Tileset set = GetTileset(tileId);
 
             if( set == null ) return null;
 
             return set.GetTileById(tileId);
+        }
+
+        private Tileset GetTileset(int tileId)
+        {
+            return (from Tileset ts in Tilesets
+                where ts.FirstTileId <= tileId && ts.LastTileId >= tileId
+                select ts).FirstOrDefault();
         }
         #endregion Private Methods
 
@@ -126,12 +160,16 @@ namespace QuestForTheCrown2.Levels.Mapping
                     foreach (Layer layer in Layers)
                     {
                         int tileId = layer.GetData(x/2, y/2);
-                        Tile tile = GetTile(tileId);
 
-                        _collisionMap[x, y] = Math.Max(tile.GetCollision(CollisionPosition.UpperLeft), _collisionMap[x, y]); ;
-                        _collisionMap[x+1,y] = Math.Max(tile.GetCollision(CollisionPosition.UpperRight), _collisionMap[x+1,y]);;
-                        _collisionMap[x,y+1] = Math.Max(tile.GetCollision(CollisionPosition.DownLeft), _collisionMap[x,y+1]);;
-                        _collisionMap[x+1,y+1] = Math.Max(tile.GetCollision(CollisionPosition.DownRight), _collisionMap[x+1,y+1]);
+                        if (tileId != 0)
+                        {
+                            Tile tile = GetTile(tileId);
+
+                            _collisionMap[x, y] = Math.Max(tile.GetCollision(CollisionPosition.UpperLeft), _collisionMap[x, y]); ;
+                            _collisionMap[x + 1, y] = Math.Max(tile.GetCollision(CollisionPosition.UpperRight), _collisionMap[x + 1, y]); ;
+                            _collisionMap[x, y + 1] = Math.Max(tile.GetCollision(CollisionPosition.DownLeft), _collisionMap[x, y + 1]); ;
+                            _collisionMap[x + 1, y + 1] = Math.Max(tile.GetCollision(CollisionPosition.DownRight), _collisionMap[x + 1, y + 1]);
+                        }
                     }
                 }
             }

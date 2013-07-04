@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace QuestForTheCrown2.Entities.Base
+namespace QuestForTheCrown2.Base
 {
     static public class GameContent
     {

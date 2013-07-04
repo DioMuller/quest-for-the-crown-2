@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using QuestForTheCrown2.Base;
 
 namespace QuestForTheCrown2.Levels.Mapping
 {
@@ -41,10 +42,12 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// <summary>
         /// Tiles list.
         /// </summary>
-        public List<Tile> Tiles { get; private set; }
+        public Tile[] Tiles { get; private set; }
 
         public int NumRows { get; private set; }
         public int NumCols { get; private set; }
+
+        internal Texture2D Texture { get; private set; }
 
         /// <summary>
         /// First tile id
@@ -53,7 +56,7 @@ namespace QuestForTheCrown2.Levels.Mapping
         {
             get
             {
-                return Tiles.First().Id;
+                return FirstGID;
             }
         }
 
@@ -61,7 +64,7 @@ namespace QuestForTheCrown2.Levels.Mapping
         {
             get
             {
-                return Tiles.Last().Id;
+                return FirstGID + (NumCols * NumRows);
             }
         }
         #endregion Properties
@@ -83,10 +86,17 @@ namespace QuestForTheCrown2.Levels.Mapping
             Source = imageSource;
             Size = imageSize;
 
+            Texture = GameContent.LoadContent<Texture2D>(Source);
+
             NumRows = Size.Y / TileSize.Y;
             NumCols = Size.X / TileSize.X;
 
-            Tiles = new List<Tile>();
+            Tiles = new Tile[NumRows*NumCols];
+
+            for( int i = 0; i < NumRows * NumCols; i++ )
+            {
+                Tiles[i] = new Tile(i);
+            }
         }
         #endregion Constructor
 
@@ -122,6 +132,8 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// <returns>Tile instance.</returns>
         public Tile GetTileById(int tileId)
         {
+            tileId = tileId - FirstGID;
+
             return (from Tile tile in Tiles where tile.Id == tileId select tile).FirstOrDefault();
         }
         #endregion Methods

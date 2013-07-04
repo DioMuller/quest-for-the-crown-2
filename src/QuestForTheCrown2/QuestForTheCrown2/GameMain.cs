@@ -13,6 +13,7 @@ using QuestForTheCrown2.Levels.Mapping;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Characters;
 using QuestForTheCrown2.Entities.Behaviors;
+using QuestForTheCrown2.Base;
 
 namespace QuestForTheCrown2
 {
@@ -25,7 +26,6 @@ namespace QuestForTheCrown2
         SpriteBatch spriteBatch;
 
         Map map;
-        Texture2D tilesetTest;
 
         Base.Input input = new Base.Input();
 
@@ -63,8 +63,7 @@ namespace QuestForTheCrown2
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            map = MapLoader.LoadMap("Content\\maps\\Overworld01.tmx");
-            tilesetTest = Content.Load<Texture2D>(map.Tilesets[0].Source);
+            map = MapLoader.LoadMap("Content\\maps\\Overworld-01.tmx");
 
             // Teste
             mainCharacter = new Enemy1 { Position = new Vector2(32 * 4, 32 * 4) };
@@ -118,23 +117,8 @@ namespace QuestForTheCrown2
             var camera = GetCameraPosition(mainCharacter, map.PixelSize, Window.ClientBounds);
 
             spriteBatch.Begin();
-            foreach (Layer layer in map.Layers)
-            {
-                for (int y = 0; y < layer.Size.Y; y++)
-                {
-                    for (int x = 0; x < layer.Size.X; x++)
-                    {
-                        spriteBatch.Draw(tilesetTest,
-                            new Rectangle(
-                                (int)(x * map.TileSize.X - camera.X),
-                                (int)(y * map.TileSize.Y - camera.Y),
-                                map.TileSize.X,
-                                map.TileSize.Y),
-                            map.Tilesets[0].GetRect(layer.GetData(x, y)),
-                            Color.White);
-                    }
-                }
-            }
+
+            map.Draw(gameTime, spriteBatch, camera);
 
             Draw(mainCharacter, camera);
             Draw(enemy1, camera);
