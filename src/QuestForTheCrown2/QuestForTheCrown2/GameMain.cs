@@ -30,7 +30,7 @@ namespace QuestForTheCrown2
         Base.Input input = new Base.Input();
 
         // Teste
-        MainCharacter mainCharacter;
+        Entity mainCharacter, enemy1;
 
         public GameMain()
             : base()
@@ -67,11 +67,16 @@ namespace QuestForTheCrown2
             tilesetTest = Content.Load<Texture2D>(map.Tilesets[0].Source);
 
             // Teste
-            mainCharacter = new MainCharacter { Position = new Vector2(32 * 4, 32 * 4) };
+            mainCharacter = new Enemy1 { Position = new Vector2(32 * 4, 32 * 4) };
             mainCharacter.AddBehavior(
-                new InputWalkBehavior(Base.InputType.Controller), 
+                new InputWalkBehavior(Base.InputType.Controller),
                 new InputWalkBehavior(Base.InputType.Keyboard)
-                );
+            );
+
+            enemy1 = new MainCharacter { Position = new Vector2(32 * 8, 32 * 8) };
+            enemy1.AddBehavior(
+                new FollowBehavior { Following = mainCharacter }
+            );
         }
 
         /// <summary>
@@ -97,6 +102,7 @@ namespace QuestForTheCrown2
 
             // Teste
             mainCharacter.Update(gameTime, map);
+            enemy1.Update(gameTime, map);
 
             base.Update(gameTime);
         }
@@ -119,8 +125,9 @@ namespace QuestForTheCrown2
                     for (int x = 0; x < layer.Size.X; x++)
                     {
                         spriteBatch.Draw(tilesetTest,
-                            new Rectangle((int)(x * map.TileSize.X - camera.X + Window.ClientBounds.Width / 2),
-                                (int)(y * map.TileSize.Y - camera.Y + Window.ClientBounds.Height / 2),
+                            new Rectangle(
+                                (int)(x * map.TileSize.X - camera.X),
+                                (int)(y * map.TileSize.Y - camera.Y),
                                 map.TileSize.X,
                                 map.TileSize.Y),
                             map.Tilesets[0].GetRect(layer.GetData(x, y)),
@@ -129,15 +136,22 @@ namespace QuestForTheCrown2
                 }
             }
 
-            spriteBatch.Draw(mainCharacter.CurrentFrame.Texture,
-                new Vector2(
-                    mainCharacter.Position.X - camera.X + Window.ClientBounds.Width / 2,
-                    mainCharacter.Position.Y - camera.Y + Window.ClientBounds.Height / 2),
-                mainCharacter.CurrentFrame.Rectangle, Color.White);
+            Draw(mainCharacter, camera);
+            Draw(enemy1, camera);
 
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void Draw(Entity entity, Vector2 camera)
+        {
+            var frame = entity.CurrentFrame;
+            spriteBatch.Draw(frame.Texture,
+                new Vector2(
+                    entity.Position.X - camera.X,
+                    entity.Position.Y - camera.Y),
+                frame.Rectangle, Color.White);
         }
 
         static Vector2 GetCameraPosition(Entity entity, Point mapSize, Rectangle screenSize)
@@ -156,7 +170,9 @@ namespace QuestForTheCrown2
             else if (newY > mapSize.Y - screenSize.Height / 2)
                 newY = mapSize.Y - screenSize.Height / 2;
 
-            camera = new Vector2(newX, newY);
+            camera = new Vector2(
+                newX - screenSize.Width / 2,
+                newY - screenSize.Height / 2);
             return camera;
         }
     }

@@ -28,7 +28,7 @@ namespace QuestForTheCrown2.Entities.Characters
             SpriteSheet.AddAnimation("walking", "right", line: 2, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("walking", "up", line: 3, frameDuration: walkFrameDuration);
 
-            Speed *= 4;
+            Speed = new Vector2(96);
         }
 
         public override void Update(GameTime gameTime, Map map)
