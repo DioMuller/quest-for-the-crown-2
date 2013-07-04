@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,26 @@ namespace QuestForTheCrown2.Levels
         /// Dungeons on this world/dungeon.
         /// </summary>
         List<LevelCollection> _dungeons;
+
+        LevelCollection _currentDungeon;
         #endregion Attributes
+
+        #region Properties
+        private Level CurrentLevel
+        {
+            get
+            {
+                if (_currentDungeon == null)
+                {
+                    return _currentLevel;
+                }
+                else
+                {
+                    return _currentDungeon.CurrentLevel;
+                }
+            }
+        }
+        #endregion Properties
 
         #region Constructor
         /// <summary>
@@ -32,5 +52,36 @@ namespace QuestForTheCrown2.Levels
             _dungeons = new List<LevelCollection>();
         }
         #endregion Constructor
+
+        #region Methods
+        /// <summary>
+        /// Changes the current level for playerNum.
+        /// </summary>
+        /// <param name="playerNum">Player identifier.</param>
+        /// <param name="direction">Direction to teleport.</param>
+        private void GoToNeighbor(int playerNum, Direction direction)
+        {
+        }
+
+        #region Public Methods
+        /// <summary>
+        /// Updates the currently active levels and their entities.
+        /// </summary>
+        /// <param name="gameTime">Game time.</param>
+        public void Update(GameTime gameTime)
+        {
+        }
+
+        /// <summary>
+        /// Draws current active levels and their entities.
+        /// </summary>
+        /// <param name="gameTime">Game time.</param>
+        public void Draw(GameTime gameTime)
+        {
+
+        }
+        #endregion Public Methods
+
+        #endregion Methods
     }
 }
