@@ -440,4 +440,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,295,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="Objects" width="40" height="25">
+  <object name="Player" type="MainCharacter" x="576" y="320" width="32" height="32"/>
+  <object name="Enemy01" type="Enemy" x="721" y="572" width="32" height="32"/>
+  <object name="Enemy01" type="Enemy" x="303" y="531" width="32" height="32"/>
+  <object name="Enemy01" type="Enemy" x="948" y="230" width="32" height="32"/>
+ </objectgroup>
 </map>

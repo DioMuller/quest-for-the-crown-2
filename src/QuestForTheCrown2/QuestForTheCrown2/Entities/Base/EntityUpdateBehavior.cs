@@ -11,7 +11,7 @@ namespace QuestForTheCrown2.Entities.Base
     /// <summary>
     /// An update method, that can be attached to entities.
     /// </summary>
-    abstract class EntityUpdateBehavior
+    public abstract class EntityUpdateBehavior
     {
         /// <summary>
         /// The group in which this update operates.

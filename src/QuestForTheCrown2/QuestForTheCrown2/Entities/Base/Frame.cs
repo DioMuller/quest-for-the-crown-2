@@ -10,7 +10,7 @@ namespace QuestForTheCrown2.Entities.Base
     /// <summary>
     /// Represents a single image inside a sprite sheet.
     /// </summary>
-    class Frame
+    public class Frame
     {
         /// <summary>
         /// The sprite sheet's texture.

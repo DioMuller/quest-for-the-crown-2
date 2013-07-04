@@ -25,13 +25,9 @@ namespace QuestForTheCrown2
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Map map;
         Levels.LevelCollection overworld;
 
         Base.Input input = new Base.Input();
-
-        // Teste
-        Entity mainCharacter, enemy1;
 
         public GameMain()
             : base()
@@ -64,20 +60,7 @@ namespace QuestForTheCrown2
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            map = MapLoader.LoadMap("Content\\maps\\Overworld-01.tmx");
             overworld = MapLoader.LoadLevels("Content/dungeons/Overworld.qfc");
-
-            // Teste
-            mainCharacter = new Enemy1 { Position = new Vector2(32 * 4, 32 * 4) };
-            mainCharacter.AddBehavior(
-                new InputWalkBehavior(Base.InputType.Controller),
-                new InputWalkBehavior(Base.InputType.Keyboard)
-            );
-
-            enemy1 = new MainCharacter { Position = new Vector2(32 * 8, 32 * 8) };
-            enemy1.AddBehavior(
-                new FollowBehavior { Following = mainCharacter }
-            );
         }
 
         /// <summary>
@@ -102,8 +85,10 @@ namespace QuestForTheCrown2
             // TODO: Add your update logic here
 
             // Teste
-            mainCharacter.Update(gameTime, map);
-            enemy1.Update(gameTime, map);
+
+            overworld.Update(gameTime);
+            //mainCharacter.Update(gameTime, map);
+            //enemy1.Update(gameTime, map);
 
             base.Update(gameTime);
         }
@@ -116,50 +101,18 @@ namespace QuestForTheCrown2
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            var camera = GetCameraPosition(mainCharacter, map.PixelSize, Window.ClientBounds);
-
             spriteBatch.Begin();
 
-            map.Draw(gameTime, spriteBatch, camera);
+            overworld.Draw(gameTime, spriteBatch, Window.ClientBounds);
 
-            Draw(mainCharacter, camera);
-            Draw(enemy1, camera);
+            //map.Draw(gameTime, spriteBatch, camera);
+
+            //Draw(mainCharacter, camera);
+            //Draw(enemy1, camera);
 
             spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        private void Draw(Entity entity, Vector2 camera)
-        {
-            var frame = entity.CurrentFrame;
-            spriteBatch.Draw(frame.Texture,
-                new Vector2(
-                    entity.Position.X - camera.X,
-                    entity.Position.Y - camera.Y),
-                frame.Rectangle, Color.White);
-        }
-
-        static Vector2 GetCameraPosition(Entity entity, Point mapSize, Rectangle screenSize)
-        {
-            var camera = entity.Position;
-            var newX = entity.Position.X;
-            var newY = entity.Position.Y;
-
-            if (newX < screenSize.Width / 2)
-                newX = screenSize.Width / 2;
-            else if (newX > mapSize.X - screenSize.Width / 2)
-                newX = mapSize.X - screenSize.Width / 2;
-
-            if (newY < screenSize.Height / 2)
-                newY = screenSize.Height / 2;
-            else if (newY > mapSize.Y - screenSize.Height / 2)
-                newY = mapSize.Y - screenSize.Height / 2;
-
-            camera = new Vector2(
-                newX - screenSize.Width / 2,
-                newY - screenSize.Height / 2);
-            return camera;
         }
     }
 }

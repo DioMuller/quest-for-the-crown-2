@@ -10,7 +10,7 @@ using QuestForTheCrown2.Levels.Mapping;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
-    class MainCharacter : Entity
+    public class MainCharacter : Entity
     {
         const string spriteSheetPath = @"sprites\MainCharacter.png";
 

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace QuestForTheCrown2.Entities.Base
 {
-    class SpriteSheet
+    public class SpriteSheet
     {
         public Texture2D Texture { get; private set; }
         public Dictionary<string, Dictionary<string, Animation>> Animations { get; private set; }
@@ -57,7 +57,7 @@ namespace QuestForTheCrown2.Entities.Base
         }
     }
 
-    class Animation
+    public class Animation
     {
         public int[] FrameIndexes { get; private set; }
         public TimeSpan FrameDuration { get; private set; }

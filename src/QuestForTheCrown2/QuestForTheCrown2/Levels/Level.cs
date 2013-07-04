@@ -6,6 +6,7 @@ using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Levels.Mapping;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using QuestForTheCrown2.Entities.Characters;
 
 namespace QuestForTheCrown2.Levels
 {
@@ -33,6 +34,22 @@ namespace QuestForTheCrown2.Levels
 
         #region Properties
         public int Id { get; private set; }
+
+        public MainCharacter Player
+        {
+            get
+            {
+                return (from Entity entity in _entities where entity is MainCharacter select entity).First() as MainCharacter;
+            }
+        }
+
+        internal Map Map
+        {
+            get
+            {
+                return _map;
+            }
+        }
         #endregion Properties
 
         #region Constructor
@@ -55,6 +72,11 @@ namespace QuestForTheCrown2.Levels
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 camera)
         {
             _map.Draw(gameTime, spriteBatch, camera);
+
+            foreach( Entity en in _entities )
+            {
+                en.Draw(gameTime, spriteBatch, camera);
+            }
         }
 
         /// <summary>
@@ -87,6 +109,16 @@ namespace QuestForTheCrown2.Levels
         public void SetNeighbor(Direction direction, int value)
         {
             _neighbors[(int)direction] = value;
+        }
+
+        public void AddEntity(Entity entity)
+        {
+            _entities.Add(entity);
+        }
+
+        public void AddEntity(IEnumerable<Entity> entities)
+        {
+            _entities.AddRange(entities);
         }
         #endregion Methods
     }

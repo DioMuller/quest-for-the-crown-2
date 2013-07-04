@@ -9,7 +9,7 @@ using QuestForTheCrown2.Base;
 
 namespace QuestForTheCrown2.Entities.Base
 {
-    class Entity
+    public class Entity
     {
         #region Attributes
         int _currentFrameIndex;
@@ -152,5 +152,23 @@ namespace QuestForTheCrown2.Entities.Base
             }
         }
         #endregion
+
+        #region Draw
+        /// <summary>
+        /// Draws the entity
+        /// </summary>
+        /// <param name="gameTime">Current game time.</param>
+        /// <param name="spriteBatch">Sprite batch</param>
+        /// <param name="camera">Current camera.</param>
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 camera)
+        {
+            var frame = CurrentFrame;
+            spriteBatch.Draw(frame.Texture,
+                new Vector2(
+                    Position.X - camera.X,
+                    Position.Y - camera.Y),
+                frame.Rectangle, Color.White);
+        }
+        #endregion Draw
     }
 }
