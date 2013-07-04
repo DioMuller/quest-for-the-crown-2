@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<collection>
+  <level id="1" neighbors="0,0,2,3" path="/maps/Overworld-01.tmx"/>
+  <level id="2" neighbors="1,0,0,0" path="/maps/Overworld-02.tmx"/>
+  <level id="3" neighbors="0,1,0,0" path="/maps/Overworld-03.tmx"/>
+</collection>
