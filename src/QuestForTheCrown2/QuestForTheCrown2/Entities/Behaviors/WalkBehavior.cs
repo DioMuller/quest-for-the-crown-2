@@ -1,23 +1,35 @@
 ﻿using Microsoft.Xna.Framework;
-using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Levels.Mapping;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace QuestForTheCrown2.Entities.Behaviors
 {
+    /// <summary>
+    /// Base behavior for walking.
+    /// Contains helper methods to make one entity walk based on the GameTime.
+    /// </summary>
     abstract class WalkBehavior : EntityUpdateBehavior
     {
+        #region Attributes
         int _stoppedFrameCount;
+        #endregion
 
-        public WalkBehavior()
+        #region Constructors
+        protected WalkBehavior()
         {
             Group = "movement";
         }
+        #endregion
 
+        #region Protected Methods
+        /// <summary>
+        /// Make the Entity walk into the desired direction.
+        /// The entity will use its animations accordingly.
+        /// </summary>
+        /// <param name="gameTime">Current game time.</param>
+        /// <param name="map">Current entity map.</param>
+        /// <param name="direction">Desired walk direction.</param>
         protected void Walk(GameTime gameTime, Map map, Vector2 direction)
         {
             if (Math.Abs(direction.X) >= Math.Abs(direction.Y))
@@ -59,5 +71,6 @@ namespace QuestForTheCrown2.Entities.Behaviors
                     y: newY);
             }
         }
+        #endregion
     }
 }
