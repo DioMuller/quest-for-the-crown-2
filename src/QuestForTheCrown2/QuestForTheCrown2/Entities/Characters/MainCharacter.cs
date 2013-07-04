@@ -7,10 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Levels.Mapping;
+using QuestForTheCrown2.Levels;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
-    class MainCharacter : Entity
+    public class MainCharacter : Entity
     {
         const string spriteSheetPath = @"sprites\MainCharacter.png";
 
@@ -29,11 +30,6 @@ namespace QuestForTheCrown2.Entities.Characters
             SpriteSheet.AddAnimation("walking", "up", line: 3, frameDuration: walkFrameDuration);
 
             Speed = new Vector2(96);
-        }
-
-        public override void Update(GameTime gameTime, Map map)
-        {
-            base.Update(gameTime, map);
         }
     }
 }

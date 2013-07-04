@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Levels.Mapping;
+using QuestForTheCrown2.Levels;
 
 namespace QuestForTheCrown2.Entities.Behaviors
 {
@@ -41,20 +42,20 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         /// <param name="gameTime">Current game time.</param>
         /// <param name="map">Current entity map.</param>
-        public override void Update(GameTime gameTime, Map map)
+        public override void Update(GameTime gameTime, Level level)
         {
-            Walk(gameTime, map, _input.Movement);
-            Attack(gameTime, map, _input.Attack);
+            Walk(gameTime, level, _input.Movement);
+            Attack(gameTime, level, _input.Attack);
         }
 
         /// <summary>
         /// Tries to attack with the current weapon.
         /// </summary>
         /// <param name="direction">The attack direction.</param>
-        void Attack(GameTime gameTime, Map map, Vector2 direction)
+        void Attack(GameTime gameTime, Level level, Vector2 direction)
         {
             if (direction != Vector2.Zero)
-                Entity.Weapons[_currentWeapon].Attack(gameTime, map, direction);
+                Entity.Weapons[_currentWeapon].Attack(gameTime, level, direction);
         }
         #endregion
     }

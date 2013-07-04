@@ -30,10 +30,5 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Speed = new Vector2(96);
         }
-
-        public override void Update(GameTime gameTime, Map map)
-        {
-            base.Update(gameTime, map);
-        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using QuestForTheCrown2.Entities.Base;
+using QuestForTheCrown2.Levels;
 using QuestForTheCrown2.Levels.Mapping;
 using System;
 
@@ -30,7 +31,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="gameTime">Current game time.</param>
         /// <param name="map">Current entity map.</param>
         /// <param name="direction">Desired walk direction.</param>
-        protected void Walk(GameTime gameTime, Map map, Vector2 direction)
+        protected void Walk(GameTime gameTime, Level level, Vector2 direction)
         {
             if (Math.Abs(direction.X) >= Math.Abs(direction.Y))
             {
@@ -64,7 +65,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
             float newX = (float)(Entity.Position.X + direction.X * Entity.Speed.X * timeFactor);
             float newY = (float)(Entity.Position.Y + direction.Y * Entity.Speed.Y * timeFactor);
 
-            if (!map.Collides(new Microsoft.Xna.Framework.Rectangle((int)newX, (int)newY, Entity.Size.X, Entity.Size.Y)))
+            if (!level.Map.Collides(new Microsoft.Xna.Framework.Rectangle((int)newX, (int)newY, Entity.Size.X, Entity.Size.Y)))
             {
                 Entity.Position = new Microsoft.Xna.Framework.Vector2(
                     x: newX,

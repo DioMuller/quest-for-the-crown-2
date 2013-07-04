@@ -7,10 +7,11 @@ using System.Text;
 using QuestForTheCrown2.Levels.Mapping;
 using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Weapons;
+using QuestForTheCrown2.Levels;
 
 namespace QuestForTheCrown2.Entities.Base
 {
-    class Entity
+    public class Entity
     {
         #region Attributes
         int _currentFrameIndex;
@@ -130,7 +131,7 @@ namespace QuestForTheCrown2.Entities.Base
         }
 
         #region Update
-        public virtual void Update(GameTime gameTime, Map map)
+        public virtual void Update(GameTime gameTime, Level level)
         {
             if (Behaviors != null)
             {
@@ -138,12 +139,12 @@ namespace QuestForTheCrown2.Entities.Base
                 {
                     if (behaviorGroup.Key == string.Empty)
                         foreach (var behavior in behaviorGroup.Value.Where(b => b.Active))
-                            behavior.Update(gameTime, map);
+                            behavior.Update(gameTime, level);
                     else
                     {
                         var bh = behaviorGroup.Value.Where(b => b.Active).FirstOrDefault();
                         if (bh != null)
-                            bh.Update(gameTime, map);
+                            bh.Update(gameTime, level);
                     }
                 }
             }
@@ -162,5 +163,23 @@ namespace QuestForTheCrown2.Entities.Base
             }
         }
         #endregion
+
+        #region Draw
+        /// <summary>
+        /// Draws the entity
+        /// </summary>
+        /// <param name="gameTime">Current game time.</param>
+        /// <param name="spriteBatch">Sprite batch</param>
+        /// <param name="camera">Current camera.</param>
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 camera)
+        {
+            var frame = CurrentFrame;
+            spriteBatch.Draw(frame.Texture,
+                new Vector2(
+                    Position.X - camera.X,
+                    Position.Y - camera.Y),
+                frame.Rectangle, Color.White);
+        }
+        #endregion Draw
     }
 }

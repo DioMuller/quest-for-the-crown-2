@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using QuestForTheCrown2.Entities.Base;
+using QuestForTheCrown2.Levels;
 using QuestForTheCrown2.Levels.Mapping;
 
 namespace QuestForTheCrown2.Entities.Behaviors
@@ -47,7 +48,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         /// <param name="gameTime">Current game time.</param>
         /// <param name="map">Current entity map.</param>
-        public override void Update(GameTime gameTime, Map map)
+        public override void Update(GameTime gameTime, Level level)
         {
             var direction = new Vector2(
                 Following.Position.X - Entity.Position.X,
@@ -61,7 +62,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
             else if (route.Length() > 1)
                 route.Normalize();
 
-            Walk(gameTime, map, route);
+            Walk(gameTime, level, route);
         }
         #endregion
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using QuestForTheCrown2.Levels;
 using QuestForTheCrown2.Levels.Mapping;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 {
     class Sword : Weapon
     {
-        public override void Attack(GameTime gameTime, Map map, Vector2 direction)
+        public override void Attack(GameTime gameTime, Level level, Vector2 direction)
         {
         }
     }

@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Levels.Mapping;
+using QuestForTheCrown2.Levels;
 
 namespace QuestForTheCrown2.Entities.Base
 {
     /// <summary>
     /// An update method, that can be attached to entities.
     /// </summary>
-    abstract class EntityUpdateBehavior
+    public abstract class EntityUpdateBehavior
     {
         /// <summary>
         /// The group in which this update operates.
@@ -33,6 +34,6 @@ namespace QuestForTheCrown2.Entities.Base
         /// Executes an update logic on the attached entity.
         /// </summary>
         /// <param name="deltaTime"></param>
-        public abstract void Update(GameTime deltaTime, Map map);
+        public abstract void Update(GameTime deltaTime, Level level);
     }
 }

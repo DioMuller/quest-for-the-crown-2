@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using QuestForTheCrown2.Entities.Base;
+using QuestForTheCrown2.Entities.Characters;
 
 namespace QuestForTheCrown2.Levels
 {
@@ -18,7 +20,7 @@ namespace QuestForTheCrown2.Levels
         /// <summary>
         /// Current level visited by the player.
         /// </summary>
-        Level _currentLevel;
+        int _currentLevel;
         
         /// <summary>
         /// Dungeons on this world/dungeon.
@@ -28,7 +30,7 @@ namespace QuestForTheCrown2.Levels
         /// <summary>
         /// Current dungeon.
         /// </summary>
-        LevelCollection _currentDungeon;
+        int _currentDungeon;
         #endregion Attributes
 
         #region Properties
@@ -39,14 +41,22 @@ namespace QuestForTheCrown2.Levels
         {
             get
             {
-                if (_currentDungeon == null)
+                if (_currentDungeon == -1)
                 {
-                    return _currentLevel;
+                    return _levels[_currentLevel];
                 }
                 else
                 {
-                    return _currentDungeon.CurrentLevel;
+                    return _dungeons[_currentDungeon].CurrentLevel;
                 }
+            }
+        }
+
+        private MainCharacter Player
+        {
+            get
+            {
+                return _levels[_currentLevel].Player;
             }
         }
         #endregion Properties
@@ -59,6 +69,9 @@ namespace QuestForTheCrown2.Levels
         {
             _levels = new List<Level>();
             _dungeons = new List<LevelCollection>();
+
+            _currentLevel = 0;
+            _currentDungeon = -1;
         }
         #endregion Constructor
 
@@ -70,6 +83,13 @@ namespace QuestForTheCrown2.Levels
         /// <param name="direction">Direction to teleport.</param>
         private void GoToNeighbor(int playerNum, Direction direction)
         {
+            int neighbor = CurrentLevel.GetNeighbor(direction);
+
+            if( neighbor != 0 )
+            {
+                _currentLevel = neighbor - 1;
+                //TODO: Set player position?
+            }
         }
 
         #region Public Methods
@@ -86,8 +106,9 @@ namespace QuestForTheCrown2.Levels
         /// Draws current active levels and their entities.
         /// </summary>
         /// <param name="gameTime">Game time.</param>
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 camera)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds)
         {
+            Vector2 camera = (Player != null) ? GetCameraPosition(Player, CurrentLevel.Map.PixelSize, clientBounds) : Vector2.Zero;
             CurrentLevel.Draw(gameTime, spriteBatch, camera);
         }
 
@@ -105,6 +126,30 @@ namespace QuestForTheCrown2.Levels
             return true;
         }
         #endregion Public Methods
+
+        #region Camera Methods
+        static Vector2 GetCameraPosition(Entity entity, Point mapSize, Rectangle screenSize)
+        {
+            var camera = entity.Position;
+            var newX = entity.Position.X;
+            var newY = entity.Position.Y;
+
+            if (newX < screenSize.Width / 2)
+                newX = screenSize.Width / 2;
+            else if (newX > mapSize.X - screenSize.Width / 2)
+                newX = mapSize.X - screenSize.Width / 2;
+
+            if (newY < screenSize.Height / 2)
+                newY = screenSize.Height / 2;
+            else if (newY > mapSize.Y - screenSize.Height / 2)
+                newY = mapSize.Y - screenSize.Height / 2;
+
+            camera = new Vector2(
+                newX - screenSize.Width / 2,
+                newY - screenSize.Height / 2);
+            return camera;
+        }
+        #endregion Camera Methods
 
         #endregion Methods
     }

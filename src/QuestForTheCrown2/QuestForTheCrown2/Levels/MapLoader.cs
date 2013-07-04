@@ -6,6 +6,10 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
+using QuestForTheCrown2.Entities.Base;
+using QuestForTheCrown2.Entities.Behaviors;
+using QuestForTheCrown2.Entities.Characters;
+using QuestForTheCrown2.Entities.Weapons;
 
 namespace QuestForTheCrown2.Levels.Mapping
 {
@@ -29,9 +33,8 @@ namespace QuestForTheCrown2.Levels.Mapping
             {
                 int id = int.Parse(el.Attribute("id").Value);
                 int[] neighbors = (from string element in el.Attribute("neighbors").Value.Split(',') select int.Parse(element)).ToArray<int>();
-                Map map = LoadMap(el.Attribute("path").Value);
+                Level level = LoadMap(id, el.Attribute("path").Value);
 
-                Level level = new Level(id, map);
                 for( int i = 0; i < 4; i++ )
                 {
                     level.SetNeighbor((Direction)i, neighbors[i]);
@@ -48,10 +51,11 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// </summary>
         /// <param name="tmxFile">TMX File path.</param>
         /// <returns>Loaded map.</returns>
-        public static Map LoadMap(string tmxFile)
+        private static Level LoadMap(int id, string tmxFile)
         {
             Map map = null;
             XDocument doc = XDocument.Load(tmxFile);
+            List<Entity> entities = new List<Entity>();
 
             #region Create Map
             XElement mapElement = doc.Element("map");
@@ -77,13 +81,13 @@ namespace QuestForTheCrown2.Levels.Mapping
                 #region Tiles
                 foreach( XElement element in set.Elements("tile") )
                 {
-                    int id = int.Parse(element.Attribute("id").Value);
+                    int tileid = int.Parse(element.Attribute("id").Value);
                     string[] terrain = element.Attribute("terrain").Value.Split(',');
-                    
-                    tileset.Tiles[id].SetCollision(CollisionPosition.UpperLeft, int.Parse(terrain[0]));
-                    tileset.Tiles[id].SetCollision(CollisionPosition.UpperRight, int.Parse(terrain[1]));
-                    tileset.Tiles[id].SetCollision(CollisionPosition.DownLeft, int.Parse(terrain[2]));
-                    tileset.Tiles[id].SetCollision(CollisionPosition.DownRight, int.Parse(terrain[3]));
+
+                    tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperLeft, int.Parse(terrain[0]));
+                    tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperRight, int.Parse(terrain[1]));
+                    tileset.Tiles[tileid].SetCollision(CollisionPosition.DownLeft, int.Parse(terrain[2]));
+                    tileset.Tiles[tileid].SetCollision(CollisionPosition.DownRight, int.Parse(terrain[3]));
                 }
                 #endregion Tiles
 
@@ -103,10 +107,53 @@ namespace QuestForTheCrown2.Levels.Mapping
             }
             #endregion Layers
 
+            #region Objects
+            MainCharacter mainChar = null;
+
+            foreach( XElement objs in mapElement.Elements("objectgroup") )
+            {
+                foreach( XElement obj in objs.Elements("object") )
+                {
+                    Entity entity;
+                    int x = int.Parse(obj.Attribute("x").Value);
+                    int y = int.Parse(obj.Attribute("y").Value);
+                    string type = obj.Attribute("type").Value;
+
+                    switch( type )
+                    {
+                        case "MainCharacter":
+                            entity = new MainCharacter { Position = new Vector2(32 * 4, 32 * 4) };
+                            entity.AddBehavior(
+                                new InputBehavior(Base.InputType.Controller),
+                                new InputBehavior(Base.InputType.Keyboard)
+                            );
+                            entity.AddWeapon(new Sword());
+
+                            mainChar = entity as MainCharacter;
+                            break;
+                        case "Enemy":
+                            entity = new Enemy1 { Position = new Vector2(32 * 8, 32 * 8) };
+                            entity.AddBehavior(
+                            new FollowBehavior { Following = mainChar }
+                            );
+                            break;
+                        default:
+                            entity = null;
+                            break;
+                    }
+
+                    if( entity != null) entities.Add(entity);
+                }
+            }
+            #endregion Objects
+
             //Updates collision map
             map.UpdateCollision();
 
-            return map;
+
+            Level level = new Level(id, map);
+            level.AddEntity(entities);
+            return level;
         }
     }
 }
