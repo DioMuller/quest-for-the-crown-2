@@ -95,6 +95,12 @@ namespace QuestForTheCrown2.Levels.Mapping
             return (result != 0); //If everything is 0; it won't collide.
         }
 
+        /// <summary>
+        /// Draws the map.
+        /// </summary>
+        /// <param name="gameTime">Game time</param>
+        /// <param name="spriteBatch">Sprite batch.</param>
+        /// <param name="camera">Game camera.</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 camera)
         {
             foreach (Layer layer in Layers)

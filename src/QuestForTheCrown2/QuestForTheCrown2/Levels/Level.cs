@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Levels.Mapping;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace QuestForTheCrown2.Levels
 {
@@ -44,6 +46,17 @@ namespace QuestForTheCrown2.Levels
         #endregion Constructor
 
         #region Methods
+        /// <summary>
+        /// Draws the level (map and entities).
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="spriteBatch"></param>
+        /// <param name="camera"></param>
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 camera)
+        {
+            _map.Draw(gameTime, spriteBatch, camera);
+        }
+
         /// <summary>
         /// Gets neighbor ID
         /// </summary>

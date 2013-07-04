@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,9 @@ namespace QuestForTheCrown2.Levels
         #endregion Attributes
 
         #region Properties
+        /// <summary>
+        /// Current Level (May be changed to CurrentLevel array)
+        /// </summary>
         private Level CurrentLevel
         {
             get
@@ -76,9 +80,9 @@ namespace QuestForTheCrown2.Levels
         /// Draws current active levels and their entities.
         /// </summary>
         /// <param name="gameTime">Game time.</param>
-        public void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 camera)
         {
-
+            CurrentLevel.Draw(gameTime, spriteBatch, camera);
         }
         #endregion Public Methods
 
