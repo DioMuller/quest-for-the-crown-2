@@ -35,8 +35,8 @@ namespace QuestForTheCrown2.Base
                     case InputType.KeyboardAndMouse:
                         var state = Keyboard.GetState((PlayerIndex)Index);
                         var movement = new Vector2(
-                            x: (state.IsKeyDown(Keys.Left) ? -1 : 0) + (state.IsKeyDown(Keys.Right) ? +1 : 0),
-                            y: (state.IsKeyDown(Keys.Up) ? -1 : 0) + (state.IsKeyDown(Keys.Down) ? +1 : 0));
+                            x: (state.IsKeyDown(Keys.A) ? -1 : 0) + (state.IsKeyDown(Keys.D) ? +1 : 0),
+                            y: (state.IsKeyDown(Keys.W) ? -1 : 0) + (state.IsKeyDown(Keys.S) ? +1 : 0));
                         if (movement.X != 0 && movement.Y != 0)
                             movement.Normalize();
                         return movement;
@@ -53,7 +53,19 @@ namespace QuestForTheCrown2.Base
                 switch (Type)
                 {
                     case InputType.Controller:
-                        return GamePad.GetState((PlayerIndex)Index).ThumbSticks.Right;
+                        var rightStick = GamePad.GetState((PlayerIndex)Index).ThumbSticks.Right;
+                        return new Vector2(
+                            x: rightStick.X,
+                            y: -rightStick.Y);
+                    case InputType.KeyboardAndMouse:
+                    case InputType.Keyboard:
+                        var state = Keyboard.GetState((PlayerIndex)Index);
+                        var attack = new Vector2(
+                            x: (state.IsKeyDown(Keys.Left) ? -1 : 0) + (state.IsKeyDown(Keys.Right) ? +1 : 0),
+                            y: (state.IsKeyDown(Keys.Up) ? -1 : 0) + (state.IsKeyDown(Keys.Down) ? +1 : 0));
+                        if (attack.X != 0 && attack.Y != 0)
+                            attack.Normalize();
+                        return attack;
                     default:
                         return Vector2.Zero;
                 }

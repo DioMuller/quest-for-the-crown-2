@@ -14,6 +14,7 @@ using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Characters;
 using QuestForTheCrown2.Entities.Behaviors;
 using QuestForTheCrown2.Base;
+using QuestForTheCrown2.Entities.Weapons;
 
 namespace QuestForTheCrown2
 {
@@ -70,9 +71,10 @@ namespace QuestForTheCrown2
             // Teste
             mainCharacter = new Enemy1 { Position = new Vector2(32 * 4, 32 * 4) };
             mainCharacter.AddBehavior(
-                new InputWalkBehavior(Base.InputType.Controller),
-                new InputWalkBehavior(Base.InputType.Keyboard)
+                new InputBehavior(Base.InputType.Controller),
+                new InputBehavior(Base.InputType.Keyboard)
             );
+            mainCharacter.AddWeapon(new Sword());
 
             enemy1 = new MainCharacter { Position = new Vector2(32 * 8, 32 * 8) };
             enemy1.AddBehavior(

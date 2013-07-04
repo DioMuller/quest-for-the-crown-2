@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Levels.Mapping;
 using QuestForTheCrown2.Base;
+using QuestForTheCrown2.Entities.Weapons;
 
 namespace QuestForTheCrown2.Entities.Base
 {
@@ -36,6 +37,7 @@ namespace QuestForTheCrown2.Entities.Base
         }
 
         public Dictionary<string, List<EntityUpdateBehavior>> Behaviors { get; private set; }
+        public List<Weapon> Weapons { get; private set; }
 
         /// <summary>
         /// Indicates the current entity animation.
@@ -117,6 +119,14 @@ namespace QuestForTheCrown2.Entities.Base
                 else
                     Behaviors[group] = new List<EntityUpdateBehavior> { behavior };
             }
+        }
+
+        public void AddWeapon(params Weapon[] weapons)
+        {
+            if (Weapons == null)
+                Weapons = new List<Weapon>();
+
+            Weapons.AddRange(weapons);
         }
 
         #region Update
