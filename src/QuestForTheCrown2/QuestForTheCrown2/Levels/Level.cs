@@ -34,12 +34,14 @@ namespace QuestForTheCrown2.Levels
 
         #region Properties
         public int Id { get; private set; }
+        public List<Player> Players { get; private set; }
 
-        public MainCharacter Player
+        public Player Player
         {
             get
             {
-                return (from Entity entity in _entities where entity is MainCharacter select entity).First() as MainCharacter;
+                if( Players.Count != 0 ) return Players.First();
+                return null;
             }
         }
 
@@ -59,6 +61,8 @@ namespace QuestForTheCrown2.Levels
             _map = map;
             _entities = new List<Entity>();
             _neighbors = new int[4];
+
+            Players = new List<Player>();
         }
         #endregion Constructor
 

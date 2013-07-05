@@ -108,7 +108,7 @@ namespace QuestForTheCrown2.Levels.Mapping
             #endregion Layers
 
             #region Objects
-            MainCharacter mainChar = null;
+            Player mainChar = null;
 
             foreach( XElement objs in mapElement.Elements("objectgroup") )
             {
@@ -122,14 +122,14 @@ namespace QuestForTheCrown2.Levels.Mapping
                     switch( type )
                     {
                         case "MainCharacter":
-                            entity = new MainCharacter { Position = new Vector2(x, y) };
+                            entity = new Player { Position = new Vector2(x, y) };
                             entity.AddBehavior(
                                 new InputBehavior(Base.InputType.Controller),
                                 new InputBehavior(Base.InputType.Keyboard)
                             );
                             entity.AddWeapon(new Sword());
 
-                            mainChar = entity as MainCharacter;
+                            mainChar = entity as Player;
                             break;
                         case "Enemy":
                             entity = new Enemy1 { Position = new Vector2( x, y) };

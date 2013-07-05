@@ -11,11 +11,54 @@ using QuestForTheCrown2.Levels;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
-    public class MainCharacter : Entity
+    public class Player : Entity
     {
+        #region Constants
+        /// <summary>
+        /// Spritesheet path
+        /// </summary>
         const string spriteSheetPath = @"sprites\MainCharacter.png";
+        #endregion Constants
 
-        public MainCharacter()
+        #region Attributes
+        private int _playerNumber;
+        #endregion Attributes
+
+        #region Properties
+        /// <summary>
+        /// Player number (1-4)
+        /// </summary>
+        public int PlayerNumber 
+        { 
+            get
+            {
+                return _playerNumber;
+            }   
+            set
+            {
+                if( value > 0 && value < 5 )
+                {
+                    _playerNumber = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Current dungeon the player is in.
+        /// </summary>
+        public int CurrentDungeon { get; set; }
+
+        /// <summary>
+        /// Current level the player is in.
+        /// </summary>
+        public int CurrentLevel { get; set; }
+        #endregion Properties
+
+        #region Constructor
+        /// <summary>
+        /// Builds main character with its base spritesheet and animations.
+        /// </summary>
+        public Player()
             : base(spriteSheetPath, new Point(22, 28))
         {
             TimeSpan walkFrameDuration = TimeSpan.FromMilliseconds(100);
@@ -31,5 +74,6 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Speed = new Vector2(96);
         }
+        #endregion Constructor
     }
 }

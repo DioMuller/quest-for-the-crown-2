@@ -28,6 +28,11 @@ namespace QuestForTheCrown2.Levels
         List<LevelCollection> _dungeons;
 
         /// <summary>
+        /// Players list.
+        /// </summary>
+        List<Player> _players;
+
+        /// <summary>
         /// Current dungeon.
         /// </summary>
         int _currentDungeon;
@@ -37,22 +42,22 @@ namespace QuestForTheCrown2.Levels
         /// <summary>
         /// Current Level (May be changed to CurrentLevel array)
         /// </summary>
-        private Level CurrentLevel
+        private IEnumerable<Level> CurrentLevels
         {
             get
             {
-                if (_currentDungeon == -1)
+                HashSet<Level> list = new HashSet<Level>();
+
+                foreach( Player player in _players )
                 {
-                    return _levels[_currentLevel];
+                    list.Add(GetLevelByPlayer(player));
                 }
-                else
-                {
-                    return _dungeons[_currentDungeon].CurrentLevel;
-                }
+
+                return list;
             }
         }
 
-        private MainCharacter Player
+        private Player Player
         {
             get
             {
@@ -83,12 +88,25 @@ namespace QuestForTheCrown2.Levels
         /// <param name="direction">Direction to teleport.</param>
         private void GoToNeighbor(int playerNum, Direction direction)
         {
-            int neighbor = CurrentLevel.GetNeighbor(direction);
+            Player player = _players[playerNum - 1];
+            int neighbor = GetLevelByPlayer(player).GetNeighbor(direction);
 
             if( neighbor != 0 )
             {
-                _currentLevel = neighbor - 1;
+                player.CurrentLevel = neighbor - 1;
             }
+        }
+
+        internal Level GetLevel(int index)
+        {
+            return _levels[index];
+        }
+
+        internal Level GetLevelByPlayer(Player player)
+        {
+            if( player.CurrentDungeon == -1 ) return _levels[player.CurrentLevel];
+
+            return _dungeons[player.CurrentDungeon].GetLevel(player.CurrentLevel);
         }
 
         #region Public Methods
@@ -98,7 +116,10 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Update(GameTime gameTime)
         {
-            CurrentLevel.Update(gameTime);
+            foreach( Level lv in CurrentLevels )
+            {
+                lv.Update(gameTime);
+            }
         }
 
         /// <summary>
@@ -107,8 +128,12 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds)
         {
-            Vector2 camera = (Player != null) ? GetCameraPosition(Player, CurrentLevel.Map.PixelSize, clientBounds) : Vector2.Zero;
-            CurrentLevel.Draw(gameTime, spriteBatch, camera);
+            foreach( Level lv in CurrentLevels )
+            {
+                //TODO: Calculate camera for split screen?
+                Vector2 camera = GetCameraPosition(lv.Player, lv.Map.PixelSize, clientBounds);
+                lv.Draw(gameTime, spriteBatch, camera);
+            }
         }
 
         /// <summary>
@@ -123,6 +148,17 @@ namespace QuestForTheCrown2.Levels
 
             _levels.Add(level);
             return true;
+        }
+
+        public int AddPlayer(Player player)
+        {
+            if( _players.Count < 4 )
+            {
+                _players.Add(player);
+                return _players.Count;
+            }
+
+            return 0;
         }
         #endregion Public Methods
 
