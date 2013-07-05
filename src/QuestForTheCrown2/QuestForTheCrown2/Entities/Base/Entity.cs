@@ -55,7 +55,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// <summary>
         /// Padding Rectangle. The Width and Height properties are actually the right and bottom margins.
         /// </summary>
-        public Rectangle  Padding { get; set; }
+        public Rectangle  Padding { get; protected set; }
 
         /// <summary>
         /// Collision Rectangle.

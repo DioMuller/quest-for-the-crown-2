@@ -3,6 +3,7 @@ using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Levels;
 using QuestForTheCrown2.Levels.Mapping;
 using System;
+using System.Linq;
 
 namespace QuestForTheCrown2.Entities.Behaviors
 {
@@ -64,8 +65,13 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
             float newX = (float)(Entity.Position.X + direction.X * Entity.Speed.X * timeFactor);
             float newY = (float)(Entity.Position.Y + direction.Y * Entity.Speed.Y * timeFactor);
+            Rectangle newRect = new Rectangle(
+                    x: (int)newX + Entity.Padding.X,
+                    y: (int)newY + Entity.Padding.Y,
+                    width: Entity.Size.X - Entity.Padding.X - Entity.Padding.Width,
+                    height: Entity.Size.Y - Entity.Padding.Y - Entity.Padding.Height);
 
-            if (!level.Map.Collides(new Microsoft.Xna.Framework.Rectangle((int)newX, (int)newY, Entity.Size.X, Entity.Size.Y)))
+            if (!level.Map.Collides(newRect) && !(level.CollidesWith(newRect).Any((e) => e != Entity)))
             {
                 Entity.Position = new Microsoft.Xna.Framework.Vector2(
                     x: newX,

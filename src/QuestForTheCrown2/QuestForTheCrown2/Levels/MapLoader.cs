@@ -122,7 +122,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                     switch( type )
                     {
                         case "MainCharacter":
-                            entity = new MainCharacter { Position = new Vector2(32 * 4, 32 * 4) };
+                            entity = new MainCharacter { Position = new Vector2(x, y) };
                             entity.AddBehavior(
                                 new InputBehavior(Base.InputType.Controller),
                                 new InputBehavior(Base.InputType.Keyboard)
@@ -132,7 +132,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                             mainChar = entity as MainCharacter;
                             break;
                         case "Enemy":
-                            entity = new Enemy1 { Position = new Vector2(32 * 8, 32 * 8) };
+                            entity = new Enemy1 { Position = new Vector2( x, y) };
                             entity.AddBehavior(
                             new FollowBehavior { Following = mainChar }
                             );
