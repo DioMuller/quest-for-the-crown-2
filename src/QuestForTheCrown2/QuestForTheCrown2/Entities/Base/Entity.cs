@@ -51,6 +51,26 @@ namespace QuestForTheCrown2.Entities.Base
         /// Examples are: "left", "bottom", "right" and "down".
         /// </summary>
         public string CurrentView { get; set; }
+
+        /// <summary>
+        /// Padding Rectangle. The Width and Height properties are actually the right and bottom margins.
+        /// </summary>
+        public Rectangle  Padding { get; set; }
+
+        /// <summary>
+        /// Collision Rectangle.
+        /// </summary>
+        public Rectangle CollisionRect
+        {
+            get
+            {
+                return new Rectangle(
+                    x:(int)Position.X + Padding.X, 
+                    y:(int)Position.Y + Padding.Y, 
+                    width:Size.X - Padding.X - Padding.Width, 
+                    height:Size.Y - Padding.Y - Padding.Height);
+            }
+        }
         #endregion
 
         #region Constructors

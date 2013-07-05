@@ -88,7 +88,6 @@ namespace QuestForTheCrown2.Levels
             if( neighbor != 0 )
             {
                 _currentLevel = neighbor - 1;
-                //TODO: Set player position?
             }
         }
 

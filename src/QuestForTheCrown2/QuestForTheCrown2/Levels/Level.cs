@@ -120,6 +120,16 @@ namespace QuestForTheCrown2.Levels
         {
             _entities.AddRange(entities);
         }
+
+        /// <summary>
+        /// Checks the entities that collide with with a given rect.
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <returns></returns>
+        public IEnumerable<Entity> CollidesWith(Rectangle rect)
+        {
+            return (from ent in _entities where rect.Intersects(ent.CollisionRect) select ent);
+        }
         #endregion Methods
     }
 }
