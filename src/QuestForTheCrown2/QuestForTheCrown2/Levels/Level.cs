@@ -30,6 +30,7 @@ namespace QuestForTheCrown2.Levels
         private Map _map;
         private List<Entity> _entities;
         private int[] _neighbors;
+        private Queue<Entity> _newEntities, _oldEntities;
         #endregion Attributes
 
         #region Properties
@@ -58,6 +59,8 @@ namespace QuestForTheCrown2.Levels
             Id = id;
             _map = map;
             _entities = new List<Entity>();
+            _newEntities = new Queue<Entity>();
+            _oldEntities = new Queue<Entity>();
             _neighbors = new int[4];
         }
         #endregion Constructor
@@ -85,6 +88,12 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Update(GameTime gameTime)
         {
+            while (_oldEntities.Count > 0)
+                _entities.Remove(_oldEntities.Dequeue());
+
+            while (_newEntities.Count > 0)
+                _entities.Add(_newEntities.Dequeue());
+
             foreach (Entity e in _entities)
             {
                 e.Update(gameTime, this);
@@ -113,12 +122,18 @@ namespace QuestForTheCrown2.Levels
 
         public void AddEntity(Entity entity)
         {
-            _entities.Add(entity);
+            _newEntities.Enqueue(entity);
         }
 
         public void AddEntity(IEnumerable<Entity> entities)
         {
-            _entities.AddRange(entities);
+            foreach (var ent in entities)
+                AddEntity(ent);
+        }
+
+        public void RemoveEntity(Entity entity)
+        {
+            _oldEntities.Enqueue(entity);
         }
 
         /// <summary>

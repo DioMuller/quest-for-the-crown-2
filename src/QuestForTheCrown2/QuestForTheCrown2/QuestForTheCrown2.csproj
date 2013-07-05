@@ -46,7 +46,7 @@
     <Compile Include="Entities\Behaviors\InputBehavior.cs" />
     <Compile Include="Entities\Characters\Enemy1.cs" />
     <Compile Include="Entities\Characters\MainCharacter.cs" />
-    <Compile Include="Entities\Weapons\Weapon.cs" />
+    <Compile Include="Entities\Weapons\IWeapon.cs" />
     <Compile Include="Entities\Weapons\Sword.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Levels\LevelCollection.cs" />

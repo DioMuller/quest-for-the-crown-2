@@ -71,7 +71,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                     width: Entity.Size.X - Entity.Padding.X - Entity.Padding.Width,
                     height: Entity.Size.Y - Entity.Padding.Y - Entity.Padding.Height);
 
-            if (!level.Map.Collides(newRect) && !(level.CollidesWith(newRect).Any((e) => e != Entity)))
+            if (!level.Map.Collides(newRect) && !(level.CollidesWith(newRect).Any((e) => e != Entity && !e.OverlapEntities)))
             {
                 Entity.Position = new Microsoft.Xna.Framework.Vector2(
                     x: newX,

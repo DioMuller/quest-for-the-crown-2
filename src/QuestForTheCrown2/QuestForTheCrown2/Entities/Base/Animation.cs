@@ -14,16 +14,22 @@ namespace QuestForTheCrown2.Entities.Base
         public Dictionary<string, Dictionary<string, Animation>> Animations { get; private set; }
         public Point FrameSize { get; private set; }
 
-        public SpriteSheet(Texture2D texture, Point frameSize)
+        public SpriteSheet(Texture2D texture, Point? frameSize)
         {
-            if (texture.Width % frameSize.X != 0 ||
-                texture.Height % frameSize.Y != 0)
-                throw new InvalidOperationException("Texture size is not multiple of the frame size");
+            if (frameSize != null)
+            {
+                if (texture.Width % frameSize.Value.X != 0 ||
+                    texture.Height % frameSize.Value.Y != 0)
+                    throw new InvalidOperationException("Texture size is not multiple of the frame size");
+            }
 
             Texture = texture;
-            FrameSize = frameSize;
+            FrameSize = frameSize ?? new Point(texture.Width, texture.Height);
 
             Animations = new Dictionary<string, Dictionary<string, Animation>>();
+
+            if(frameSize == null)
+                AddAnimation("default", "default", new int[] { 0 }, TimeSpan.Zero);
         }
 
         public void AddAnimation(string name, string view, int[] frameIndexes, TimeSpan frameDuration)

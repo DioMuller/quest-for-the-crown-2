@@ -38,7 +38,7 @@ namespace QuestForTheCrown2.Entities.Base
         }
 
         public Dictionary<string, List<EntityUpdateBehavior>> Behaviors { get; private set; }
-        public List<Weapon> Weapons { get; private set; }
+        public List<IWeapon> Weapons { get; private set; }
 
         /// <summary>
         /// Indicates the current entity animation.
@@ -55,7 +55,18 @@ namespace QuestForTheCrown2.Entities.Base
         /// <summary>
         /// Padding Rectangle. The Width and Height properties are actually the right and bottom margins.
         /// </summary>
-        public Rectangle  Padding { get; protected set; }
+        public Rectangle Padding { get; protected set; }
+
+        /// <summary>
+        /// The current entity rotation angle.
+        /// This is used during the Draw method, in conjunction with the RotationCenter.
+        /// </summary>
+        public float Angle { get; protected set; }
+
+        /// <summary>
+        /// The draw point of the entity, the default is (0,0) which represents the upper-left corner.
+        /// </summary>
+        public Vector2 Origin { get; protected set; }
 
         /// <summary>
         /// Collision Rectangle.
@@ -71,15 +82,20 @@ namespace QuestForTheCrown2.Entities.Base
                     height:Size.Y - Padding.Y - Padding.Height);
             }
         }
+
+        /// <summary>
+        /// Indicates if the current entity can overlap another entity.
+        /// </summary>
+        public bool OverlapEntities { get; set; }
         #endregion
 
         #region Constructors
-        public Entity(string spriteSheetPath, Point frameSize)
+        public Entity(string spriteSheetPath, Point? frameSize)
         {
             SpriteSheet = new SpriteSheet(GameContent.LoadContent<Texture2D>(spriteSheetPath), frameSize);
             _framesPerLine = SpriteSheet.Texture.Width / SpriteSheet.FrameSize.X;
 
-            Speed = new Vector2(frameSize.X, frameSize.Y);
+            Speed = new Vector2(SpriteSheet.FrameSize.X, SpriteSheet.FrameSize.X);
         }
         #endregion
 
@@ -142,10 +158,10 @@ namespace QuestForTheCrown2.Entities.Base
             }
         }
 
-        public void AddWeapon(params Weapon[] weapons)
+        public void AddWeapon(params IWeapon[] weapons)
         {
             if (Weapons == null)
-                Weapons = new List<Weapon>();
+                Weapons = new List<IWeapon>();
 
             Weapons.AddRange(weapons);
         }
@@ -198,7 +214,7 @@ namespace QuestForTheCrown2.Entities.Base
                 new Vector2(
                     Position.X - camera.X,
                     Position.Y - camera.Y),
-                frame.Rectangle, Color.White);
+                frame.Rectangle, Color.White, Angle, Origin, 1, SpriteEffects.None, 1);
         }
         #endregion Draw
     }
