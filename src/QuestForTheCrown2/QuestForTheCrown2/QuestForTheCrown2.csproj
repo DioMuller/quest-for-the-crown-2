@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Base\Input.cs" />
+    <Compile Include="Base\VectorHelper.cs" />
     <Compile Include="Entities\Base\Animation.cs" />
     <Compile Include="Entities\Base\Frame.cs" />
     <Compile Include="Base\GameContent.cs" />

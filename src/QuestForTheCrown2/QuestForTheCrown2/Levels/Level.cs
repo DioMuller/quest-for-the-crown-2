@@ -85,14 +85,9 @@ namespace QuestForTheCrown2.Levels
         {
             _map.Draw(gameTime, spriteBatch, camera);
 
-            foreach (Entity en in _entities)
+            foreach (Entity en in _entities.OrderBy(e => e.Position.Y + e.Size.Y))
             {
                 en.Draw(gameTime, spriteBatch, camera);
-            }
-
-            foreach (Player pl in Players)
-            {
-                pl.Draw(gameTime, spriteBatch, camera);
             }
         }
 
@@ -180,8 +175,9 @@ namespace QuestForTheCrown2.Levels
         /// <returns>Entities that collide with the rectangle.</returns>
         public IEnumerable<Entity> CollidesWith(Rectangle rect)
         {
-            return (from ent in _entities where rect.Intersects(ent.CollisionRect) select ent)
-                .Union(from pl in Players where rect.Intersects(pl.CollisionRect) select pl);
+            return (from ent in _entities
+                    where !ent.OverlapEntities && rect.Intersects(ent.CollisionRect)
+                    select ent);
         }
         #endregion Methods
 
@@ -198,6 +194,16 @@ namespace QuestForTheCrown2.Levels
         public void GoToNeighbor(Player player, Direction direction)
         {
             Parent.GoToNeighbor(player, this, direction);
+        }
+
+        /// <summary>
+        /// Tests entities matching a specific predicate.
+        /// </summary>
+        /// <param name="predicate">The function that checks the entity.</param>
+        /// <returns>All entities where the predicate is true.</returns>
+        public IEnumerable<object> FindEntities(Func<Entity, bool> predicate)
+        {
+            return _entities.Where(predicate);
         }
     }
 }
