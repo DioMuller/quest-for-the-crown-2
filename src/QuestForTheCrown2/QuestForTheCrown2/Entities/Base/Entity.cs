@@ -75,11 +75,14 @@ namespace QuestForTheCrown2.Entities.Base
         {
             get
             {
+                if (Angle != 0)
+                    throw new NotImplementedException();
+
                 return new Rectangle(
-                    x:(int)Position.X + Padding.X, 
-                    y:(int)Position.Y + Padding.Y, 
-                    width:Size.X - Padding.X - Padding.Width, 
-                    height:Size.Y - Padding.Y - Padding.Height);
+                    x: (int)(Position.X + Padding.X - Origin.X),
+                    y: (int)(Position.Y + Padding.Y - Origin.Y),
+                    width: Size.X - Padding.X - Padding.Width,
+                    height: Size.Y - Padding.Y - Padding.Height);
             }
         }
 

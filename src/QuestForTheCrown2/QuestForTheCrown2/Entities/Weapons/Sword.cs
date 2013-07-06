@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Levels;
 using QuestForTheCrown2.Levels.Mapping;
@@ -47,7 +48,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 Angle = _swingedAngle;
                 level.AddEntity(this);
             }
-            else if(_swingedAngle == 0)
+            else if (_swingedAngle == 0)
             {
                 var oldAngle = _swingedAngle;
                 _swingedAngle -= _desiredAngle - Angle + _swingedAngle;
@@ -66,6 +67,12 @@ namespace QuestForTheCrown2.Entities.Weapons
             Position = new Vector2(
                 x: Entity.Position.X + Entity.Size.X / 2,
                 y: Entity.Position.Y + Entity.Size.Y / 2);
+
+            foreach (var ent in GetCollisionRects().SelectMany(level.CollidesWith))
+            {
+                if (ent != this && !(ent is QuestForTheCrown2.Entities.Characters.Player))
+                    level.RemoveEntity(ent);
+            }
 
             if (_swingedAngle != 0)
             {
@@ -86,6 +93,22 @@ namespace QuestForTheCrown2.Entities.Weapons
             }
 
             Angle = _desiredAngle + _swingedAngle;
+        }
+
+        private IEnumerable<Rectangle> GetCollisionRects()
+        {
+            const int rectSize = 5;
+
+            var direction = VectorHelper.AngleToV2(Angle, rectSize);
+            direction = new Vector2(-direction.Y, direction.X);
+
+            var location = new Vector2(Position.X, Position.Y);
+
+            for (int i = 0; i < 30; i += rectSize)
+            {
+                location += direction;
+                yield return new Rectangle((int)(location.X - rectSize/2), (int)(location.Y - rectSize / 2), rectSize, rectSize);
+            }
         }
 
         static float ToRadian(float angle)
