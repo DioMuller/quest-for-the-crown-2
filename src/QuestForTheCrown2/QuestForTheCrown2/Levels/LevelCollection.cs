@@ -18,45 +18,33 @@ namespace QuestForTheCrown2.Levels
         List<Level> _levels;
         
         /// <summary>
-        /// Current level visited by the player.
-        /// </summary>
-        int _currentLevel;
-        
-        /// <summary>
         /// Dungeons on this world/dungeon.
         /// </summary>
         List<LevelCollection> _dungeons;
 
         /// <summary>
-        /// Current dungeon.
+        /// Players list.
         /// </summary>
-        int _currentDungeon;
+        List<Player> _players;
+
         #endregion Attributes
 
         #region Properties
         /// <summary>
         /// Current Level (May be changed to CurrentLevel array)
         /// </summary>
-        private Level CurrentLevel
+        private IEnumerable<Level> CurrentLevels
         {
             get
             {
-                if (_currentDungeon == -1)
-                {
-                    return _levels[_currentLevel];
-                }
-                else
-                {
-                    return _dungeons[_currentDungeon].CurrentLevel;
-                }
-            }
-        }
+                HashSet<Level> list = new HashSet<Level>();
 
-        private MainCharacter Player
-        {
-            get
-            {
-                return _levels[_currentLevel].Player;
+                foreach( Player player in _players )
+                {
+                    list.Add(GetLevelByPlayer(player));
+                }
+
+                return list;
             }
         }
         #endregion Properties
@@ -69,9 +57,8 @@ namespace QuestForTheCrown2.Levels
         {
             _levels = new List<Level>();
             _dungeons = new List<LevelCollection>();
-
-            _currentLevel = 0;
-            _currentDungeon = -1;
+            
+            _players = new List<Player>();
         }
         #endregion Constructor
 
@@ -83,12 +70,25 @@ namespace QuestForTheCrown2.Levels
         /// <param name="direction">Direction to teleport.</param>
         private void GoToNeighbor(int playerNum, Direction direction)
         {
-            int neighbor = CurrentLevel.GetNeighbor(direction);
+            Player player = _players[playerNum - 1];
+            int neighbor = GetLevelByPlayer(player).GetNeighbor(direction);
 
             if( neighbor != 0 )
             {
-                _currentLevel = neighbor - 1;
+                player.CurrentLevel = neighbor - 1;
             }
+        }
+
+        internal Level GetLevel(int index)
+        {
+            return _levels[index];
+        }
+
+        internal Level GetLevelByPlayer(Player player)
+        {
+            if( player.CurrentDungeon == -1 ) return _levels[player.CurrentLevel - 1];
+
+            return _dungeons[player.CurrentDungeon].GetLevel(player.CurrentLevel - 1);
         }
 
         #region Public Methods
@@ -98,7 +98,10 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Update(GameTime gameTime)
         {
-            CurrentLevel.Update(gameTime);
+            foreach( Level lv in CurrentLevels )
+            {
+                lv.Update(gameTime);
+            }
         }
 
         /// <summary>
@@ -107,8 +110,12 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds)
         {
-            Vector2 camera = (Player != null) ? GetCameraPosition(Player, CurrentLevel.Map.PixelSize, clientBounds) : Vector2.Zero;
-            CurrentLevel.Draw(gameTime, spriteBatch, camera);
+            foreach( Level lv in CurrentLevels )
+            {
+                //TODO: Calculate camera for split screen?
+                Vector2 camera = GetCameraPosition(lv.Player, lv.Map.PixelSize, clientBounds);
+                lv.Draw(gameTime, spriteBatch, camera);
+            }
         }
 
         /// <summary>
@@ -122,7 +129,21 @@ namespace QuestForTheCrown2.Levels
             if( count != 0 ) return false;
 
             _levels.Add(level);
+
+            if( level.Players.Count > 0) _players.AddRange(level.Players);
+
             return true;
+        }
+
+        public int AddPlayer(Player player)
+        {
+            if( _players.Count < 4 )
+            {
+                _players.Add(player);
+                return _players.Count;
+            }
+
+            return 0;
         }
         #endregion Public Methods
 

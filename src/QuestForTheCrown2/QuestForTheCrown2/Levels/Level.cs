@@ -35,12 +35,14 @@ namespace QuestForTheCrown2.Levels
 
         #region Properties
         public int Id { get; private set; }
+        public List<Player> Players { get; private set; }
 
-        public MainCharacter Player
+        public Player Player
         {
             get
             {
-                return (from Entity entity in _entities where entity is MainCharacter select entity).First() as MainCharacter;
+                if( Players.Count != 0 ) return Players.First();
+                return null;
             }
         }
 
@@ -62,6 +64,8 @@ namespace QuestForTheCrown2.Levels
             _newEntities = new Queue<Entity>();
             _oldEntities = new Queue<Entity>();
             _neighbors = new int[4];
+
+            Players = new List<Player>();
         }
         #endregion Constructor
 
@@ -80,6 +84,11 @@ namespace QuestForTheCrown2.Levels
             {
                 en.Draw(gameTime, spriteBatch, camera);
             }
+
+            foreach( Player pl in Players )
+            {
+                pl.Draw( gameTime, spriteBatch, camera);
+            }
         }
 
         /// <summary>
@@ -97,6 +106,11 @@ namespace QuestForTheCrown2.Levels
             foreach (Entity e in _entities)
             {
                 e.Update(gameTime, this);
+            }
+
+            foreach( Player pl in Players )
+            {
+                pl.Update( gameTime, this);
             }
         }
 
@@ -120,15 +134,33 @@ namespace QuestForTheCrown2.Levels
             _neighbors[(int)direction] = value;
         }
 
+        /// <summary>
+        /// Adds entity to the entities list
+        /// </summary>
+        /// <param name="entity"></param>
         public void AddEntity(Entity entity)
         {
             _newEntities.Enqueue(entity);
+            if( entity is Player )
+            {
+                Players.Add( entity as Player );
+            }
+            else
+            {
+                _newEntities.Enqueue(entity);
+            }
         }
 
+        /// <summary>
+        /// Adds an array of entities to the entity list.
+        /// </summary>
+        /// <param name="entities"></param>
         public void AddEntity(IEnumerable<Entity> entities)
         {
-            foreach (var ent in entities)
-                AddEntity(ent);
+            foreach( Entity en in entities )
+            {   
+                AddEntity(en);
+            }
         }
 
         public void RemoveEntity(Entity entity)
@@ -143,7 +175,8 @@ namespace QuestForTheCrown2.Levels
         /// <returns></returns>
         public IEnumerable<Entity> CollidesWith(Rectangle rect)
         {
-            return (from ent in _entities where rect.Intersects(ent.CollisionRect) select ent);
+            return (from ent in _entities where rect.Intersects(ent.CollisionRect) select ent)
+                .Union( from pl in Players where rect.Intersects(pl.CollisionRect) select pl );
         }
         #endregion Methods
     }
