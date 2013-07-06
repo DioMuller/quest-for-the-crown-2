@@ -7,6 +7,7 @@ using QuestForTheCrown2.Levels.Mapping;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using QuestForTheCrown2.Entities.Characters;
+using System.Text.RegularExpressions;
 
 namespace QuestForTheCrown2.Levels
 {
@@ -204,6 +205,20 @@ namespace QuestForTheCrown2.Levels
         public IEnumerable<object> FindEntities(Func<Entity, bool> predicate)
         {
             return _entities.Where(predicate);
+        }
+
+        /// <summary>
+        /// Finds the entity of the desired category that is closer to an specified entity.
+        /// </summary>
+        /// <param name="relativeTo">Find the entity which is closer to the specified entity.</param>
+        /// <param name="category">The category of the entity being searched.</param>
+        /// <returns></returns>
+        public Entity EntityCloserTo(Entity relativeTo, params string[] category)
+        {
+            var categorySearchRegex = "^" + string.Join("$|^", category) + "$";
+            return _entities
+                .Where(e => Regex.IsMatch(e.Category ?? "", categorySearchRegex))
+                .FirstOrDefault();
         }
     }
 }

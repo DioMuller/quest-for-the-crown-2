@@ -10,15 +10,19 @@ namespace QuestForTheCrown2.Entities.Behaviors
     /// </summary>
     class FollowBehavior : WalkBehavior
     {
+        #region Attributes
+        Entity _following;
+        #endregion
+
         #region Properties
         /// <summary>
         /// A desired distance to keep from the entity.
         /// </summary>
         public float Distance { get; set; }
         /// <summary>
-        /// The entity to be followed.
+        /// The entity category to be followed.
         /// </summary>
-        public Entity Following { get; set; }
+        public string TargetCategory { get; set; }
         #endregion
 
         #region Constructors
@@ -27,9 +31,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         /// <param name="following">The entity to follow.</param>
         /// <param name="distance">The desired distance to keep.</param>
-        public FollowBehavior(Entity following = null, float distance = 64)
+        public FollowBehavior(string targetCategory, float distance = 64)
         {
-            Following = following;
+            TargetCategory = targetCategory;
             Distance = distance;
         }
         #endregion
@@ -38,9 +42,10 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <summary>
         /// Indicates if this behavior is set to follow one Entity.
         /// </summary>
-        public override bool Active
+        public override bool IsActive(GameTime gameTime, Level level)
         {
-            get { return Following != null; }
+            _following = level.EntityCloserTo(Entity, TargetCategory);
+            return _following != null;
         }
 
         /// <summary>
@@ -51,8 +56,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
         public override void Update(GameTime gameTime, Level level)
         {
             var direction = new Vector2(
-                Following.Position.X - Entity.Position.X,
-                Following.Position.Y - Entity.Position.Y);
+                _following.Position.X - Entity.Position.X,
+                _following.Position.Y - Entity.Position.Y);
 
             var route = direction;
             var length = route.Length();

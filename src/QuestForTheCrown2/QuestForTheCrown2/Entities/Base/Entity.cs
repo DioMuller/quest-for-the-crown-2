@@ -27,6 +27,12 @@ namespace QuestForTheCrown2.Entities.Base
         public Vector2 Speed { get; set; }
 
         /// <summary>
+        /// Indicates in which category this entity is at.
+        /// Values could be: "Player", "Enemy", "Item" and etc.
+        /// </summary>
+        public string Category { get; set; }
+
+        /// <summary>
         /// Entity size
         /// </summary>
         public Point Size
@@ -177,11 +183,11 @@ namespace QuestForTheCrown2.Entities.Base
                 foreach (var behaviorGroup in Behaviors)
                 {
                     if (behaviorGroup.Key == string.Empty)
-                        foreach (var behavior in behaviorGroup.Value.Where(b => b.Active))
+                        foreach (var behavior in behaviorGroup.Value.Where(b => b.IsActive(gameTime, level)))
                             behavior.Update(gameTime, level);
                     else
                     {
-                        var bh = behaviorGroup.Value.Where(b => b.Active).FirstOrDefault();
+                        var bh = behaviorGroup.Value.Where(b => b.IsActive(gameTime, level)).FirstOrDefault();
                         if (bh != null)
                             bh.Update(gameTime, level);
                     }

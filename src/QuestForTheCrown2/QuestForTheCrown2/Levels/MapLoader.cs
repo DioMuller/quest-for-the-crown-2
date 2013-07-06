@@ -35,7 +35,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                 int[] neighbors = (from string element in el.Attribute("neighbors").Value.Split(',') select int.Parse(element)).ToArray<int>();
                 Level level = LoadMap(id, el.Attribute("path").Value);
 
-                for( int i = 0; i < 4; i++ )
+                for (int i = 0; i < 4; i++)
                 {
                     level.SetNeighbor((Direction)i, neighbors[i]);
                 }
@@ -67,12 +67,12 @@ namespace QuestForTheCrown2.Levels.Mapping
             #endregion Create Map
 
             #region Tilesets
-            foreach( XElement set in mapElement.Elements("tileset") )
+            foreach (XElement set in mapElement.Elements("tileset"))
             {
                 Tileset tileset;
                 int firstgid = int.Parse(set.Attribute("firstgid").Value.Replace("../", ""));
 
-                if( set.Attribute("source") == null )
+                if (set.Attribute("source") == null)
                 {
                     string tilename = set.Attribute("name").Value;
                     Point tilesSize = new Point(int.Parse(set.Attribute("tilewidth").Value), int.Parse(set.Attribute("tileheight").Value));
@@ -105,10 +105,10 @@ namespace QuestForTheCrown2.Levels.Mapping
             #endregion Tilesets
 
             #region Layers
-            foreach( XElement lay in mapElement.Elements("layer") )
+            foreach (XElement lay in mapElement.Elements("layer"))
             {
                 string layerName = lay.Attribute("name").Value;
-                Point layersize = new Point( int.Parse(lay.Attribute("width").Value), int.Parse(lay.Attribute("height").Value) );
+                Point layersize = new Point(int.Parse(lay.Attribute("width").Value), int.Parse(lay.Attribute("height").Value));
                 string csvdata = lay.Element("data").Value;
 
                 Layer layer = new Layer(layerName, layersize, csvdata);
@@ -119,16 +119,16 @@ namespace QuestForTheCrown2.Levels.Mapping
             #region Objects
             Player mainChar = null;
 
-            foreach( XElement objs in mapElement.Elements("objectgroup") )
+            foreach (XElement objs in mapElement.Elements("objectgroup"))
             {
-                foreach( XElement obj in objs.Elements("object") )
+                foreach (XElement obj in objs.Elements("object"))
                 {
                     Entity entity;
                     int x = int.Parse(obj.Attribute("x").Value);
                     int y = int.Parse(obj.Attribute("y").Value);
                     string type = obj.Attribute("type").Value;
 
-                    switch( type )
+                    switch (type)
                     {
                         case "Player":
                             entity = new Player { Position = new Vector2(x, y) };
@@ -141,12 +141,11 @@ namespace QuestForTheCrown2.Levels.Mapping
                             mainChar = entity as Player;
                             mainChar.CurrentDungeon = -1;
                             mainChar.CurrentLevel = id;
-
                             break;
                         case "Enemy":
-                            entity = new Enemy1 { Position = new Vector2( x, y) };
+                            entity = new Enemy1 { Position = new Vector2(x, y) };
                             entity.AddBehavior(
-                            new FollowBehavior { Following = mainChar }
+                                new FollowBehavior("Player")
                             );
                             break;
                         default:
@@ -154,7 +153,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                             break;
                     }
 
-                    if( entity != null )
+                    if (entity != null)
                     {
                         entities.Add(entity);
                     }
@@ -175,7 +174,7 @@ namespace QuestForTheCrown2.Levels.Mapping
         {
             XDocument doc = XDocument.Load(tsxFile);
             XElement set = doc.Element("tileset");
-                        
+
             string tilename = set.Attribute("name").Value;
             Point tilesSize = new Point(int.Parse(set.Attribute("tilewidth").Value), int.Parse(set.Attribute("tileheight").Value));
             XElement image = set.Element("image");

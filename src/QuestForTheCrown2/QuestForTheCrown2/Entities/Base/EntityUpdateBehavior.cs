@@ -28,7 +28,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// <summary>
         /// Checks if the current behavior is active.
         /// </summary>
-        public abstract bool Active { get; }
+        public abstract bool IsActive(GameTime gameTime, Level level);
 
         /// <summary>
         /// Executes an update logic on the attached entity.

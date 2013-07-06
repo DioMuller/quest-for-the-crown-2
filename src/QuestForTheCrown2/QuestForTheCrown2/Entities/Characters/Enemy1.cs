@@ -17,6 +17,8 @@ namespace QuestForTheCrown2.Entities.Characters
         public Enemy1()
             : base(spriteSheetPath, new Point(32, 50))
         {
+            Category = "Enemy";
+
             TimeSpan walkFrameDuration = TimeSpan.FromMilliseconds(100);
             SpriteSheet.AddAnimation("stopped", "down", line: 0, count: 1, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("stopped", "left", line: 1, count: 1, frameDuration: walkFrameDuration);
