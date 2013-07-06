@@ -36,8 +36,8 @@ namespace QuestForTheCrown2
             graphics = new GraphicsDeviceManager(this);
 
             graphics.IsFullScreen = true;
-            graphics.PreferredBackBufferHeight = 720;
-            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 1080;
+            graphics.PreferredBackBufferWidth = 1920;
 
             Content.RootDirectory = "Content";
         }

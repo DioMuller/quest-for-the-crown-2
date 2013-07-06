@@ -69,27 +69,36 @@ namespace QuestForTheCrown2.Levels.Mapping
             #region Tilesets
             foreach( XElement set in mapElement.Elements("tileset") )
             {
-                int firstgid = int.Parse(set.Attribute("firstgid").Value);
-                string tilename = set.Attribute("name").Value;
-                Point tilesSize = new Point(int.Parse(set.Attribute("tilewidth").Value), int.Parse(set.Attribute("tileheight").Value));
-                XElement image = set.Element("image");
-                string imageSource = image.Attribute("source").Value.Replace("../", ""); //Removes relative path (since we'll use Content)
-                Point imageSize = new Point(int.Parse(image.Attribute("width").Value), int.Parse(image.Attribute("height").Value));
+                Tileset tileset;
+                int firstgid = int.Parse(set.Attribute("firstgid").Value.Replace("../", ""));
 
-                Tileset tileset = new Tileset(firstgid, name, tilesSize,  imageSource, imageSize);
-
-                #region Tiles
-                foreach( XElement element in set.Elements("tile") )
+                if( set.Attribute("source") == null )
                 {
-                    int tileid = int.Parse(element.Attribute("id").Value);
-                    string[] terrain = element.Attribute("terrain").Value.Split(',');
+                    string tilename = set.Attribute("name").Value;
+                    Point tilesSize = new Point(int.Parse(set.Attribute("tilewidth").Value), int.Parse(set.Attribute("tileheight").Value));
+                    XElement image = set.Element("image");
+                    string imageSource = image.Attribute("source").Value.Replace("../", ""); //Removes relative path (since we'll use Content)
+                    Point imageSize = new Point(int.Parse(image.Attribute("width").Value), int.Parse(image.Attribute("height").Value));
 
-                    tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperLeft, int.Parse(terrain[0]));
-                    tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperRight, int.Parse(terrain[1]));
-                    tileset.Tiles[tileid].SetCollision(CollisionPosition.DownLeft, int.Parse(terrain[2]));
-                    tileset.Tiles[tileid].SetCollision(CollisionPosition.DownRight, int.Parse(terrain[3]));
+                    tileset = new Tileset(firstgid, tilename, tilesSize, imageSource, imageSize);
+
+                    #region Tiles
+                    foreach (XElement element in set.Elements("tile"))
+                    {
+                        int tileid = int.Parse(element.Attribute("id").Value);
+                        string[] terrain = element.Attribute("terrain").Value.Split(',');
+
+                        tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperLeft, int.Parse(terrain[0]));
+                        tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperRight, int.Parse(terrain[1]));
+                        tileset.Tiles[tileid].SetCollision(CollisionPosition.DownLeft, int.Parse(terrain[2]));
+                        tileset.Tiles[tileid].SetCollision(CollisionPosition.DownRight, int.Parse(terrain[3]));
+                    }
+                    #endregion Tiles
                 }
-                #endregion Tiles
+                else
+                {
+                    tileset = LoadTileset(firstgid, set.Attribute("source").Value.Replace("../", "Content/"));
+                }
 
                 map.Tilesets.Add(tileset);
             }
@@ -121,7 +130,7 @@ namespace QuestForTheCrown2.Levels.Mapping
 
                     switch( type )
                     {
-                        case "MainCharacter":
+                        case "Player":
                             entity = new Player { Position = new Vector2(x, y) };
                             entity.AddBehavior(
                                 new InputBehavior(Base.InputType.Controller),
@@ -160,6 +169,34 @@ namespace QuestForTheCrown2.Levels.Mapping
             Level level = new Level(id, map);
             level.AddEntity(entities);
             return level;
+        }
+
+        private static Tileset LoadTileset(int firstgid, string tsxFile)
+        {
+            XDocument doc = XDocument.Load(tsxFile);
+            XElement set = doc.Element("tileset");
+                        
+            string tilename = set.Attribute("name").Value;
+            Point tilesSize = new Point(int.Parse(set.Attribute("tilewidth").Value), int.Parse(set.Attribute("tileheight").Value));
+            XElement image = set.Element("image");
+            string imageSource = image.Attribute("source").Value.Replace("../", ""); //Removes relative path (since we'll use Content)
+            Point imageSize = new Point(int.Parse(image.Attribute("width").Value), int.Parse(image.Attribute("height").Value));
+            Tileset tileset = new Tileset(firstgid, tilename, tilesSize, imageSource, imageSize);
+
+            #region Tiles
+            foreach (XElement element in set.Elements("tile"))
+            {
+                int tileid = int.Parse(element.Attribute("id").Value);
+                string[] terrain = element.Attribute("terrain").Value.Split(',');
+
+                tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperLeft, int.Parse(terrain[0]));
+                tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperRight, int.Parse(terrain[1]));
+                tileset.Tiles[tileid].SetCollision(CollisionPosition.DownLeft, int.Parse(terrain[2]));
+                tileset.Tiles[tileid].SetCollision(CollisionPosition.DownRight, int.Parse(terrain[3]));
+            }
+            #endregion Tiles
+
+            return tileset;
         }
     }
 }
