@@ -48,6 +48,8 @@
     <Compile Include="Entities\Characters\Player.cs" />
     <Compile Include="Entities\Weapons\IWeapon.cs" />
     <Compile Include="Entities\Weapons\Sword.cs" />
+    <Compile Include="GUI\Components\Component.cs" />
+    <Compile Include="GUI\Components\MenuItem.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Levels\LevelCollection.cs" />
     <Compile Include="Levels\Mapping\Layer.cs" />
@@ -58,6 +60,7 @@
     <Compile Include="GameMain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Screens\TitleScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
@@ -77,6 +80,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\menuselected.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\images\title.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\sprites\Brendan.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -161,7 +170,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Content\fonts\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Content\maps\Overworld01.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
