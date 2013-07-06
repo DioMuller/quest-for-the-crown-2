@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <collection>
   <levels>
-    <level id="1" neighbors="0,0,2,3" path="Content/maps/Overworld-01.tmx"/>
-    <level id="2" neighbors="1,0,0,0" path="Content/maps/Overworld-02.tmx"/>
-    <level id="3" neighbors="0,1,0,0" path="Content/maps/Overworld-03.tmx"/>
+    <level id="1" neighbors="0,0,2,4" path="Content/maps/Overworld01.tmx"/>
+    <level id="2" neighbors="1,0,3,5" path="Content/maps/Overworld02.tmx"/>
+    <level id="3" neighbors="2,0,0,0" path="Content/maps/Overworld03.tmx"/>
+	<level id="4" neighbors="0,1,5,6" path="Content/maps/Overworld04.tmx"/>
+	<level id="5" neighbors="4,2,0,0" path="Content/maps/Overworld05.tmx"/>
+	<level id="6" neighbors="0,4,0,0" path="Content/maps/Overworld06.tmx"/>
   </levels>
   <dungeons>
     <dungeon id="1" path="qfc"/>
