@@ -14,6 +14,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         #region Attributes
         Input _input;
         int _currentWeapon;
+        Vector2 _currentAttackDirection;
         #endregion
 
         #region Constructors
@@ -54,7 +55,10 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="direction">The attack direction.</param>
         void Attack(GameTime gameTime, Level level, Vector2 direction)
         {
-            if (direction != Vector2.Zero)
+            if (_currentAttackDirection == direction)
+                return;
+
+            _currentAttackDirection = direction;
                 Entity.Weapons[_currentWeapon].Attack(gameTime, level, direction);
         }
         #endregion

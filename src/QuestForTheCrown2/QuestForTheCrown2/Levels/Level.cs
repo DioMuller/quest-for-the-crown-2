@@ -145,10 +145,6 @@ namespace QuestForTheCrown2.Levels
             {
                 Players.Add( entity as Player );
             }
-            else
-            {
-                _newEntities.Enqueue(entity);
-            }
         }
 
         /// <summary>
@@ -179,5 +175,15 @@ namespace QuestForTheCrown2.Levels
                 .Union( from pl in Players where rect.Intersects(pl.CollisionRect) select pl );
         }
         #endregion Methods
+
+        /// <summary>
+        /// Checks if the entity is currently in the map.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public bool ContainsEntity(Entity entity)
+        {
+            return _entities.Contains(entity) || _newEntities.Contains(entity);
+        }
     }
 }
