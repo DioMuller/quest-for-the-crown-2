@@ -52,6 +52,21 @@ namespace QuestForTheCrown2.Entities.Characters
         /// Current level the player is in.
         /// </summary>
         public int CurrentLevel { get; set; }
+
+        /// <summary>
+        /// Indicates if the current entity is transitioning between levels.
+        /// </summary>
+        public Direction LevelTransitionDirection { get; set; }
+        /// <summary>
+        /// Gets or sets the level in which the current entity is transitioning to.
+        /// </summary>
+        public int TransitioningToLevel { get; set; }
+
+        /// <summary>
+        /// Indicates in which state the current level transition is at.
+        /// Value range from 0 to 1.
+        /// </summary>
+        public float LevelTransitionPercent { get; set; }
         #endregion Properties
 
         #region Constructor

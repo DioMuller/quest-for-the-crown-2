@@ -111,11 +111,6 @@ namespace QuestForTheCrown2
 
             overworld.Draw(gameTime, spriteBatch, Window.ClientBounds);
 
-            //map.Draw(gameTime, spriteBatch, camera);
-
-            //Draw(mainCharacter, camera);
-            //Draw(enemy1, camera);
-
             spriteBatch.End();
 
             base.Draw(gameTime);

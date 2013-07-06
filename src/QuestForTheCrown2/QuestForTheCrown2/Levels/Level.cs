@@ -43,7 +43,7 @@ namespace QuestForTheCrown2.Levels
         {
             get
             {
-                if( Players.Count != 0 ) return Players.First();
+                if (Players.Count != 0) return Players.First();
                 return null;
             }
         }
@@ -85,14 +85,14 @@ namespace QuestForTheCrown2.Levels
         {
             _map.Draw(gameTime, spriteBatch, camera);
 
-            foreach( Entity en in _entities )
+            foreach (Entity en in _entities)
             {
                 en.Draw(gameTime, spriteBatch, camera);
             }
 
-            foreach( Player pl in Players )
+            foreach (Player pl in Players)
             {
-                pl.Draw( gameTime, spriteBatch, camera);
+                pl.Draw(gameTime, spriteBatch, camera);
             }
         }
 
@@ -102,23 +102,22 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Update(GameTime gameTime)
         {
-            while (_oldEntities.Count > 0)
-                _entities.Remove(_oldEntities.Dequeue());
+            if (Players.Any(p => p.LevelTransitionPercent != 0))
+                return;
 
-            while(_oldPlayers.Count > 0)
-                Players.Remove(_oldPlayers.Dequeue());
+            while (_oldEntities.Count > 0)
+            {
+                _entities.Remove(_oldEntities.Dequeue());
+            }
 
             while (_newEntities.Count > 0)
+            {
                 _entities.Add(_newEntities.Dequeue());
+            }
 
             foreach (Entity e in _entities)
             {
                 e.Update(gameTime, this);
-            }
-
-            foreach( Player pl in Players )
-            {
-                pl.Update( gameTime, this);
             }
         }
 
@@ -129,7 +128,7 @@ namespace QuestForTheCrown2.Levels
         /// <returns>Neigbhbor id</returns>
         public int GetNeighbor(Direction direction)
         {
-            return _neighbors[(int) direction];
+            return _neighbors[(int)direction];
         }
 
         /// <summary>
@@ -149,10 +148,8 @@ namespace QuestForTheCrown2.Levels
         public void AddEntity(Entity entity)
         {
             _newEntities.Enqueue(entity);
-            if( entity is Player )
-            {
-                Players.Add( entity as Player );
-            }
+            if (entity is Player)
+                Players.Add((Player)entity);
         }
 
         /// <summary>
@@ -161,10 +158,8 @@ namespace QuestForTheCrown2.Levels
         /// <param name="entities"></param>
         public void AddEntity(IEnumerable<Entity> entities)
         {
-            foreach( Entity en in entities )
-            {   
+            foreach (Entity en in entities)
                 AddEntity(en);
-            }
         }
 
         /// <summary>
@@ -173,14 +168,9 @@ namespace QuestForTheCrown2.Levels
         /// <param name="entity">Entity to be removed.</param>
         public void RemoveEntity(Entity entity)
         {
-            if(entity is Player)
-            {
-                _oldPlayers.Enqueue(entity as Player);
-            }
-            else
-            {
-                _oldEntities.Enqueue(entity);
-            }
+            _oldEntities.Enqueue(entity);
+            if (entity is Player)
+                Players.Remove((Player)entity);
         }
 
         /// <summary>
@@ -191,7 +181,7 @@ namespace QuestForTheCrown2.Levels
         public IEnumerable<Entity> CollidesWith(Rectangle rect)
         {
             return (from ent in _entities where rect.Intersects(ent.CollisionRect) select ent)
-                .Union( from pl in Players where rect.Intersects(pl.CollisionRect) select pl );
+                .Union(from pl in Players where rect.Intersects(pl.CollisionRect) select pl);
         }
         #endregion Methods
 

@@ -16,7 +16,7 @@ namespace QuestForTheCrown2.Levels
         /// This world/dungeon levels.
         /// </summary>
         List<Level> _levels;
-        
+
         /// <summary>
         /// Dungeons on this world/dungeon.
         /// </summary>
@@ -39,7 +39,7 @@ namespace QuestForTheCrown2.Levels
             {
                 HashSet<Level> list = new HashSet<Level>();
 
-                foreach( Player player in _players )
+                foreach (Player player in _players)
                 {
                     list.Add(GetLevelByPlayer(player));
                 }
@@ -57,7 +57,7 @@ namespace QuestForTheCrown2.Levels
         {
             _levels = new List<Level>();
             _dungeons = new List<LevelCollection>();
-            
+
             _players = new List<Player>();
         }
         #endregion Constructor
@@ -70,33 +70,13 @@ namespace QuestForTheCrown2.Levels
         /// <param name="direction">Direction to teleport.</param>
         internal void GoToNeighbor(Player player, Level level, Direction direction)
         {
-
             int neighbor = level.GetNeighbor(direction);
 
-            if( neighbor != 0 )
+            if (neighbor != 0)
             {
-                level.RemoveEntity(player);
-                player.CurrentLevel = neighbor;
-                Level newLevel = GetLevelByPlayer(player);
-                newLevel.AddEntity(player);
-
-                //TODO: Add fancy transition drawing/update logic?
-
-                switch( direction )
-                {
-                    case Direction.East:
-                        player.Position = new Vector2(0, player.Position.Y);
-                        break;
-                    case Direction.North:
-                        player.Position = new Vector2(player.Position.X, level.Map.PixelSize.Y - player.Size.Y);
-                        break;
-                    case Direction.South:
-                        player.Position = new Vector2(player.Position.X, 0);
-                        break;
-                    case Direction.West:
-                        player.Position = new Vector2(level.Map.PixelSize.X - player.Size.X, player.Position.Y);
-                        break;
-                }
+                player.TransitioningToLevel = neighbor;
+                player.LevelTransitionPercent = 0;
+                player.LevelTransitionDirection = direction;
             }
         }
 
@@ -117,7 +97,7 @@ namespace QuestForTheCrown2.Levels
         /// <returns>The level the player is in.</returns>
         internal Level GetLevelByPlayer(Player player)
         {
-            if( player.CurrentDungeon == -1 ) return _levels[player.CurrentLevel - 1];
+            if (player.CurrentDungeon == -1) return _levels[player.CurrentLevel - 1];
 
             return _dungeons[player.CurrentDungeon].GetLevel(player.CurrentLevel - 1);
         }
@@ -129,7 +109,7 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Update(GameTime gameTime)
         {
-            foreach( Level lv in CurrentLevels )
+            foreach (Level lv in CurrentLevels)
             {
                 lv.Update(gameTime);
             }
@@ -141,11 +121,85 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds)
         {
-            foreach( Level lv in CurrentLevels )
+            foreach (Level lv in CurrentLevels)
             {
-                //TODO: Calculate camera for split screen?
-                Vector2 camera = GetCameraPosition(lv.Player, lv.Map.PixelSize, clientBounds);
-                lv.Draw(gameTime, spriteBatch, camera);
+                var player = lv.Player;
+                if (player.TransitioningToLevel != 0)
+                {
+                    SlideScreen(gameTime, spriteBatch, clientBounds, lv, player);
+                }
+                else
+                {
+                    //TODO: Calculate camera for split screen?
+                    Vector2 camera = GetCameraPosition(player, lv.Map.PixelSize, clientBounds);
+                    lv.Draw(gameTime, spriteBatch, camera);
+                }
+            }
+        }
+
+        private void SlideScreen(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds, Level lv, Player player)
+        {
+            var newLevel = GetLevel(player.TransitioningToLevel - 1);
+            Vector2 camera = GetCameraPosition(player, lv.Map.PixelSize, clientBounds);
+            Vector2 camera2 = GetCameraPosition(player, newLevel.Map.PixelSize, clientBounds);
+
+            var cameraXTranslation = clientBounds.Width * player.LevelTransitionPercent;
+            var cameraYTranslation = clientBounds.Height * player.LevelTransitionPercent;
+
+            player.LevelTransitionPercent += (float)(gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
+
+            switch (player.LevelTransitionDirection)
+            {
+                case Direction.West:
+                    newLevel.Draw(gameTime, spriteBatch, new Vector2(newLevel.Map.PixelSize.X - clientBounds.Width + (clientBounds.Width - cameraXTranslation), camera2.Y));
+                    lv.Draw(gameTime, spriteBatch, new Vector2(-cameraXTranslation, camera.Y));
+                    player.Position = new Vector2(-(player.Size.X * player.LevelTransitionPercent), player.Position.Y);
+                    break;
+                case Direction.East:
+                    newLevel.Draw(gameTime, spriteBatch, new Vector2(-clientBounds.Width + cameraXTranslation, camera2.Y));
+                    lv.Draw(gameTime, spriteBatch, new Vector2(camera.X + cameraXTranslation, camera.Y));
+                    player.Position = new Vector2(lv.Map.PixelSize.X - (player.Size.X * (1 - player.LevelTransitionPercent)), player.Position.Y);
+                    break;
+                case Direction.South:
+                    newLevel.Draw(gameTime, spriteBatch, new Vector2(camera2.X, -clientBounds.Height + cameraYTranslation));
+                    lv.Draw(gameTime, spriteBatch, new Vector2(camera.X, camera.Y + cameraYTranslation));
+                    player.Position = new Vector2(player.Position.X, lv.Map.PixelSize.Y - (player.Size.Y * (1 - player.LevelTransitionPercent)));
+                    break;
+                case Direction.North:
+                    newLevel.Draw(gameTime, spriteBatch, new Vector2(camera2.X, newLevel.Map.PixelSize.Y - clientBounds.Height + (clientBounds.Height - cameraYTranslation)));
+                    lv.Draw(gameTime, spriteBatch, new Vector2(camera.X, -cameraYTranslation));
+                    player.Position = new Vector2(player.Position.X, -(player.Size.Y * player.LevelTransitionPercent));
+                    break;
+                default:
+                    player.LevelTransitionPercent = 1;
+                    break;
+            }
+
+            if (player.LevelTransitionPercent >= 1)
+            {
+                newLevel.AddEntity(player);
+                lv.RemoveEntity(player);
+
+                player.CurrentLevel = player.TransitioningToLevel;
+                player.TransitioningToLevel = 0;
+                switch (player.LevelTransitionDirection)
+                {
+                    case Direction.West:
+                        player.Position = new Vector2(newLevel.Map.PixelSize.X + player.Position.X, player.Position.Y);
+                        break;
+                    case Direction.East:
+                        player.Position = new Vector2(player.Position.X - lv.Map.PixelSize.X, player.Position.Y);
+                        break;
+                    case Direction.North:
+                        player.Position = new Vector2(player.Position.X, newLevel.Map.PixelSize.Y + player.Position.Y);
+                        break;
+                    case Direction.South:
+                        player.Position = new Vector2(player.Position.X, player.Position.Y - lv.Map.PixelSize.Y);
+                        break;
+                }
+
+                player.LevelTransitionDirection = Direction.None;
+                player.LevelTransitionPercent = 0;
             }
         }
 
@@ -157,20 +211,20 @@ namespace QuestForTheCrown2.Levels
         {
             int count = (from Level lv in _levels where lv.Id == level.Id select lv).Count();
 
-            if( count != 0 ) return false;
+            if (count != 0) return false;
 
             _levels.Add(level);
 
             level.Parent = this;
 
-            if( level.Players.Count > 0) _players.AddRange(level.Players);
+            if (level.Players.Count > 0) _players.AddRange(level.Players);
 
             return true;
         }
 
         public int AddPlayer(Player player)
         {
-            if( _players.Count < 4 )
+            if (_players.Count < 4)
             {
                 _players.Add(player);
                 return _players.Count;
