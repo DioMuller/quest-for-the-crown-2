@@ -18,11 +18,6 @@ namespace QuestForTheCrown2.Levels
         List<Level> _levels;
         
         /// <summary>
-        /// Current level visited by the player.
-        /// </summary>
-        int _currentLevel;
-        
-        /// <summary>
         /// Dungeons on this world/dungeon.
         /// </summary>
         List<LevelCollection> _dungeons;
@@ -32,10 +27,6 @@ namespace QuestForTheCrown2.Levels
         /// </summary>
         List<Player> _players;
 
-        /// <summary>
-        /// Current dungeon.
-        /// </summary>
-        int _currentDungeon;
         #endregion Attributes
 
         #region Properties
@@ -56,14 +47,6 @@ namespace QuestForTheCrown2.Levels
                 return list;
             }
         }
-
-        private Player Player
-        {
-            get
-            {
-                return _levels[_currentLevel].Player;
-            }
-        }
         #endregion Properties
 
         #region Constructor
@@ -74,9 +57,8 @@ namespace QuestForTheCrown2.Levels
         {
             _levels = new List<Level>();
             _dungeons = new List<LevelCollection>();
-
-            _currentLevel = 0;
-            _currentDungeon = -1;
+            
+            _players = new List<Player>();
         }
         #endregion Constructor
 
@@ -104,9 +86,9 @@ namespace QuestForTheCrown2.Levels
 
         internal Level GetLevelByPlayer(Player player)
         {
-            if( player.CurrentDungeon == -1 ) return _levels[player.CurrentLevel];
+            if( player.CurrentDungeon == -1 ) return _levels[player.CurrentLevel - 1];
 
-            return _dungeons[player.CurrentDungeon].GetLevel(player.CurrentLevel);
+            return _dungeons[player.CurrentDungeon].GetLevel(player.CurrentLevel - 1);
         }
 
         #region Public Methods
@@ -147,6 +129,9 @@ namespace QuestForTheCrown2.Levels
             if( count != 0 ) return false;
 
             _levels.Add(level);
+
+            if( level.Players.Count > 0) _players.AddRange(level.Players);
+
             return true;
         }
 

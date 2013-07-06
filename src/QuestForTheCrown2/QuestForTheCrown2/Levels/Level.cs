@@ -81,6 +81,11 @@ namespace QuestForTheCrown2.Levels
             {
                 en.Draw(gameTime, spriteBatch, camera);
             }
+
+            foreach( Player pl in Players )
+            {
+                pl.Draw( gameTime, spriteBatch, camera);
+            }
         }
 
         /// <summary>
@@ -92,6 +97,11 @@ namespace QuestForTheCrown2.Levels
             foreach (Entity e in _entities)
             {
                 e.Update(gameTime, this);
+            }
+
+            foreach( Player pl in Players )
+            {
+                pl.Update( gameTime, this);
             }
         }
 
@@ -115,15 +125,35 @@ namespace QuestForTheCrown2.Levels
             _neighbors[(int)direction] = value;
         }
 
+        /// <summary>
+        /// Adds entity to the entities list
+        /// </summary>
+        /// <param name="entity"></param>
         public void AddEntity(Entity entity)
         {
-            _entities.Add(entity);
+            if( entity is Player )
+            {
+                Players.Add( entity as Player );
+            }
+            else
+            {
+                _entities.Add(entity);
+            }
         }
 
+        /// <summary>
+        /// Adds an array of entities to the entity list.
+        /// </summary>
+        /// <param name="entities"></param>
         public void AddEntity(IEnumerable<Entity> entities)
         {
-            _entities.AddRange(entities);
+            foreach( Entity en in entities )
+            {   
+                AddEntity(en);
+            }
         }
+
+
 
         /// <summary>
         /// Checks the entities that collide with with a given rect.
@@ -132,7 +162,8 @@ namespace QuestForTheCrown2.Levels
         /// <returns></returns>
         public IEnumerable<Entity> CollidesWith(Rectangle rect)
         {
-            return (from ent in _entities where rect.Intersects(ent.CollisionRect) select ent);
+            return (from ent in _entities where rect.Intersects(ent.CollisionRect) select ent)
+                .Union( from pl in Players where rect.Intersects(pl.CollisionRect) select pl );
         }
         #endregion Methods
     }

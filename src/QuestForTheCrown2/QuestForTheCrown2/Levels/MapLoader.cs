@@ -130,6 +130,9 @@ namespace QuestForTheCrown2.Levels.Mapping
                             entity.AddWeapon(new Sword());
 
                             mainChar = entity as Player;
+                            mainChar.CurrentDungeon = -1;
+                            mainChar.CurrentLevel = id;
+
                             break;
                         case "Enemy":
                             entity = new Enemy1 { Position = new Vector2( x, y) };
@@ -142,7 +145,10 @@ namespace QuestForTheCrown2.Levels.Mapping
                             break;
                     }
 
-                    if( entity != null) entities.Add(entity);
+                    if( entity != null )
+                    {
+                        entities.Add(entity);
+                    }
                 }
             }
             #endregion Objects
