@@ -18,7 +18,8 @@ namespace QuestForTheCrown2.Levels
         West = 0,
         North = 1,
         East = 2,
-        South = 3
+        South = 3,
+        None = -1
     }
 
     /// <summary>
@@ -31,11 +32,12 @@ namespace QuestForTheCrown2.Levels
         private List<Entity> _entities;
         private int[] _neighbors;
         private Queue<Entity> _newEntities, _oldEntities;
+        private Queue<Player> _oldPlayers;
         #endregion Attributes
 
         #region Properties
         public int Id { get; private set; }
-        public List<Player> Players { get; private set; }
+        internal List<Player> Players { get; private set; }
 
         public Player Player
         {
@@ -53,6 +55,8 @@ namespace QuestForTheCrown2.Levels
                 return _map;
             }
         }
+
+        internal LevelCollection Parent { get; set; }
         #endregion Properties
 
         #region Constructor
@@ -63,6 +67,7 @@ namespace QuestForTheCrown2.Levels
             _entities = new List<Entity>();
             _newEntities = new Queue<Entity>();
             _oldEntities = new Queue<Entity>();
+            _oldPlayers = new Queue<Entities.Characters.Player>();
             _neighbors = new int[4];
 
             Players = new List<Player>();
@@ -99,6 +104,9 @@ namespace QuestForTheCrown2.Levels
         {
             while (_oldEntities.Count > 0)
                 _entities.Remove(_oldEntities.Dequeue());
+
+            while(_oldPlayers.Count > 0)
+                Players.Remove(_oldPlayers.Dequeue());
 
             while (_newEntities.Count > 0)
                 _entities.Add(_newEntities.Dequeue());
@@ -159,16 +167,27 @@ namespace QuestForTheCrown2.Levels
             }
         }
 
+        /// <summary>
+        /// Removes entity from the level.
+        /// </summary>
+        /// <param name="entity">Entity to be removed.</param>
         public void RemoveEntity(Entity entity)
         {
-            _oldEntities.Enqueue(entity);
+            if(entity is Player)
+            {
+                _oldPlayers.Enqueue(entity as Player);
+            }
+            else
+            {
+                _oldEntities.Enqueue(entity);
+            }
         }
 
         /// <summary>
         /// Checks the entities that collide with with a given rect.
         /// </summary>
-        /// <param name="rect"></param>
-        /// <returns></returns>
+        /// <param name="rect">Collision rect.</param>
+        /// <returns>Entities that collide with the rectangle.</returns>
         public IEnumerable<Entity> CollidesWith(Rectangle rect)
         {
             return (from ent in _entities where rect.Intersects(ent.CollisionRect) select ent)
@@ -184,6 +203,11 @@ namespace QuestForTheCrown2.Levels
         public bool ContainsEntity(Entity entity)
         {
             return _entities.Contains(entity) || _newEntities.Contains(entity);
+        }
+
+        public void GoToNeighbor(Player player, Direction direction)
+        {
+            Parent.GoToNeighbor(player, this, direction);
         }
     }
 }

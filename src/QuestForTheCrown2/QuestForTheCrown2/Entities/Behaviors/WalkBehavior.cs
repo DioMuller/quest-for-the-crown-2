@@ -4,6 +4,7 @@ using QuestForTheCrown2.Levels;
 using QuestForTheCrown2.Levels.Mapping;
 using System;
 using System.Linq;
+using QuestForTheCrown2.Entities.Characters;
 
 namespace QuestForTheCrown2.Entities.Behaviors
 {
@@ -76,6 +77,17 @@ namespace QuestForTheCrown2.Entities.Behaviors
                 Entity.Position = new Microsoft.Xna.Framework.Vector2(
                     x: newX,
                     y: newY);
+            }
+            else if( Entity is Player && level.Map.IsOutsideBorders(newRect) )
+            {
+                Direction teleportDirection = Direction.None;
+
+                if (newRect.X < 0) teleportDirection = Direction.West;
+                else if (newRect.X + newRect.Width > level.Map.PixelSize.X) teleportDirection = Direction.East;
+                else if (newRect.Y < 0) teleportDirection = Direction.North;
+                else if (newRect.Y + newRect.Height > level.Map.PixelSize.Y) teleportDirection = Direction.South;
+
+                level.GoToNeighbor(Entity as Player, teleportDirection);
             }
         }
         #endregion

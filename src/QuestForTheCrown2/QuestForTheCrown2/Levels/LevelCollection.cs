@@ -68,22 +68,53 @@ namespace QuestForTheCrown2.Levels
         /// </summary>
         /// <param name="playerNum">Player identifier.</param>
         /// <param name="direction">Direction to teleport.</param>
-        private void GoToNeighbor(int playerNum, Direction direction)
+        internal void GoToNeighbor(Player player, Level level, Direction direction)
         {
-            Player player = _players[playerNum - 1];
-            int neighbor = GetLevelByPlayer(player).GetNeighbor(direction);
+
+            int neighbor = level.GetNeighbor(direction);
 
             if( neighbor != 0 )
             {
-                player.CurrentLevel = neighbor - 1;
+                level.RemoveEntity(player);
+                player.CurrentLevel = neighbor;
+                Level newLevel = GetLevelByPlayer(player);
+                newLevel.AddEntity(player);
+
+                //TODO: Add fancy transition drawing/update logic?
+
+                switch( direction )
+                {
+                    case Direction.East:
+                        player.Position = new Vector2(0, player.Position.Y);
+                        break;
+                    case Direction.North:
+                        player.Position = new Vector2(player.Position.X, level.Map.PixelSize.Y - player.Size.Y);
+                        break;
+                    case Direction.South:
+                        player.Position = new Vector2(player.Position.X, 0);
+                        break;
+                    case Direction.West:
+                        player.Position = new Vector2(level.Map.PixelSize.X - player.Size.X, player.Position.Y);
+                        break;
+                }
             }
         }
 
+        /// <summary>
+        /// Get the level.
+        /// </summary>
+        /// <param name="index">Level index.</param>
+        /// <returns>The level.</returns>
         internal Level GetLevel(int index)
         {
             return _levels[index];
         }
 
+        /// <summary>
+        /// Get player by Level.
+        /// </summary>
+        /// <param name="player">Player reference</param>
+        /// <returns>The level the player is in.</returns>
         internal Level GetLevelByPlayer(Player player)
         {
             if( player.CurrentDungeon == -1 ) return _levels[player.CurrentLevel - 1];
@@ -129,6 +160,8 @@ namespace QuestForTheCrown2.Levels
             if( count != 0 ) return false;
 
             _levels.Add(level);
+
+            level.Parent = this;
 
             if( level.Players.Count > 0) _players.AddRange(level.Players);
 

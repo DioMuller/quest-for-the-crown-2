@@ -74,8 +74,10 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// </summary>
         /// <param name="rect">Collision rectangle.</param>
         /// <returns>Is colliding?</returns>
-        public bool Collides(Rectangle rect)
+        public bool Collides(Rectangle rect, bool allowOutside = false)
         {
+            if( !allowOutside && IsOutsideBorders(rect) ) return true;
+
             int result = 0;
             int mod_x = (TileSize.X / 2);
             int mod_y = (TileSize.Y / 2);
@@ -88,11 +90,24 @@ namespace QuestForTheCrown2.Levels.Mapping
             {
                 for( int y = min_y; y < max_y; y++ )
                 {
-                    result += _collisionMap[x,y];
+                    if( x < Size.X * 2 && y < Size.Y * 2 && x >= 0 && y >= 0 )
+                    {
+                        result += _collisionMap[x,y];
+                    }
                 }
             }
 
             return (result != 0); //If everything is 0; it won't collide.
+        }
+
+        /// <summary>
+        /// Checks if rectangle is outside borders
+        /// </summary>
+        /// <param name="rect">Collision rectangle</param>
+        /// <returns>Is the rectangle outside borders?</returns>
+        public bool IsOutsideBorders(Rectangle rect)
+        {
+            return (rect.X < 0 || rect.Y < 0 || rect.X + rect.Width > PixelSize.X || rect.Y + rect.Height > PixelSize.Y );
         }
 
         /// <summary>
