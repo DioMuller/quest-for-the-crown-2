@@ -85,14 +85,9 @@ namespace QuestForTheCrown2.Levels
         {
             _map.Draw(gameTime, spriteBatch, camera);
 
-            foreach (Entity en in _entities)
+            foreach (Entity en in _entities.OrderBy(e => e.Position.Y + e.Size.Y))
             {
                 en.Draw(gameTime, spriteBatch, camera);
-            }
-
-            foreach (Player pl in Players)
-            {
-                pl.Draw(gameTime, spriteBatch, camera);
             }
         }
 

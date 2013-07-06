@@ -87,6 +87,8 @@ namespace QuestForTheCrown2.Entities.Characters
             SpriteSheet.AddAnimation("walking", "right", line: 2, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("walking", "up", line: 3, frameDuration: walkFrameDuration);
 
+            Padding = new Rectangle(2, 10, 2, 2);
+
             Speed = new Vector2(96);
         }
         #endregion Constructor
