@@ -79,10 +79,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             foreach (var ent in GetCollisionRects().SelectMany(level.CollidesWith).Distinct())
             {
                 if (ent != this && ent != Entity && ent.Health != null)
-<<<<<<< HEAD
-=======
                 {
->>>>>>> remotes/origin/Dungeons
                     Hit(level, ent);
                 }
             }
