@@ -10,15 +10,15 @@ namespace QuestForTheCrown2.Entities.Behaviors
     /// </summary>
     class FollowBehavior : WalkBehavior
     {
-        #region Attributes
-        Entity _following;
-        #endregion
-
         #region Properties
+        public EntityRelativePosition CurrentTarget { get; private set; }
+
         /// <summary>
         /// A desired distance to keep from the entity.
         /// </summary>
         public float Distance { get; set; }
+
+        public float? MaxDistance { get; set; }
         /// <summary>
         /// The entity category to be followed.
         /// </summary>
@@ -44,8 +44,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         public override bool IsActive(GameTime gameTime, Level level)
         {
-            _following = level.EntityCloserTo(Entity, TargetCategory);
-            return _following != null;
+            CurrentTarget = level.EntityCloserTo(Entity, TargetCategory);
+            return CurrentTarget != null && (MaxDistance == null || CurrentTarget.Distance < MaxDistance);
         }
 
         /// <summary>
@@ -56,8 +56,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
         public override void Update(GameTime gameTime, Level level)
         {
             var direction = new Vector2(
-                _following.CenterPosition.X - Entity.CenterPosition.X,
-                _following.CenterPosition.Y - Entity.CenterPosition.Y);
+                CurrentTarget.Entity.CenterPosition.X - Entity.CenterPosition.X,
+                CurrentTarget.Entity.CenterPosition.Y - Entity.CenterPosition.Y);
 
             var route = direction;
             var length = route.Length();

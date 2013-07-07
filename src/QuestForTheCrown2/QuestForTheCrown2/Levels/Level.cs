@@ -232,11 +232,22 @@ namespace QuestForTheCrown2.Levels
         /// <param name="relativeTo">Find the entity which is closer to the specified entity.</param>
         /// <param name="category">The category of the entity being searched.</param>
         /// <returns></returns>
-        public Entity EntityCloserTo(Entity relativeTo, params string[] category)
+        public EntityRelativePosition EntityCloserTo(Entity relativeTo, params string[] category)
         {
-            return GetEntities(category)
-                .OrderBy(e => new Vector2(e.Position.X - relativeTo.Position.X, e.Position.Y - relativeTo.Position.Y).Length())
-                .FirstOrDefault();
+            if (relativeTo == null)
+                throw new ArgumentNullException("relativeTo");
+
+            return (from e in GetEntities(category)
+                    let position = new Vector2(e.CenterPosition.X - relativeTo.CenterPosition.X, e.CenterPosition.Y - relativeTo.CenterPosition.Y)
+                    let distance = position.Length()
+                    orderby distance
+                    select new EntityRelativePosition
+                     {
+                         Entity = e,
+                         RelativeTo = relativeTo,
+                         Position = position,
+                         Distance = distance
+                     }).FirstOrDefault();
         }
     }
 }

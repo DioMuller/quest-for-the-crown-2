@@ -145,8 +145,9 @@ namespace QuestForTheCrown2.Levels.Mapping
                         case "Enemy":
                             entity = new Enemy1 { Position = new Vector2(x, y) };
                             entity.AddBehavior(
-                                new FollowBehavior("Player")
+                                new SwordAttackBehavior("Player") { MaxDistance = 300 }
                             );
+                            entity.AddWeapon(new Sword { Entity = entity });
                             break;
                         default:
                             entity = null;

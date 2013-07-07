@@ -44,7 +44,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Speed = new Vector2(96);
 
-            Health = 5;
+            Health = 500;
         }
         #endregion Constructor
     }

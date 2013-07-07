@@ -12,9 +12,10 @@ namespace QuestForTheCrown2.Entities.Weapons
 {
     class Sword : Entity, IWeapon
     {
-        bool _removeOnComplete;
+        bool _removeOnComplete, _rotationCompleted;
         float _desiredAngle, _swingedAngle;
         float _swingSpeed = (float)Math.PI * 4;
+        int _swingDirection, _keepRotating;
 
         public Sword()
             : base(@"sprites\Sword.png", null)
@@ -27,18 +28,23 @@ namespace QuestForTheCrown2.Entities.Weapons
         {
             if (direction.Length() < 0.4)
             {
-                if (_swingedAngle != 0)
+                if (!_rotationCompleted)
+                {
                     _removeOnComplete = true;
-                else
+                    _keepRotating = 5;
+                }
+                else if (_keepRotating <= 0)
                 {
                     level.RemoveEntity(this);
                 }
                 return;
             }
             _removeOnComplete = false;
+            _rotationCompleted = false;
 
             var oldDesired = _desiredAngle;
             _desiredAngle = (float)Math.Atan2(-direction.X, direction.Y);
+
             if (!level.ContainsEntity(this))
             {
                 if (_desiredAngle > 0)
@@ -60,6 +66,11 @@ namespace QuestForTheCrown2.Entities.Weapons
                         _swingedAngle += (float)Math.PI * 2;
                 }
             }
+
+            if (_swingedAngle > 0)
+                _swingDirection = -1;
+            else
+                _swingDirection = 1;
         }
 
         public override void Update(GameTime gameTime, Level level)
@@ -70,21 +81,26 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             foreach (var ent in GetCollisionRects().SelectMany(level.CollidesWith).Distinct())
             {
-                if (ent != this && !(ent is QuestForTheCrown2.Entities.Characters.Player))
+                if (ent != this && ent != Entity)
                     Hit(level, ent);
             }
 
-            if (_swingedAngle != 0)
+            if (!_rotationCompleted || _keepRotating > 0)
             {
                 var oldAngle = _swingedAngle;
-                if (_swingedAngle < 0)
-                    _swingedAngle += (float)(_swingSpeed * gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
-                else
-                    _swingedAngle -= (float)(_swingSpeed * gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
-                if ((oldAngle < 0) != (_swingedAngle < 0))
+                _swingedAngle += (float)(_swingDirection * _swingSpeed * gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
+
+                if (!_rotationCompleted && (oldAngle < 0) != (_swingedAngle < 0))
                 {
-                    _swingedAngle = 0;
-                    if (_removeOnComplete)
+                    _rotationCompleted = true;
+                    if (!_removeOnComplete)
+                        _swingedAngle = 0;
+                }
+
+                if (_rotationCompleted)
+                {
+                    _keepRotating--;
+                    if (_removeOnComplete && _keepRotating <= 0)
                     {
                         level.RemoveEntity(this);
                         _removeOnComplete = false;
