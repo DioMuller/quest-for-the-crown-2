@@ -196,9 +196,9 @@ namespace QuestForTheCrown2.Levels
         /// </summary>
         /// <param name="player">Player to be teleported.</param>
         /// <param name="direction">Direction.</param>
-        public void GoToNeighbor(Player player, Direction direction)
+        public void GoToNeighbor(Entity entity, Direction direction)
         {
-            Parent.GoToNeighbor(player, this, direction);
+            Parent.GoToNeighbor(entity, this, direction);
         }
 
         public void GoToDungeon(Player player, int dungeon)

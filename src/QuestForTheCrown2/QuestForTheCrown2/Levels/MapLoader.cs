@@ -119,8 +119,6 @@ namespace QuestForTheCrown2.Levels.Mapping
             #endregion Layers
 
             #region Objects
-            Player mainChar = null;
-
             foreach (XElement objs in mapElement.Elements("objectgroup"))
             {
                 foreach (XElement obj in objs.Elements("object"))
@@ -140,9 +138,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                                 new InputBehavior(Base.InputType.Keyboard)
                             );
                             entity.AddWeapon(new Sword { Entity = entity });
-
-                            mainChar = entity as Player;
-                            mainChar.CurrentLevel = id;
+                            entity.CurrentLevel = id;
                             break;
                         case "Enemy":
                             //TODO: Get Enemy type and create refering to that.
@@ -152,6 +148,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                                 new WalkAroundBehavior()
                             );
                             entity.AddWeapon(new Sword { Entity = entity });
+                            entity.CurrentLevel = id;
                             break;
                         case "Item":
                             entity = new Item { Position = new Vector2(x, y) };

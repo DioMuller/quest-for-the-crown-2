@@ -133,8 +133,8 @@ namespace QuestForTheCrown2.Entities.Base
             get
             {
                 return new Vector2(
-                    x: Position.X + (Size.X - Padding.X - Padding.Width),
-                    y: Position.Y + (Size.Y - Padding.Y - Padding.Height));
+                    x: Position.X + (Size.X - Padding.X - Padding.Width) / 2 + Padding.X,
+                    y: Position.Y + (Size.Y - Padding.Y - Padding.Height) / 2 + Padding.Y);
             }
         }
 
@@ -165,8 +165,8 @@ namespace QuestForTheCrown2.Entities.Base
                     throw new NotImplementedException();
 
                 return new Rectangle(
-                    x: (int)(Position.X + Padding.X - Origin.X),
-                    y: (int)(Position.Y + Padding.Y - Origin.Y),
+                    x: (int)(Position.X + Padding.X),
+                    y: (int)(Position.Y + Padding.Y),
                     width: Size.X - Padding.X - Padding.Width,
                     height: Size.Y - Padding.Y - Padding.Height);
             }

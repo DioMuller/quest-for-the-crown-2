@@ -73,7 +73,7 @@ namespace QuestForTheCrown2.Levels
         /// </summary>
         /// <param name="playerNum">Player identifier.</param>
         /// <param name="direction">Direction to teleport.</param>
-        internal void GoToNeighbor(Player player, Level level, Direction direction)
+        internal void GoToNeighbor(Entity entity, Level level, Direction direction)
         {
             int neighbor = level.GetNeighbor(direction);
 
@@ -83,9 +83,9 @@ namespace QuestForTheCrown2.Levels
             }
             else if (neighbor != 0)
             {
-                player.TransitioningToLevel = neighbor;
-                player.LevelTransitionPercent = 0;
-                player.LevelTransitionDirection = direction;
+                entity.TransitioningToLevel = neighbor;
+                entity.LevelTransitionPercent = 0;
+                entity.LevelTransitionDirection = direction;
             }
         }
 
