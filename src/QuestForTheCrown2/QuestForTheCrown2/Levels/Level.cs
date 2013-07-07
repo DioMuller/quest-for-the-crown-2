@@ -191,9 +191,19 @@ namespace QuestForTheCrown2.Levels
             return _entities.Contains(entity) || _newEntities.Contains(entity);
         }
 
+        /// <summary>
+        /// Teleports the player to the Neighbor.
+        /// </summary>
+        /// <param name="player">Player to be teleported.</param>
+        /// <param name="direction">Direction.</param>
         public void GoToNeighbor(Player player, Direction direction)
         {
             Parent.GoToNeighbor(player, this, direction);
+        }
+
+        public void GoToDungeon(Player player, int dungeon)
+        {
+            Parent.GoToDungeon(player, dungeon);
         }
 
         /// <summary>

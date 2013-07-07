@@ -87,7 +87,7 @@ namespace QuestForTheCrown2
 
             _mainMenu = new TitleScreen(this);
 
-            _overworld = MapLoader.LoadLevels("Content/dungeons/Overworld.qfc");
+            _overworld = MapLoader.LoadLevels("Content/maps/QuestForTheCrown.maps");
         }
 
         /// <summary>

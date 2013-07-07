@@ -6,3 +6,5 @@ Debug
 *.opensdf
 *.suo
 ~$*
+*.vsp
+*.vspx

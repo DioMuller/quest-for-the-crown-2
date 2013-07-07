@@ -45,19 +45,6 @@ namespace QuestForTheCrown2.Levels.Mapping
                 collection.AddLevel(level);
             }
             #endregion Load Levels
-
-            if( root.Element("dungeons") != null )
-            {
-                foreach( XElement dung in root.Element("dungeons").Elements("dungeon") )
-                {
-                    int id = int.Parse(dung.Attribute("id").Value);
-                    LevelCollection dungeon = LoadLevels(dung.Attribute("path").Value);
-                    dungeon.Id = id;
-
-                    collection.AddDungeon(dungeon);
-                }
-            }
-
             return collection;
         }
 
@@ -155,7 +142,6 @@ namespace QuestForTheCrown2.Levels.Mapping
                             entity.AddWeapon(new Sword { Entity = entity });
 
                             mainChar = entity as Player;
-                            mainChar.CurrentDungeon = -1;
                             mainChar.CurrentLevel = id;
                             break;
                         case "Enemy":
