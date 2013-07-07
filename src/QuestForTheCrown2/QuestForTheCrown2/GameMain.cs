@@ -15,29 +15,48 @@ using QuestForTheCrown2.Entities.Characters;
 using QuestForTheCrown2.Entities.Behaviors;
 using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Weapons;
+using QuestForTheCrown2.GUI.Screens;
 
 namespace QuestForTheCrown2
 {
+    /// <summary>
+    /// Game current state.
+    /// </summary>
+    public enum GameState
+    {
+        MainMenu,
+        Playing,
+        Loading,
+        Options,
+        Credits,
+        Quiting
+    }
+
     /// <summary>
     /// This is the main type for your game
     /// </summary>
     public class GameMain : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        GraphicsDeviceManager _graphics;
+        SpriteBatch _spriteBatch;
+        GameState _currentState;
 
-        Levels.LevelCollection overworld;
+        TitleScreen _mainMenu;
+
+        Levels.LevelCollection _overworld;
 
         Base.Input input = new Base.Input();
 
         public GameMain()
             : base()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
 
-            graphics.IsFullScreen = true;
-            graphics.PreferredBackBufferHeight = 1080;
-            graphics.PreferredBackBufferWidth = 1920;
+            _graphics.IsFullScreen = true;
+            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.PreferredBackBufferWidth = 1920;
+
+            _currentState = GameState.MainMenu;
 
             Content.RootDirectory = "Content";
         }
@@ -64,9 +83,11 @@ namespace QuestForTheCrown2
             GameContent.Initialize(Content);
 
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            overworld = MapLoader.LoadLevels("Content/dungeons/Overworld.qfc");
+            _mainMenu = new TitleScreen(this);
+
+            _overworld = MapLoader.LoadLevels("Content/dungeons/Overworld.qfc");
         }
 
         /// <summary>
@@ -85,16 +106,28 @@ namespace QuestForTheCrown2
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (input.QuitButton)
+            if (input.PauseButton)
                 Exit();
 
-            // TODO: Add your update logic here
-
-            // Teste
-
-            overworld.Update(gameTime);
-            //mainCharacter.Update(gameTime, map);
-            //enemy1.Update(gameTime, map);
+            switch( _currentState )
+            {
+                case GameState.MainMenu:
+                    _mainMenu.Update(gameTime);
+                    break;
+                case GameState.Playing:
+                    _overworld.Update(gameTime);
+                    break;
+                case GameState.Loading:
+                    break;
+                case GameState.Options:
+                    break;
+                case GameState.Credits:
+                    break;
+                case GameState.Quiting:
+                    Exit();
+                    break;
+            }            
+            
 
             base.Update(gameTime);
         }
@@ -105,15 +138,32 @@ namespace QuestForTheCrown2
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            spriteBatch.Begin();
+            _spriteBatch.Begin();
 
-            overworld.Draw(gameTime, spriteBatch, Window.ClientBounds);
-
-            spriteBatch.End();
+            switch (_currentState)
+            {
+                case GameState.MainMenu:
+                    _mainMenu.Draw(gameTime, _spriteBatch);
+                    break;
+                case GameState.Playing:
+                    _overworld.Draw(gameTime, _spriteBatch, Window.ClientBounds);
+                    break;
+            }    
+ 
+            _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Changes game state.
+        /// </summary>
+        /// <param name="state">Desired game state.</param>
+        public void ChangeState(GameState state)
+        {
+            _currentState = state;
         }
     }
 }

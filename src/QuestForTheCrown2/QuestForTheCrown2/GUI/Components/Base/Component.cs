@@ -8,6 +8,13 @@ using QuestForTheCrown2.Base;
 
 namespace QuestForTheCrown2.GUI.Components
 {
+    #region Delegates
+    /// <summary>
+    /// Called when the button is selected.
+    /// </summary>
+    public delegate void SelectDelegate();
+    #endregion Delegates
+
     public class Component
     {
         #region Properties
@@ -25,6 +32,10 @@ namespace QuestForTheCrown2.GUI.Components
         public Texture2D SelectedTexture { get; set; }
         #endregion Properties
 
+        #region Delegates
+        public SelectDelegate Select;
+        #endregion Delegates
+
         #region Constructor
         /// <summary>
         /// Creates component and initializes the texture with a default value.
@@ -40,7 +51,7 @@ namespace QuestForTheCrown2.GUI.Components
         /// Draw the component
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             if( Selected ) spriteBatch.Draw(SelectedTexture, Position, Color.White);
         }

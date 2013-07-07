@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace QuestForTheCrown2.Base
 {
+    /// <summary>
+    /// Input type.
+    /// </summary>
     public enum InputType
     {
         Controller,
@@ -14,12 +17,25 @@ namespace QuestForTheCrown2.Base
         KeyboardAndMouse
     }
 
+    /// <summary>
+    /// Works with all the input in the game.
+    /// </summary>
     public class Input
     {
         #region Properties
+        /// <summary>
+        /// Input type.
+        /// </summary>
         public InputType Type { get; private set; }
+
+        /// <summary>
+        /// Input index.
+        /// </summary>
         public int Index { get; private set; }
 
+        /// <summary>
+        /// Movement direction.
+        /// </summary>
         public Vector2 Movement
         {
             get
@@ -46,6 +62,9 @@ namespace QuestForTheCrown2.Base
             }
         }
 
+        /// <summary>
+        /// Attack direction.
+        /// </summary>
         public Vector2 Attack
         {
             get
@@ -72,7 +91,10 @@ namespace QuestForTheCrown2.Base
             }
         }
 
-        public bool QuitButton
+        /// <summary>
+        /// Pause button pressed?
+        /// </summary>
+        public bool PauseButton
         {
             get
             {
@@ -82,6 +104,46 @@ namespace QuestForTheCrown2.Base
                         return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.Start);
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
+                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Enter);
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Confirm button pressed?
+        /// </summary>
+        public bool ConfirmButton
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case InputType.Controller:
+                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.A);
+                    case InputType.Keyboard:
+                    case InputType.KeyboardAndMouse:
+                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Space);
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Cancel button pressed?
+        /// </summary>
+        public bool CancelButton
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case InputType.Controller:
+                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.B);
+                    case InputType.Keyboard:
+                    case InputType.KeyboardAndMouse:
                         return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Escape);
                     default:
                         return false;
@@ -89,6 +151,9 @@ namespace QuestForTheCrown2.Base
             }
         }
 
+        /// <summary>
+        /// Is input connected?
+        /// </summary>
         public bool IsConnected
         {
             get
@@ -108,6 +173,9 @@ namespace QuestForTheCrown2.Base
         #endregion Properties
 
         #region Constructor
+        /// <summary>
+        /// Initializes input with controller, if possible. If not, initializes with the keyboard.
+        /// </summary>
         public Input()
         {
             if (GamePad.GetState(PlayerIndex.One).IsConnected)
@@ -122,12 +190,21 @@ namespace QuestForTheCrown2.Base
             this.Index = 0;
         }
 
+        /// <summary>
+        /// Initializes input with desired input type, first index.
+        /// </summary>
+        /// <param name="inputType">Input type.</param>
         public Input(InputType inputType)
             : this(inputType, 0)
         {
             //Nothing else to do.
         }
-
+        
+        /// <summary>
+        /// Initializes input with desired input type and index.
+        /// </summary>
+        /// <param name="inputType">Input type.</param>
+        /// <param name="index">Input index.</param>
         public Input(InputType inputType, int index)
         {
             Type = inputType;
