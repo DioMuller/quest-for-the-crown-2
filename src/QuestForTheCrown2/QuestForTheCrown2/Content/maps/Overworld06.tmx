@@ -84,6 +84,6 @@
 </data>
  </layer>
  <objectgroup name="Objects" width="60" height="34">
-  <object name="1" type="Entrance" x="927" y="258" width="32" height="32"/>
+  <object name="10" type="Entrance" x="927" y="258" width="32" height="32"/>
  </objectgroup>
 </map>

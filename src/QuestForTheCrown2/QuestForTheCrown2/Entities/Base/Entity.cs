@@ -181,11 +181,6 @@ namespace QuestForTheCrown2.Entities.Base
 
         #region Level
         /// <summary>
-        /// Current dungeon the player is in.
-        /// </summary>
-        public int CurrentDungeon { get; set; }
-
-        /// <summary>
         /// Current level the player is in.
         /// </summary>
         public int CurrentLevel { get; set; }

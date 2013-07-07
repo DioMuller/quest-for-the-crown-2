@@ -154,9 +154,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\dungeons\Overworld.qfc">
+    <None Include="Content\maps\QuestForTheCrown.maps">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\tilesets\Dungeon 1.tsx">
@@ -214,11 +214,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\fonts\GearInfoFont.xnb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\dungeons\BeachCave.qfc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

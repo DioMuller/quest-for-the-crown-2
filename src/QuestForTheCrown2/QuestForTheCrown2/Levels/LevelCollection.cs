@@ -31,11 +31,6 @@ namespace QuestForTheCrown2.Levels
         List<Level> _levels;
 
         /// <summary>
-        /// Dungeons on this world/dungeon.
-        /// </summary>
-        List<LevelCollection> _dungeons;
-
-        /// <summary>
         /// Stored waypoints: Where the player was when he quit this collection.
         /// </summary>
         List<Waypoint> _storedWaypoints;
@@ -54,7 +49,7 @@ namespace QuestForTheCrown2.Levels
         {
             get
             {
-                return _levels.Where(l => l.Players.Any()).Union(_dungeons.SelectMany(d => d.CurrentLevels));
+                return _levels.Where(l => l.Players.Any());
             }
         }
 
@@ -68,7 +63,6 @@ namespace QuestForTheCrown2.Levels
         public LevelCollection()
         {
             _levels = new List<Level>();
-            _dungeons = new List<LevelCollection>();
             _storedWaypoints = new List<Waypoint>();
         }
         #endregion Constructor
@@ -96,14 +90,13 @@ namespace QuestForTheCrown2.Levels
         /// </summary>
         /// <param name="player">Player</param>
         /// <param name="dungeon">Dungeon ID</param>
-        internal void GoToDungeon(Player player, int dungeon)
+        internal void GoToDungeon(Player player, int map)
         {
             _storedWaypoints.Add(new Waypoint { Player = player, Level = GetLevelByPlayer(player), Position = player.Position } );
 
             GetLevelByPlayer(player).RemoveEntity(player);
             
-            player.CurrentDungeon = (dungeon - 1);
-            player.CurrentLevel = 1;
+            player.CurrentLevel = map;
 
             Level newLevel = GetLevelByPlayer(player);
             newLevel.AddEntity(player);
@@ -129,9 +122,7 @@ namespace QuestForTheCrown2.Levels
         /// <returns>The level the player is in.</returns>
         internal Level GetLevelByPlayer(Player player)
         {
-            if (player.CurrentDungeon == -1) return _levels[player.CurrentLevel - 1];
-
-            return _dungeons[player.CurrentDungeon].GetLevel(player.CurrentLevel - 1);
+            return _levels[player.CurrentLevel - 1];
         }
 
         #region Public Methods
@@ -182,20 +173,6 @@ namespace QuestForTheCrown2.Levels
 
             _levels.Add(level);
             level.Parent = this;
-            return true;
-        }
-
-        /// <summary>
-        /// Adds a dungeon to the collection.
-        /// </summary>
-        /// <param name="dungeon">Level to be added.</param>
-        public bool AddDungeon(LevelCollection dungeon)
-        {
-            if (_dungeons.Any(l => l.Id == dungeon.Id))
-                return false;
-
-            _dungeons.Add(dungeon);
-            dungeon.Parent = this;
             return true;
         }
         #endregion Collection Methods
