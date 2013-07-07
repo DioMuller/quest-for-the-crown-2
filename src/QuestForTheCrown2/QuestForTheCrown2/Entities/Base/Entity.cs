@@ -8,6 +8,7 @@ using QuestForTheCrown2.Levels.Mapping;
 using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Weapons;
 using QuestForTheCrown2.Levels;
+using QuestForTheCrown2.Entities.Behaviors;
 
 namespace QuestForTheCrown2.Entities.Base
 {
@@ -26,11 +27,37 @@ namespace QuestForTheCrown2.Entities.Base
         public SpriteSheet SpriteSheet { get; private set; }
         public Vector2 Speed { get; set; }
 
+        public Vector2 CenterPosition
+        {
+            get
+            {
+                return new Vector2(
+                    x:Position.X + (Size.X - Padding.X - Padding.Width),
+                    y: Position.Y + (Size.Y - Padding.Y - Padding.Height));
+            }
+        }
+
+        /// <summary>
+        /// The current entity's health.
+        /// Null if it can't be destroyed.
+        /// </summary>
+        public int? Health { get; set; }
+
+        /// <summary>
+        /// Indicates if the current entity cannot be hit.
+        /// </summary>
+        public bool IsBlinking { get; set; }
+
         /// <summary>
         /// Indicates in which category this entity is at.
         /// Values could be: "Player", "Enemy", "Item" and etc.
         /// </summary>
         public string Category { get; set; }
+
+        /// <summary>
+        /// Indicates if the current entity will not be drawn.
+        /// </summary>
+        public bool IsInvisible { get; set; }
 
         /// <summary>
         /// Entity size
@@ -105,6 +132,8 @@ namespace QuestForTheCrown2.Entities.Base
             _framesPerLine = SpriteSheet.Texture.Width / SpriteSheet.FrameSize.X;
 
             Speed = new Vector2(SpriteSheet.FrameSize.X, SpriteSheet.FrameSize.X);
+
+            AddBehavior(new BlinkBehavior());
         }
         #endregion
 

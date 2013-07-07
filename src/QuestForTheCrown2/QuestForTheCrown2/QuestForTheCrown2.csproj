@@ -42,6 +42,7 @@
     <Compile Include="Base\GameContent.cs" />
     <Compile Include="Entities\Base\Entity.cs" />
     <Compile Include="Entities\Base\EntityUpdateBehavior.cs" />
+    <Compile Include="Entities\Behaviors\BlinkBehavior.cs" />
     <Compile Include="Entities\Behaviors\WalkBehavior.cs" />
     <Compile Include="Entities\Behaviors\FollowBehavior.cs" />
     <Compile Include="Entities\Behaviors\InputBehavior.cs" />

@@ -92,6 +92,8 @@ namespace QuestForTheCrown2.Entities.Characters
             Padding = new Rectangle(2, 10, 2, 2);
 
             Speed = new Vector2(96);
+
+            Health = 5;
         }
         #endregion Constructor
     }

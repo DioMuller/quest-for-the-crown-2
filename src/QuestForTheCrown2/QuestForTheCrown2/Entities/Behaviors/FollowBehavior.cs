@@ -31,7 +31,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         /// <param name="following">The entity to follow.</param>
         /// <param name="distance">The desired distance to keep.</param>
-        public FollowBehavior(string targetCategory, float distance = 64)
+        public FollowBehavior(string targetCategory, float distance = 32)
         {
             TargetCategory = targetCategory;
             Distance = distance;
@@ -56,8 +56,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
         public override void Update(GameTime gameTime, Level level)
         {
             var direction = new Vector2(
-                _following.Position.X - Entity.Position.X,
-                _following.Position.Y - Entity.Position.Y);
+                _following.CenterPosition.X - Entity.CenterPosition.X,
+                _following.CenterPosition.Y - Entity.CenterPosition.Y);
 
             var route = direction;
             var length = route.Length();

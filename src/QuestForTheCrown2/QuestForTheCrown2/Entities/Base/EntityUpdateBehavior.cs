@@ -34,6 +34,6 @@ namespace QuestForTheCrown2.Entities.Base
         /// Executes an update logic on the attached entity.
         /// </summary>
         /// <param name="deltaTime"></param>
-        public abstract void Update(GameTime deltaTime, Level level);
+        public abstract void Update(GameTime gameTime, Level level);
     }
 }
