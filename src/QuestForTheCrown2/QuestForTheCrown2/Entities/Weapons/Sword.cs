@@ -81,8 +81,10 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             foreach (var ent in GetCollisionRects().SelectMany(level.CollidesWith).Distinct())
             {
-                if (ent != this && ent != Entity)
+                if (ent != this && ent != Entity && ent.Health != null)
+                {
                     Hit(level, ent);
+                }
             }
 
             if (!_rotationCompleted || _keepRotating > 0)

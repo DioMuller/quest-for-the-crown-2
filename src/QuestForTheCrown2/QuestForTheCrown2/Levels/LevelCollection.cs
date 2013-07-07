@@ -9,6 +9,19 @@ using QuestForTheCrown2.Entities.Characters;
 
 namespace QuestForTheCrown2.Levels
 {
+    /// <summary>
+    /// Class to represent a waypoint (where the player stoped).
+    /// </summary>
+    internal class Waypoint
+    {
+        public Player Player { get; set; }
+        public Level Level { get; set; }
+        public Vector2 Position { get; set; }
+    }
+
+    /// <summary>
+    /// Dungeon/Overworld/Other types of level collection.
+    /// </summary>
     public class LevelCollection
     {
         #region Attributes
@@ -22,6 +35,10 @@ namespace QuestForTheCrown2.Levels
         /// </summary>
         List<LevelCollection> _dungeons;
 
+        /// <summary>
+        /// Stored waypoints: Where the player was when he quit this collection.
+        /// </summary>
+        List<Waypoint> _storedWaypoints;
         #endregion Attributes
 
         #region Properties
@@ -37,7 +54,7 @@ namespace QuestForTheCrown2.Levels
         {
             get
             {
-                return _levels.Where(l => l.Players.Any());
+                return _levels.Where(l => l.Players.Any()).Union(_dungeons.SelectMany(d => d.CurrentLevels));
             }
         }
 
@@ -52,6 +69,7 @@ namespace QuestForTheCrown2.Levels
         {
             _levels = new List<Level>();
             _dungeons = new List<LevelCollection>();
+            _storedWaypoints = new List<Waypoint>();
         }
         #endregion Constructor
 
@@ -71,6 +89,27 @@ namespace QuestForTheCrown2.Levels
                 player.LevelTransitionPercent = 0;
                 player.LevelTransitionDirection = direction;
             }
+        }
+
+        /// <summary>
+        /// Teleports player to dungeon
+        /// </summary>
+        /// <param name="player">Player</param>
+        /// <param name="dungeon">Dungeon ID</param>
+        internal void GoToDungeon(Player player, int dungeon)
+        {
+            _storedWaypoints.Add(new Waypoint { Player = player, Level = GetLevelByPlayer(player), Position = player.Position } );
+
+            GetLevelByPlayer(player).RemoveEntity(player);
+            
+            player.CurrentDungeon = (dungeon - 1);
+            player.CurrentLevel = 1;
+
+            Level newLevel = GetLevelByPlayer(player);
+            newLevel.AddEntity(player);
+
+            //TODO: Load this from an XML file, maybe?
+            player.Position = new Vector2(newLevel.Map.PixelSize.X/2, newLevel.Map.PixelSize.Y - player.Size.Y - 1);
         }
 
         /// <summary>
@@ -128,6 +167,67 @@ namespace QuestForTheCrown2.Levels
                     lv.Draw(gameTime, spriteBatch, camera);
                 }
             }
+        }
+        #endregion Public Methods
+
+        #region Collection Methods
+        /// <summary>
+        /// Adds a level to the collection.
+        /// </summary>
+        /// <param name="level">Level to be added.</param>
+        public bool AddLevel(Level level)
+        {
+            if (_levels.Any(l => l.Id == level.Id))
+                return false;
+
+            _levels.Add(level);
+            level.Parent = this;
+            return true;
+        }
+
+        /// <summary>
+        /// Adds a dungeon to the collection.
+        /// </summary>
+        /// <param name="dungeon">Level to be added.</param>
+        public bool AddDungeon(LevelCollection dungeon)
+        {
+            if (_dungeons.Any(l => l.Id == dungeon.Id))
+                return false;
+
+            _dungeons.Add(dungeon);
+            dungeon.Parent = this;
+            return true;
+        }
+        #endregion Collection Methods
+
+        #region Camera Methods
+        /// <summary>
+        /// Gets camera position relative to an Entity.
+        /// </summary>
+        /// <param name="entity">Entity</param>
+        /// <param name="mapSize">Complete map size.</param>
+        /// <param name="screenSize">Screen total size.</param>
+        /// <returns></returns>
+        static Vector2 GetCameraPosition(Entity entity, Point mapSize, Rectangle screenSize)
+        {
+            var camera = entity.Position;
+            var newX = entity.Position.X;
+            var newY = entity.Position.Y;
+
+            if (newX < screenSize.Width / 2)
+                newX = screenSize.Width / 2;
+            else if (newX > mapSize.X - screenSize.Width / 2)
+                newX = mapSize.X - screenSize.Width / 2;
+
+            if (newY < screenSize.Height / 2)
+                newY = screenSize.Height / 2;
+            else if (newY > mapSize.Y - screenSize.Height / 2)
+                newY = mapSize.Y - screenSize.Height / 2;
+
+            camera = new Vector2(
+                newX - screenSize.Width / 2,
+                newY - screenSize.Height / 2);
+            return camera;
         }
 
         /// <summary>
@@ -202,58 +302,6 @@ namespace QuestForTheCrown2.Levels
                 player.LevelTransitionDirection = Direction.None;
                 player.LevelTransitionPercent = 0;
             }
-        }
-
-        /// <summary>
-        /// Adds a level to the collection.
-        /// </summary>
-        /// <param name="level">Level to be added.</param>
-        public bool AddLevel(Level level)
-        {
-            if (_levels.Any(l => l.Id == level.Id))
-                return false;
-
-            _levels.Add(level);
-            level.Parent = this;
-            return true;
-        }
-
-        /// <summary>
-        /// Adds a dungeon to the collection.
-        /// </summary>
-        /// <param name="dungeon">Level to be added.</param>
-        public bool AddDungeon(LevelCollection dungeon)
-        {
-            if (_dungeons.Any(l => l.Id == dungeon.Id))
-                return false;
-
-            _dungeons.Add(dungeon);
-            dungeon.Parent = this;
-            return true;
-        }
-        #endregion Public Methods
-
-        #region Camera Methods
-        static Vector2 GetCameraPosition(Entity entity, Point mapSize, Rectangle screenSize)
-        {
-            var camera = entity.Position;
-            var newX = entity.Position.X;
-            var newY = entity.Position.Y;
-
-            if (newX < screenSize.Width / 2)
-                newX = screenSize.Width / 2;
-            else if (newX > mapSize.X - screenSize.Width / 2)
-                newX = mapSize.X - screenSize.Width / 2;
-
-            if (newY < screenSize.Height / 2)
-                newY = screenSize.Height / 2;
-            else if (newY > mapSize.Y - screenSize.Height / 2)
-                newY = mapSize.Y - screenSize.Height / 2;
-
-            camera = new Vector2(
-                newX - screenSize.Width / 2,
-                newY - screenSize.Height / 2);
-            return camera;
         }
         #endregion Camera Methods
 

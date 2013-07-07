@@ -10,8 +10,11 @@
 	<level id="7" neighbors="5,3,0,0" path="Content/maps/Overworld07.tmx"/>
 	<level id="8" neighbors="6,5,9,0" path="Content/maps/Overworld08.tmx"/>
 	<level id="9" neighbors="8,0,0,0" path="Content/maps/Overworld09.tmx"/>
+	<level id="10" neighbors="0,2,0,-1" path="Content/maps/BeachCave/BeachCave01.tmx"/>
+    <level id="11" neighbors="0,3,4,1" path="Content/maps/BeachCave/BeachCave02.tmx"/>
+    <level id="12" neighbors="0,0,2,0" path="Content/maps/BeachCave/BeachCave03.tmx"/>
+	<level id="13" neighbors="2,5,0,0" path="Content/maps/BeachCave/BeachCave04.tmx"/>
+	<level id="14" neighbors="0,6,0,4" path="Content/maps/BeachCave/BeachCave05.tmx"/>
+	<level id="15" neighbors="0,0,0,5" path="Content/maps/BeachCave/BeachCave06.tmx"/>
   </levels>
-  <dungeons>
-    <dungeon id="1" path="Content/dungeons/BeachCave.qfc"/>
-  </dungeons>
 </collection>
