@@ -33,28 +33,19 @@ namespace QuestForTheCrown2.Levels
         private List<Entity> _entities;
         private int[] _neighbors;
         private Queue<Entity> _newEntities, _oldEntities;
-        private Queue<Player> _oldPlayers;
+        private Dictionary<string, List<Entity>> _entitiesByCategory;
         #endregion Attributes
 
         #region Properties
         public int Id { get; private set; }
-        internal List<Player> Players { get; private set; }
-
-        public Player Player
+        internal IEnumerable<Entity> Players
         {
-            get
-            {
-                if (Players.Count != 0) return Players.First();
-                return null;
-            }
+            get { return GetEntities("Player"); }
         }
 
         internal Map Map
         {
-            get
-            {
-                return _map;
-            }
+            get { return _map; }
         }
 
         internal LevelCollection Parent { get; set; }
@@ -68,10 +59,8 @@ namespace QuestForTheCrown2.Levels
             _entities = new List<Entity>();
             _newEntities = new Queue<Entity>();
             _oldEntities = new Queue<Entity>();
-            _oldPlayers = new Queue<Entities.Characters.Player>();
             _neighbors = new int[4];
-
-            Players = new List<Player>();
+            _entitiesByCategory = new Dictionary<string, List<Entity>>();
         }
         #endregion Constructor
 
@@ -144,8 +133,18 @@ namespace QuestForTheCrown2.Levels
         public void AddEntity(Entity entity)
         {
             _newEntities.Enqueue(entity);
-            if (entity is Player)
-                Players.Add((Player)entity);
+
+            if (entity.Category != null)
+            {
+                List<Entity> existingCategoryList;
+                if (!_entitiesByCategory.TryGetValue(entity.Category, out existingCategoryList))
+                {
+                    existingCategoryList = new List<Entity>();
+                    _entitiesByCategory.Add(entity.Category, existingCategoryList);
+                }
+
+                existingCategoryList.Add(entity);
+            }
         }
 
         /// <summary>
@@ -165,8 +164,8 @@ namespace QuestForTheCrown2.Levels
         public void RemoveEntity(Entity entity)
         {
             _oldEntities.Enqueue(entity);
-            if (entity is Player)
-                Players.Remove((Player)entity);
+            if (entity.Category != null)
+                _entitiesByCategory[entity.Category].Remove(entity);
         }
 
         /// <summary>
@@ -208,17 +207,47 @@ namespace QuestForTheCrown2.Levels
         }
 
         /// <summary>
+        /// Finds all entities matching any of the specified categories.
+        /// </summary>
+        /// <param name="category">Array of possible categories.</param>
+        /// <returns>All entities matching any of the specified categories.</returns>
+        public IEnumerable<Entity> GetEntities(params string[] category)
+        {
+            if (category.Length == 0)
+                throw new ArgumentException("A category must be specified", "category");
+
+            foreach (var cat in category)
+            {
+                if (_entitiesByCategory.ContainsKey(cat))
+                {
+                    foreach (var ent in _entitiesByCategory[cat])
+                        yield return ent;
+                }
+            }
+        }
+
+        /// <summary>
         /// Finds the entity of the desired category that is closer to an specified entity.
         /// </summary>
         /// <param name="relativeTo">Find the entity which is closer to the specified entity.</param>
         /// <param name="category">The category of the entity being searched.</param>
         /// <returns></returns>
-        public Entity EntityCloserTo(Entity relativeTo, params string[] category)
+        public EntityRelativePosition EntityCloserTo(Entity relativeTo, params string[] category)
         {
-            var categorySearchRegex = "^" + string.Join("$|^", category) + "$";
-            return _entities
-                .Where(e => Regex.IsMatch(e.Category ?? "", categorySearchRegex))
-                .FirstOrDefault();
+            if (relativeTo == null)
+                throw new ArgumentNullException("relativeTo");
+
+            return (from e in GetEntities(category)
+                    let position = new Vector2(e.CenterPosition.X - relativeTo.CenterPosition.X, e.CenterPosition.Y - relativeTo.CenterPosition.Y)
+                    let distance = position.Length()
+                    orderby distance
+                    select new EntityRelativePosition
+                     {
+                         Entity = e,
+                         RelativeTo = relativeTo,
+                         Position = position,
+                         Distance = distance
+                     }).FirstOrDefault();
         }
     }
 }

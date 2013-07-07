@@ -19,23 +19,36 @@ namespace QuestForTheCrown2.Entities.Base
         readonly int _framesPerLine;
         Animation _lastAnimation;
         TimeSpan _lastFrameStartTime;
+        //private int _playerNumber;
         #endregion
 
         #region Properties
         public Entity Parent { get; set; }
-        public Vector2 Position { get; set; }
-        public SpriteSheet SpriteSheet { get; private set; }
-        public Vector2 Speed { get; set; }
 
-        public Vector2 CenterPosition
-        {
-            get
-            {
-                return new Vector2(
-                    x:Position.X + (Size.X - Padding.X - Padding.Width),
-                    y: Position.Y + (Size.Y - Padding.Y - Padding.Height));
-            }
-        }
+        // public int PlayerNumber
+        ///// <summary>
+        ///// Player number (1-4)
+        ///// </summary>
+        //public int PlayerNumber
+        //{
+        //    get
+        //    {
+        //        return _playerNumber;
+        //    }
+        //    set
+        //    {
+        //        if (value > 0 && value < 5)
+        //        {
+        //            _playerNumber = value;
+        //        }
+        //    }
+        //}
+
+        /// <summary>
+        /// Indicates in which category this entity is at.
+        /// Values could be: "Player", "Enemy", "Item" and etc.
+        /// </summary>
+        public string Category { get; set; }
 
         /// <summary>
         /// The current entity's health.
@@ -49,29 +62,42 @@ namespace QuestForTheCrown2.Entities.Base
         public bool IsBlinking { get; set; }
 
         /// <summary>
-        /// Indicates in which category this entity is at.
-        /// Values could be: "Player", "Enemy", "Item" and etc.
+        /// Contains all the entities behavior, that will be used during the entity's update logic.
         /// </summary>
-        public string Category { get; set; }
+        public Dictionary<string, List<EntityUpdateBehavior>> Behaviors { get; private set; }
+
+        /// <summary>
+        /// A list of all weapons available to this entity.
+        /// </summary>
+        public List<IWeapon> Weapons { get; private set; }
+
+        #region Draw
+
+        public SpriteSheet SpriteSheet { get; private set; }
+
+        public Frame CurrentFrame
+        {
+            get
+            {
+                Animation animation = SelectAnimation();
+                var index = animation.FrameIndexes[_currentFrameIndex];
+
+                return new Frame
+                {
+                    Texture = SpriteSheet.Texture,
+                    Rectangle = new Rectangle(
+                        (index % _framesPerLine) * SpriteSheet.FrameSize.X,
+                        (index / _framesPerLine) * SpriteSheet.FrameSize.Y,
+                        SpriteSheet.FrameSize.X,
+                        SpriteSheet.FrameSize.Y)
+                };
+            }
+        }
 
         /// <summary>
         /// Indicates if the current entity will not be drawn.
         /// </summary>
         public bool IsInvisible { get; set; }
-
-        /// <summary>
-        /// Entity size
-        /// </summary>
-        public Point Size
-        {
-            get
-            {
-                return SpriteSheet.FrameSize;
-            }
-        }
-
-        public Dictionary<string, List<EntityUpdateBehavior>> Behaviors { get; private set; }
-        public List<IWeapon> Weapons { get; private set; }
 
         /// <summary>
         /// Indicates the current entity animation.
@@ -84,6 +110,33 @@ namespace QuestForTheCrown2.Entities.Base
         /// Examples are: "left", "bottom", "right" and "down".
         /// </summary>
         public string CurrentView { get; set; }
+
+        #endregion
+
+        #region Position
+        public Vector2 Position { get; set; }
+        public Vector2 Speed { get; set; }
+
+        /// <summary>
+        /// Entity size
+        /// </summary>
+        public Point Size
+        {
+            get { return SpriteSheet.FrameSize; }
+        }
+
+        /// <summary>
+        /// Gets the central position of the entity, in relation to the level.
+        /// </summary>
+        public Vector2 CenterPosition
+        {
+            get
+            {
+                return new Vector2(
+                    x: Position.X + (Size.X - Padding.X - Padding.Width),
+                    y: Position.Y + (Size.Y - Padding.Y - Padding.Height));
+            }
+        }
 
         /// <summary>
         /// Padding Rectangle. The Width and Height properties are actually the right and bottom margins.
@@ -123,6 +176,36 @@ namespace QuestForTheCrown2.Entities.Base
         /// Indicates if the current entity can overlap another entity.
         /// </summary>
         public bool OverlapEntities { get; set; }
+
+        #endregion
+
+        #region Level
+        /// <summary>
+        /// Current dungeon the player is in.
+        /// </summary>
+        public int CurrentDungeon { get; set; }
+
+        /// <summary>
+        /// Current level the player is in.
+        /// </summary>
+        public int CurrentLevel { get; set; }
+
+        /// <summary>
+        /// Indicates if the current entity is transitioning between levels.
+        /// </summary>
+        public Direction LevelTransitionDirection { get; set; }
+
+        /// <summary>
+        /// Gets or sets the level in which the current entity is transitioning to.
+        /// </summary>
+        public int TransitioningToLevel { get; set; }
+
+        /// <summary>
+        /// Indicates in which state the current level transition is at.
+        /// Value range from 0 to 1.
+        /// </summary>
+        public float LevelTransitionPercent { get; set; }
+        #endregion
         #endregion
 
         #region Constructors
@@ -137,44 +220,7 @@ namespace QuestForTheCrown2.Entities.Base
         }
         #endregion
 
-        public Frame CurrentFrame
-        {
-            get
-            {
-                Animation animation = SelectAnimation();
-                var index = animation.FrameIndexes[_currentFrameIndex];
-
-                return new Frame
-                {
-                    Texture = SpriteSheet.Texture,
-                    Rectangle = new Rectangle(
-                        (index % _framesPerLine) * SpriteSheet.FrameSize.X,
-                        (index / _framesPerLine) * SpriteSheet.FrameSize.Y,
-                        SpriteSheet.FrameSize.X,
-                        SpriteSheet.FrameSize.Y)
-                };
-            }
-        }
-
-        /// <summary>
-        /// Selects the best animation based on the current view and animation name.
-        /// </summary>
-        /// <returns>The animation matching the entity's current view and animation</returns>
-        Animation SelectAnimation()
-        {
-            Animation bestAnimation;
-            Dictionary<string, Animation> bestAnimations;
-
-            if (CurrentAnimation == null || !SpriteSheet.Animations.ContainsKey(CurrentAnimation))
-                CurrentAnimation = SpriteSheet.Animations.First().Key;
-            bestAnimations = SpriteSheet.Animations[CurrentAnimation];
-
-            if (CurrentView == null || !bestAnimations.ContainsKey(CurrentView))
-                CurrentView = bestAnimations.First().Key;
-            bestAnimation = bestAnimations[CurrentView];
-
-            return bestAnimation;
-        }
+        #region Methods
 
         /// <summary>
         /// Attach update methods to this entity.
@@ -196,6 +242,10 @@ namespace QuestForTheCrown2.Entities.Base
             }
         }
 
+        /// <summary>
+        /// Attach weapons to the current entity.
+        /// </summary>
+        /// <param name="weapons"></param>
         public void AddWeapon(params IWeapon[] weapons)
         {
             if (Weapons == null)
@@ -203,6 +253,8 @@ namespace QuestForTheCrown2.Entities.Base
 
             Weapons.AddRange(weapons);
         }
+
+        #endregion
 
         #region Update
         public virtual void Update(GameTime gameTime, Level level)
@@ -239,6 +291,25 @@ namespace QuestForTheCrown2.Entities.Base
         #endregion
 
         #region Draw
+        /// <summary>
+        /// Selects the best animation based on the current view and animation name.
+        /// </summary>
+        /// <returns>The animation matching the entity's current view and animation</returns>
+        Animation SelectAnimation()
+        {
+            Animation bestAnimation;
+            Dictionary<string, Animation> bestAnimations;
+
+            if (CurrentAnimation == null || !SpriteSheet.Animations.ContainsKey(CurrentAnimation))
+                CurrentAnimation = SpriteSheet.Animations.First().Key;
+            bestAnimations = SpriteSheet.Animations[CurrentAnimation];
+
+            if (CurrentView == null || !bestAnimations.ContainsKey(CurrentView))
+                CurrentView = bestAnimations.First().Key;
+            bestAnimation = bestAnimations[CurrentView];
+
+            return bestAnimation;
+        }
         /// <summary>
         /// Draws the entity
         /// </summary>
