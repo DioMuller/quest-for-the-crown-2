@@ -148,7 +148,8 @@ namespace QuestForTheCrown2.Levels.Mapping
                             //TODO: Get Enemy type and create refering to that.
                             entity = new Enemy1 { Position = new Vector2(x, y) };
                             entity.AddBehavior(
-                                new SwordAttackBehavior("Player") { MaxDistance = 300 }
+                                new SwordAttackBehavior("Player") { MaxDistance = 300 },
+                                new WalkAroundBehavior()
                             );
                             entity.AddWeapon(new Sword { Entity = entity });
                             break;
