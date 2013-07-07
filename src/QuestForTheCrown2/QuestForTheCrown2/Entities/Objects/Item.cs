@@ -14,7 +14,9 @@ namespace QuestForTheCrown2.Entities.Objects
     {
         public Item() : base(@"sprites/Empty.png", new Point(32, 32))
         {
-
+            OverlapEntities = false;
+            Health = null;
+            SpriteSheet.AddAnimation("stopped", "down", line: 0, count: 1, frameDuration: TimeSpan.FromDays(1)); 
         }
     }
 }

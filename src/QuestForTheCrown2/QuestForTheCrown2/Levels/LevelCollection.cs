@@ -77,7 +77,11 @@ namespace QuestForTheCrown2.Levels
         {
             int neighbor = level.GetNeighbor(direction);
 
-            if (neighbor != 0)
+            if( neighbor == -1 )
+            {
+                BackToWaypoint(player);
+            }
+            else if (neighbor != 0)
             {
                 player.TransitioningToLevel = neighbor;
                 player.LevelTransitionPercent = 0;
@@ -103,6 +107,25 @@ namespace QuestForTheCrown2.Levels
 
             //TODO: Load this from an XML file, maybe?
             player.Position = new Vector2(newLevel.Map.PixelSize.X/2, newLevel.Map.PixelSize.Y - player.Size.Y - 1);
+        }
+
+        /// <summary>
+        /// Returns to the waypoint
+        /// </summary>
+        /// <param name="player">Player</param>
+        internal void BackToWaypoint(Player player)
+        {
+            Waypoint wp = _storedWaypoints.Where(w => w.Player == player).Last();
+
+            GetLevelByPlayer(player).RemoveEntity(player);
+
+            player.CurrentLevel = wp.Level.Id;
+
+            wp.Level.AddEntity(player);
+
+            player.Position = new Vector2(wp.Position.X, wp.Position.Y + 5);
+
+            _storedWaypoints.Remove(wp);
         }
 
         /// <summary>
@@ -147,6 +170,7 @@ namespace QuestForTheCrown2.Levels
             foreach (Level lv in CurrentLevels)
             {
                 var player = lv.Players.FirstOrDefault();
+                               
                 if (player.TransitioningToLevel != 0)
                 {
                     SlideScreen(gameTime, spriteBatch, clientBounds, lv, player);
