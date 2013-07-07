@@ -33,7 +33,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="gameTime">Current game time.</param>
         /// <param name="map">Current entity map.</param>
         /// <param name="direction">Desired walk direction.</param>
-        protected void Walk(GameTime gameTime, Level level, Vector2 direction)
+        protected bool Walk(GameTime gameTime, Level level, Vector2 direction)
         {
             if (Math.Abs(direction.X) >= Math.Abs(direction.Y))
             {
@@ -59,7 +59,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
             {
                 if (_stoppedFrameCount++ > 1)
                     Entity.CurrentAnimation = "stopped";
-                return;
+                return true;
             }
 
             var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
@@ -77,6 +77,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                 Entity.Position = new Microsoft.Xna.Framework.Vector2(
                     x: newX,
                     y: newY);
+                return true;
             }
             else if( Entity is Player && level.Map.IsOutsideBorders(newRect) )
             {
@@ -89,6 +90,13 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
                 level.GoToNeighbor(Entity as Player, teleportDirection);
             }
+            return false;
+        }
+
+        protected void StopWalking(GameTime gameTime, Level level)
+        {
+            Entity.CurrentAnimation = "stopped";
+            _stoppedFrameCount = 2;
         }
         #endregion
     }

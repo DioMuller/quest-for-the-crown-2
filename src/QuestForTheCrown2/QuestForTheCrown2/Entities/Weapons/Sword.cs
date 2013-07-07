@@ -89,7 +89,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 var oldAngle = _swingedAngle;
                 _swingedAngle += (float)(_swingDirection * _swingSpeed * gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
 
-                if (!_rotationCompleted && (oldAngle < 0) != (_swingedAngle < 0))
+                if (!_rotationCompleted && (_swingDirection > 0 == _swingedAngle > 0))
                 {
                     _rotationCompleted = true;
                     if (!_removeOnComplete)
