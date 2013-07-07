@@ -26,6 +26,11 @@ namespace QuestForTheCrown2.Levels
 
         #region Properties
         /// <summary>
+        /// Dungeon id.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Current Level (May be changed to CurrentLevel array)
         /// </summary>
         private IEnumerable<Level> CurrentLevels
@@ -35,6 +40,8 @@ namespace QuestForTheCrown2.Levels
                 return _levels.Where(l => l.Players.Any());
             }
         }
+
+        public LevelCollection Parent { get; set; }
         #endregion Properties
 
         #region Constructor
@@ -123,6 +130,14 @@ namespace QuestForTheCrown2.Levels
             }
         }
 
+        /// <summary>
+        /// Screen sliding effect
+        /// </summary>
+        /// <param name="gameTime">Current game time</param>
+        /// <param name="spriteBatch">Sprite batch for drawing</param>
+        /// <param name="clientBounds">Window bounds</param>
+        /// <param name="lv">Previous level</param>
+        /// <param name="player">Player.</param>
         private void SlideScreen(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds, Level lv, Entity player)
         {
             var newLevel = GetLevel(player.TransitioningToLevel - 1);
@@ -200,6 +215,20 @@ namespace QuestForTheCrown2.Levels
 
             _levels.Add(level);
             level.Parent = this;
+            return true;
+        }
+
+        /// <summary>
+        /// Adds a dungeon to the collection.
+        /// </summary>
+        /// <param name="dungeon">Level to be added.</param>
+        public bool AddDungeon(LevelCollection dungeon)
+        {
+            if (_dungeons.Any(l => l.Id == dungeon.Id))
+                return false;
+
+            _dungeons.Add(dungeon);
+            dungeon.Parent = this;
             return true;
         }
         #endregion Public Methods

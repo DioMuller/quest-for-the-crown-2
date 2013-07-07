@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Behaviors;
 using QuestForTheCrown2.Entities.Characters;
+using QuestForTheCrown2.Entities.Objects;
 using QuestForTheCrown2.Entities.Weapons;
 
 namespace QuestForTheCrown2.Levels.Mapping
@@ -29,6 +30,7 @@ namespace QuestForTheCrown2.Levels.Mapping
             XDocument doc = XDocument.Load(path);
             XElement root = doc.Element("collection");
 
+            #region Load Levels
             foreach (XElement el in root.Element("levels").Elements("level"))
             {
                 int id = int.Parse(el.Attribute("id").Value);
@@ -41,6 +43,19 @@ namespace QuestForTheCrown2.Levels.Mapping
                 }
 
                 collection.AddLevel(level);
+            }
+            #endregion Load Levels
+
+            if( root.Element("dungeons") != null )
+            {
+                foreach( XElement dung in root.Element("dungeons").Elements("dungeon") )
+                {
+                    int id = int.Parse(dung.Attribute("id").Value);
+                    LevelCollection dungeon = LoadLevels(dung.Attribute("path").Value);
+                    dungeon.Id = id;
+
+                    collection.AddDungeon(dungeon);
+                }
             }
 
             return collection;
@@ -97,7 +112,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                 }
                 else
                 {
-                    tileset = LoadTileset(firstgid, set.Attribute("source").Value.Replace("../", "Content/"));
+                    tileset = LoadTileset(firstgid, "Content/" + set.Attribute("source").Value.Replace("../", ""));
                 }
 
                 map.Tilesets.Add(tileset);
@@ -124,6 +139,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                 foreach (XElement obj in objs.Elements("object"))
                 {
                     Entity entity;
+                    string objname = obj.Attribute("name").Value;
                     int x = int.Parse(obj.Attribute("x").Value);
                     int y = int.Parse(obj.Attribute("y").Value);
                     string type = obj.Attribute("type").Value;
@@ -143,11 +159,22 @@ namespace QuestForTheCrown2.Levels.Mapping
                             mainChar.CurrentLevel = id;
                             break;
                         case "Enemy":
+                            //TODO: Get Enemy type and create refering to that.
                             entity = new Enemy1 { Position = new Vector2(x, y) };
                             entity.AddBehavior(
                                 new SwordAttackBehavior("Player") { MaxDistance = 300 }
                             );
                             entity.AddWeapon(new Sword { Entity = entity });
+                            break;
+                        case "Item":
+                            entity = new Item { Position = new Vector2(x, y) };
+                            break;
+                        case "Entrance":
+                            //Name MUST be the int value of the dungeon id.
+                            entity = new Entrance(int.Parse(objname)) { Position = new Vector2(x, y) };
+                            break;
+                        case "SavePoint":
+                            entity = new SavePoint { Position = new Vector2(x, y) };
                             break;
                         default:
                             entity = null;

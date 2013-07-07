@@ -3,4 +3,6 @@
  <objecttype name="Player" color="#1300a4"/>
  <objecttype name="Enemy" color="#ff0000"/>
  <objecttype name="Item" color="#00ff00"/>
+ <objecttype name="Entrance" color="#a4a400"/>
+ <objecttype name="SavePoint" color="#00f5cc"/>
 </objecttypes>

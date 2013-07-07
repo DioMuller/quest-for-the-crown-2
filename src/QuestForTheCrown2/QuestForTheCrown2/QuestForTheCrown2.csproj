@@ -50,6 +50,9 @@
     <Compile Include="Entities\Behaviors\InputBehavior.cs" />
     <Compile Include="Entities\Characters\Enemy1.cs" />
     <Compile Include="Entities\Characters\Player.cs" />
+    <Compile Include="Entities\Objects\Item.cs" />
+    <Compile Include="Entities\Objects\SavePoint.cs" />
+    <Compile Include="Entities\Objects\Entrance.cs" />
     <Compile Include="Entities\Weapons\IWeapon.cs" />
     <Compile Include="Entities\Weapons\Sword.cs" />
     <Compile Include="GUI\Components\ComponentList.cs" />
@@ -92,6 +95,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sprites\Brendan.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sprites\Empty.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sprites\MainCharacter.png">
