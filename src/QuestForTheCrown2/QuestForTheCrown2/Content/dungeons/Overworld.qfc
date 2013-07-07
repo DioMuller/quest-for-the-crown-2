@@ -12,6 +12,6 @@
 	<level id="9" neighbors="8,0,0,0" path="Content/maps/Overworld09.tmx"/>
   </levels>
   <dungeons>
-    <dungeon id="1" path="qfc"/>
+    <dungeon id="1" path="Content/dungeons/BeachCave.qfc"/>
   </dungeons>
 </collection>

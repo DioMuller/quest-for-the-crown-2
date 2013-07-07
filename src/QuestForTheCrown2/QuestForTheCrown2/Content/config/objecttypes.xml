@@ -2,4 +2,5 @@
 <objecttypes>
  <objecttype name="Player" color="#1300a4"/>
  <objecttype name="Enemy" color="#ff0000"/>
+ <objecttype name="Item" color="#00ff00"/>
 </objecttypes>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<collection>
+  <levels>
+    <level id="1" neighbors="0,2,0,-1" path="Content/maps/BeachCave/BeachCave01.tmx"/>
+    <level id="2" neighbors="0,3,4,1" path="Content/maps/BeachCave/BeachCave02.tmx"/>
+    <level id="3" neighbors="0,0,2,0" path="Content/maps/BeachCave/BeachCave03.tmx"/>
+	<level id="4" neighbors="2,5,0,0" path="Content/maps/BeachCave/BeachCave04.tmx"/>
+	<level id="5" neighbors="0,6,0,4" path="Content/maps/BeachCave/BeachCave05.tmx"/>
+	<level id="6" neighbors="0,0,0,5" path="Content/maps/BeachCave/BeachCave06.tmx"/>
+  </levels>
+</collection>
