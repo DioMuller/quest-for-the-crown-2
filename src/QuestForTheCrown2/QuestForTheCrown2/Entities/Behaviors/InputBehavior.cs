@@ -33,9 +33,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <summary>
         /// Indicates if the current input is connected and active.
         /// </summary>
-        public override bool Active
+        public override bool IsActive(GameTime gameTime, Level level)
         {
-            get { return _input.IsConnected; }
+            return _input.IsConnected;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                 return;
 
             _currentAttackDirection = direction;
-                Entity.Weapons[_currentWeapon].Attack(gameTime, level, direction);
+            Entity.Weapons[_currentWeapon].Attack(gameTime, level, direction);
         }
         #endregion
     }

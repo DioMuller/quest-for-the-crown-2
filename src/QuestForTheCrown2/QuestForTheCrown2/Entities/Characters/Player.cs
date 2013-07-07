@@ -76,6 +76,8 @@ namespace QuestForTheCrown2.Entities.Characters
         public Player()
             : base(spriteSheetPath, new Point(22, 28))
         {
+            Category = "Player";
+
             TimeSpan walkFrameDuration = TimeSpan.FromMilliseconds(100);
             SpriteSheet.AddAnimation("stopped", "down", line: 0, count: 1, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("stopped", "left", line: 1, count: 1, frameDuration: walkFrameDuration);
@@ -90,6 +92,8 @@ namespace QuestForTheCrown2.Entities.Characters
             Padding = new Rectangle(2, 10, 2, 2);
 
             Speed = new Vector2(96);
+
+            Health = 5;
         }
         #endregion Constructor
     }

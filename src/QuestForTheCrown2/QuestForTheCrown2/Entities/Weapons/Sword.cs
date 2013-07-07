@@ -68,10 +68,10 @@ namespace QuestForTheCrown2.Entities.Weapons
                 x: Entity.Position.X + Entity.Size.X / 2,
                 y: Entity.Position.Y + Entity.Size.Y / 2);
 
-            foreach (var ent in GetCollisionRects().SelectMany(level.CollidesWith))
+            foreach (var ent in GetCollisionRects().SelectMany(level.CollidesWith).Distinct())
             {
                 if (ent != this && !(ent is QuestForTheCrown2.Entities.Characters.Player))
-                    level.RemoveEntity(ent);
+                    Hit(level, ent);
             }
 
             if (_swingedAngle != 0)
@@ -95,6 +95,24 @@ namespace QuestForTheCrown2.Entities.Weapons
             Angle = _desiredAngle + _swingedAngle;
         }
 
+        private void Hit(Level level, Base.Entity ent)
+        {
+            if (!ent.IsBlinking)
+                ent.Health--;
+
+            if (ent.Health != null && ent.Health <= 0)
+                level.RemoveEntity(ent);
+            else
+            {
+                var direction = VectorHelper.AngleToV2(Angle, 5);
+                direction = new Vector2(-direction.Y, direction.X);
+                var oldPos = ent.Position;
+                ent.Position += direction;
+                if (level.CollidesWith(ent.CollisionRect).Any(e => e != ent))
+                    ent.Position = oldPos;
+            }
+        }
+
         private IEnumerable<Rectangle> GetCollisionRects()
         {
             const int rectSize = 5;
@@ -107,7 +125,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             for (int i = 0; i < 30; i += rectSize)
             {
                 location += direction;
-                yield return new Rectangle((int)(location.X - rectSize/2), (int)(location.Y - rectSize / 2), rectSize, rectSize);
+                yield return new Rectangle((int)(location.X - rectSize / 2), (int)(location.Y - rectSize / 2), rectSize, rectSize);
             }
         }
 
