@@ -22,11 +22,6 @@ namespace QuestForTheCrown2.Levels
         /// </summary>
         List<LevelCollection> _dungeons;
 
-        /// <summary>
-        /// Players list.
-        /// </summary>
-        List<Player> _players;
-
         #endregion Attributes
 
         #region Properties
@@ -37,14 +32,7 @@ namespace QuestForTheCrown2.Levels
         {
             get
             {
-                HashSet<Level> list = new HashSet<Level>();
-
-                foreach (Player player in _players)
-                {
-                    list.Add(GetLevelByPlayer(player));
-                }
-
-                return list;
+                return _levels.Where(l => l.Players.Any());
             }
         }
         #endregion Properties
@@ -57,8 +45,6 @@ namespace QuestForTheCrown2.Levels
         {
             _levels = new List<Level>();
             _dungeons = new List<LevelCollection>();
-
-            _players = new List<Player>();
         }
         #endregion Constructor
 
@@ -123,7 +109,7 @@ namespace QuestForTheCrown2.Levels
         {
             foreach (Level lv in CurrentLevels)
             {
-                var player = lv.Player;
+                var player = lv.Players.FirstOrDefault();
                 if (player.TransitioningToLevel != 0)
                 {
                     SlideScreen(gameTime, spriteBatch, clientBounds, lv, player);
@@ -137,7 +123,7 @@ namespace QuestForTheCrown2.Levels
             }
         }
 
-        private void SlideScreen(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds, Level lv, Player player)
+        private void SlideScreen(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds, Level lv, Entity player)
         {
             var newLevel = GetLevel(player.TransitioningToLevel - 1);
             Vector2 camera = GetCameraPosition(player, lv.Map.PixelSize, clientBounds);
@@ -209,28 +195,12 @@ namespace QuestForTheCrown2.Levels
         /// <param name="level">Level to be added.</param>
         public bool AddLevel(Level level)
         {
-            int count = (from Level lv in _levels where lv.Id == level.Id select lv).Count();
-
-            if (count != 0) return false;
+            if (_levels.Any(l => l.Id == level.Id))
+                return false;
 
             _levels.Add(level);
-
             level.Parent = this;
-
-            if (level.Players.Count > 0) _players.AddRange(level.Players);
-
             return true;
-        }
-
-        public int AddPlayer(Player player)
-        {
-            if (_players.Count < 4)
-            {
-                _players.Add(player);
-                return _players.Count;
-            }
-
-            return 0;
         }
         #endregion Public Methods
 

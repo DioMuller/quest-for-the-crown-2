@@ -20,55 +20,6 @@ namespace QuestForTheCrown2.Entities.Characters
         const string spriteSheetPath = @"sprites\MainCharacter.png";
         #endregion Constants
 
-        #region Attributes
-        private int _playerNumber;
-        #endregion Attributes
-
-        #region Properties
-        /// <summary>
-        /// Player number (1-4)
-        /// </summary>
-        public int PlayerNumber 
-        { 
-            get
-            {
-                return _playerNumber;
-            }   
-            set
-            {
-                if( value > 0 && value < 5 )
-                {
-                    _playerNumber = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Current dungeon the player is in.
-        /// </summary>
-        public int CurrentDungeon { get; set; }
-
-        /// <summary>
-        /// Current level the player is in.
-        /// </summary>
-        public int CurrentLevel { get; set; }
-
-        /// <summary>
-        /// Indicates if the current entity is transitioning between levels.
-        /// </summary>
-        public Direction LevelTransitionDirection { get; set; }
-        /// <summary>
-        /// Gets or sets the level in which the current entity is transitioning to.
-        /// </summary>
-        public int TransitioningToLevel { get; set; }
-
-        /// <summary>
-        /// Indicates in which state the current level transition is at.
-        /// Value range from 0 to 1.
-        /// </summary>
-        public float LevelTransitionPercent { get; set; }
-        #endregion Properties
-
         #region Constructor
         /// <summary>
         /// Builds main character with its base spritesheet and animations.
