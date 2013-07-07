@@ -5,6 +5,7 @@ using QuestForTheCrown2.Levels;
 using QuestForTheCrown2.Levels.Mapping;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -28,15 +29,11 @@ namespace QuestForTheCrown2.Entities.Weapons
         {
             if (direction.Length() < 0.4)
             {
+                _removeOnComplete = true;
                 if (!_rotationCompleted)
-                {
-                    _removeOnComplete = true;
                     _keepRotating = 5;
-                }
                 else if (_keepRotating <= 0)
-                {
                     level.RemoveEntity(this);
-                }
                 return;
             }
             _removeOnComplete = false;
@@ -81,7 +78,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             foreach (var ent in GetCollisionRects().SelectMany(level.CollidesWith).Distinct())
             {
-                if (ent != this && ent != Entity)
+                if (ent != this && ent != Entity && ent.Health != null)
                     Hit(level, ent);
             }
 
@@ -116,7 +113,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             if (!ent.IsBlinking)
                 ent.Health--;
 
-            if (ent.Health != null && ent.Health <= 0)
+            if (ent.Health <= 0)
                 level.RemoveEntity(ent);
             else
             {
