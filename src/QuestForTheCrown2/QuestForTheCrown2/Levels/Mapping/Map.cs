@@ -76,28 +76,30 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// <returns>Is colliding?</returns>
         public bool Collides(Rectangle rect, bool allowOutside = false)
         {
-            if( !allowOutside && IsOutsideBorders(rect) ) return true;
+            if (!allowOutside && IsOutsideBorders(rect)) return true;
 
-            int result = 0;
             int mod_x = (TileSize.X / 2);
             int mod_y = (TileSize.Y / 2);
-            int min_x = rect.X / mod_x;
-            int min_y = rect.Y / mod_y;
-            int max_x = rect.X / mod_x + ( rect.X % mod_x == 0 ? 1 : 2 );
-            int max_y = rect.Y / mod_y + (rect.Y % mod_y == 0 ? 1 : 2);
 
-            for( int x = min_x; x < max_x; x++ )
+            float min_x_real = (float)rect.X / mod_x;
+            float min_y_real = (float)rect.Y / mod_y;
+
+            int min_x = Math.Max((int)min_x_real, 0);
+            int min_y = Math.Max((int)min_y_real, 0);
+
+            int max_x = min_x + (int)Math.Ceiling((float)rect.Width / mod_x + (min_x_real - min_x));
+            int max_y = min_y + (int)Math.Ceiling((float)rect.Height / mod_y + (min_y_real - min_y));
+
+            for (int x = min_x; x < max_x && x < Size.X * 2; x++)
             {
-                for( int y = min_y; y < max_y; y++ )
+                for (int y = min_y; y < max_y && y < Size.Y * 2; y++)
                 {
-                    if( x < Size.X * 2 && y < Size.Y * 2 && x >= 0 && y >= 0 )
-                    {
-                        result += _collisionMap[x,y];
-                    }
+                    if (_collisionMap[x, y] > 0)
+                        return true;
                 }
             }
 
-            return (result != 0); //If everything is 0; it won't collide.
+            return false;
         }
 
         /// <summary>
@@ -107,7 +109,7 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// <returns>Is the rectangle outside borders?</returns>
         public bool IsOutsideBorders(Rectangle rect)
         {
-            return (rect.X < 0 || rect.Y < 0 || rect.X + rect.Width > PixelSize.X || rect.Y + rect.Height > PixelSize.Y );
+            return (rect.X < 0 || rect.Y < 0 || rect.X + rect.Width > PixelSize.X || rect.Y + rect.Height > PixelSize.Y);
         }
 
         /// <summary>
@@ -155,7 +157,7 @@ namespace QuestForTheCrown2.Levels.Mapping
 
             Tileset set = GetTileset(tileId);
 
-            if( set == null ) return null;
+            if (set == null) return null;
 
             return set.GetTileById(tileId);
         }
@@ -163,8 +165,8 @@ namespace QuestForTheCrown2.Levels.Mapping
         private Tileset GetTileset(int tileId)
         {
             return (from Tileset ts in Tilesets
-                where ts.FirstTileId <= tileId && ts.LastTileId >= tileId
-                select ts).FirstOrDefault();
+                    where ts.FirstTileId <= tileId && ts.LastTileId >= tileId
+                    select ts).FirstOrDefault();
         }
         #endregion Private Methods
 
@@ -174,13 +176,13 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// </summary>
         internal void UpdateCollision()
         {
-            for (int y = 0; y < Size.Y * 2; y+=2)
+            for (int y = 0; y < Size.Y * 2; y += 2)
             {
-                for (int x = 0; x < Size.X * 2; x+=2)
+                for (int x = 0; x < Size.X * 2; x += 2)
                 {
                     foreach (Layer layer in Layers)
                     {
-                        int tileId = layer.GetData(x/2, y/2);
+                        int tileId = layer.GetData(x / 2, y / 2);
 
                         if (tileId != 0)
                         {

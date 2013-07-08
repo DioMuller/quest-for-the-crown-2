@@ -74,12 +74,10 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
             if (!level.Map.Collides(newRect) && !(level.CollidesWith(newRect).Any((e) => e != Entity && !e.OverlapEntities)))
             {
-                Entity.Position = new Microsoft.Xna.Framework.Vector2(
-                    x: newX,
-                    y: newY);
+                Entity.Position = new Vector2(newX, newY);
                 return true;
             }
-            else if( Entity is Player && level.Map.IsOutsideBorders(newRect) )
+            else if( Entity.Category == "Player" && level.Map.IsOutsideBorders(newRect) )
             {
                 Direction teleportDirection = Direction.None;
 
@@ -88,7 +86,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                 else if (newRect.Y < 0) teleportDirection = Direction.North;
                 else if (newRect.Y + newRect.Height > level.Map.PixelSize.Y) teleportDirection = Direction.South;
 
-                level.GoToNeighbor(Entity as Player, teleportDirection);
+                level.GoToNeighbor(Entity, teleportDirection);
             }
             return false;
         }

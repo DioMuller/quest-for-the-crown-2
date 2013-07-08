@@ -72,9 +72,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Update(GameTime gameTime, Level level)
         {
-            Position = new Vector2(
-                x: Entity.Position.X + Entity.Size.X / 2,
-                y: Entity.Position.Y + Entity.Size.Y / 2);
+            Position = Entity.CenterPosition;
 
             foreach (var ent in GetCollisionRects().SelectMany(level.CollidesWith).Distinct())
             {
