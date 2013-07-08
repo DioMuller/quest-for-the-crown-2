@@ -31,9 +31,9 @@ namespace QuestForTheCrown2.Entities.Objects
             foreach( Entity en in level.CollidesWith(this.CollisionRect) )
             {
                 //TODO: Remove en is Player
-                if( Teleportable.Split(';').Contains(en.Category) && en is Player ) 
+                if( Teleportable.Split(';').Contains(en.Category)) 
                 {
-                    level.GoToDungeon(en as Player, Dungeon);
+                    level.GoToDungeon(en, Dungeon);
                 }
             }
             //base.Update(gameTime, level);

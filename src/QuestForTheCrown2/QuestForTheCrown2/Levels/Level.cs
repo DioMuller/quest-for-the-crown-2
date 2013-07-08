@@ -201,9 +201,9 @@ namespace QuestForTheCrown2.Levels
             Parent.GoToNeighbor(entity, this, direction);
         }
 
-        public void GoToDungeon(Player player, int dungeon)
+        public void GoToDungeon(Entity en, int dungeon)
         {
-            Parent.GoToDungeon(player, dungeon);
+            Parent.GoToDungeon(en, dungeon);
         }
 
         /// <summary>

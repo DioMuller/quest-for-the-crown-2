@@ -14,7 +14,7 @@ namespace QuestForTheCrown2.Levels
     /// </summary>
     internal class Waypoint
     {
-        public Player Player { get; set; }
+        public Entity Entity { get; set; }
         public Level Level { get; set; }
         public Vector2 Position { get; set; }
     }
@@ -79,7 +79,7 @@ namespace QuestForTheCrown2.Levels
 
             if( neighbor == -1 )
             {
-                BackToWaypoint(player);
+                BackToWaypoint(entity);
             }
             else if (neighbor != 0)
             {
@@ -92,38 +92,38 @@ namespace QuestForTheCrown2.Levels
         /// <summary>
         /// Teleports player to dungeon
         /// </summary>
-        /// <param name="player">Player</param>
+        /// <param name="entity">Entity</param>
         /// <param name="dungeon">Dungeon ID</param>
-        internal void GoToDungeon(Player player, int map)
+        internal void GoToDungeon(Entity entity, int map)
         {
-            _storedWaypoints.Add(new Waypoint { Player = player, Level = GetLevelByPlayer(player), Position = player.Position } );
+            _storedWaypoints.Add(new Waypoint { Entity = entity, Level = GetLevelByEntity(entity), Position = entity.Position } );
 
-            GetLevelByPlayer(player).RemoveEntity(player);
-            
-            player.CurrentLevel = map;
+            GetLevelByEntity(entity).RemoveEntity(entity);
 
-            Level newLevel = GetLevelByPlayer(player);
-            newLevel.AddEntity(player);
+            entity.CurrentLevel = map;
+
+            Level newLevel = GetLevelByEntity(entity);
+            newLevel.AddEntity(entity);
 
             //TODO: Load this from an XML file, maybe?
-            player.Position = new Vector2(newLevel.Map.PixelSize.X/2, newLevel.Map.PixelSize.Y - player.Size.Y - 1);
+            entity.Position = new Vector2(newLevel.Map.PixelSize.X / 2, newLevel.Map.PixelSize.Y - entity.Size.Y - 1);
         }
 
         /// <summary>
         /// Returns to the waypoint
         /// </summary>
-        /// <param name="player">Player</param>
-        internal void BackToWaypoint(Player player)
+        /// <param name="entity">The entity that will return to the waypoint</param>
+        internal void BackToWaypoint(Entity entity)
         {
-            Waypoint wp = _storedWaypoints.Where(w => w.Player == player).Last();
+            Waypoint wp = _storedWaypoints.Where(w => w.Entity == entity).Last();
 
-            GetLevelByPlayer(player).RemoveEntity(player);
+            GetLevelByEntity(entity).RemoveEntity(entity);
 
-            player.CurrentLevel = wp.Level.Id;
+            entity.CurrentLevel = wp.Level.Id;
 
-            wp.Level.AddEntity(player);
+            wp.Level.AddEntity(entity);
 
-            player.Position = new Vector2(wp.Position.X, wp.Position.Y + 5);
+            entity.Position = new Vector2(wp.Position.X, wp.Position.Y + 5);
 
             _storedWaypoints.Remove(wp);
         }
@@ -139,13 +139,13 @@ namespace QuestForTheCrown2.Levels
         }
 
         /// <summary>
-        /// Get player by Level.
+        /// Get the level in which the entity is at.
         /// </summary>
-        /// <param name="player">Player reference</param>
-        /// <returns>The level the player is in.</returns>
-        internal Level GetLevelByPlayer(Player player)
+        /// <param name="entity">Entity reference</param>
+        /// <returns>The level the entity is in.</returns>
+        internal Level GetLevelByEntity(Entity entity)
         {
-            return _levels[player.CurrentLevel - 1];
+            return _levels[entity.CurrentLevel - 1];
         }
 
         #region Public Methods
