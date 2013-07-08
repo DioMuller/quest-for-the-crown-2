@@ -42,6 +42,7 @@ namespace QuestForTheCrown2
         GameState _currentState;
 
         TitleScreen _mainMenu;
+        CreditsScreen _credits;
 
         Levels.LevelCollection _overworld;
 
@@ -86,6 +87,7 @@ namespace QuestForTheCrown2
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _mainMenu = new TitleScreen(this);
+            _credits = new CreditsScreen(this);
 
             _overworld = MapLoader.LoadLevels("Content/maps/QuestForTheCrown.maps");
         }
@@ -122,6 +124,7 @@ namespace QuestForTheCrown2
                 case GameState.Options:
                     break;
                 case GameState.Credits:
+                    _credits.Update(gameTime);
                     break;
                 case GameState.Quiting:
                     Exit();
@@ -149,6 +152,13 @@ namespace QuestForTheCrown2
                     break;
                 case GameState.Playing:
                     _overworld.Draw(gameTime, _spriteBatch, Window.ClientBounds);
+                    break;
+                case GameState.Loading:
+                    break;
+                case GameState.Options:
+                    break;
+                case GameState.Credits:
+                    _credits.Draw(gameTime, _spriteBatch);
                     break;
             }    
  

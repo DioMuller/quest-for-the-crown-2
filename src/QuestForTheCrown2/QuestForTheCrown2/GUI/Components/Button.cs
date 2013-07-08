@@ -28,7 +28,7 @@ namespace QuestForTheCrown2.GUI.Components
         #region Constructor
         public Button(string text, SelectDelegate select) : base()
         {
-            Font = GameContent.LoadContent<SpriteFont>("fonts/GearInfoFont");
+            Font = GameContent.LoadContent<SpriteFont>("fonts/DefaultFont");
             Text = text;
             Select += select;
         }
