@@ -49,6 +49,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 else
                     _swingedAngle = ToRadian(-90);
                 Angle = _swingedAngle;
+                Parent = Entity;
                 level.AddEntity(this);
             }
             else if (_swingedAngle == 0)
