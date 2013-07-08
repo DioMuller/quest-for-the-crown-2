@@ -53,7 +53,7 @@ namespace QuestForTheCrown2.Levels
             }
         }
 
-        public LevelCollection Parent { get; set; }
+        public GameMain Parent { get; set; }
         #endregion Properties
 
         #region Constructor
@@ -155,6 +155,8 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Update(GameTime gameTime)
         {
+            if( CurrentLevels.Count() == 0 ) Parent.ChangeState(GameState.GameOver);
+
             foreach (Level lv in CurrentLevels)
             {
                 lv.Update(gameTime);
