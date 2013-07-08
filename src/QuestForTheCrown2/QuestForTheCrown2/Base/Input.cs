@@ -63,9 +63,35 @@ namespace QuestForTheCrown2.Base
         }
 
         /// <summary>
+        /// The current attack force
+        /// </summary>
+        public float Attack
+        {
+            get
+            {
+                switch(Type)
+                {
+                    case InputType.Controller:
+                        var gpState = GamePad.GetState((PlayerIndex)Index);
+                        if (gpState.IsButtonDown(Buttons.A))
+                            return 1;
+                        return gpState.Triggers.Right;
+                    case InputType.Keyboard:
+                    case InputType.KeyboardAndMouse:
+                        var kbState = Keyboard.GetState((PlayerIndex)Index);
+                        return kbState.IsKeyDown(Keys.LeftControl)
+                            || kbState .IsKeyDown(Keys.RightControl)
+                            || kbState.IsKeyDown(Keys.Space)? 1 : 0;
+                    default:
+                        return 0;
+                }
+            }
+        }
+
+        /// <summary>
         /// Attack direction.
         /// </summary>
-        public Vector2 Attack
+        public Vector2 AttackDirection
         {
             get
             {
@@ -145,23 +171,6 @@ namespace QuestForTheCrown2.Base
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
                         return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Escape);
-                    default:
-                        return false;
-                }
-            }
-        }
-
-        public bool AttackButton
-        {
-            get
-            {
-                switch (Type)
-                {
-                    case InputType.Controller:
-                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.X) || (GamePad.GetState((PlayerIndex)Index).Triggers.Right > 0.4f);
-                    case InputType.Keyboard:
-                    case InputType.KeyboardAndMouse:
-                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.LeftControl) || Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.RightControl) || Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Space);
                     default:
                         return false;
                 }

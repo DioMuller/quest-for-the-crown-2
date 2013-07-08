@@ -25,25 +25,6 @@ namespace QuestForTheCrown2.Entities.Base
         #region Properties
         public Entity Parent { get; set; }
 
-        // public int PlayerNumber
-        ///// <summary>
-        ///// Player number (1-4)
-        ///// </summary>
-        //public int PlayerNumber
-        //{
-        //    get
-        //    {
-        //        return _playerNumber;
-        //    }
-        //    set
-        //    {
-        //        if (value > 0 && value < 5)
-        //        {
-        //            _playerNumber = value;
-        //        }
-        //    }
-        //}
-
         /// <summary>
         /// Indicates in which category this entity is at.
         /// Values could be: "Player", "Enemy", "Item" and etc.
@@ -116,6 +97,7 @@ namespace QuestForTheCrown2.Entities.Base
         #region Position
         public Vector2 Position { get; set; }
         public Vector2 Speed { get; set; }
+        public Vector2 CurrentDirection { get; set; }
 
         /// <summary>
         /// Entity size
@@ -247,6 +229,30 @@ namespace QuestForTheCrown2.Entities.Base
                 Weapons = new List<IWeapon>();
 
             Weapons.AddRange(weapons);
+        }
+
+        public virtual void Look(Vector2 direction, bool updateDirection)
+        {
+            if (direction == Vector2.Zero)
+                return;
+
+            if (Math.Abs(direction.X) >= Math.Abs(direction.Y))
+            {
+                if (direction.X > 0)
+                    CurrentView = "right";
+                else if (direction.X < 0)
+                    CurrentView = "left";
+            }
+            else
+            {
+                if (direction.Y < 0)
+                    CurrentView = "up";
+                else if (direction.Y > 0)
+                    CurrentView = "down";
+            }
+
+            if (updateDirection)
+                CurrentDirection = direction;
         }
 
         #endregion

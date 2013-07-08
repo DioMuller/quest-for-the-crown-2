@@ -17,7 +17,8 @@ namespace QuestForTheCrown2.Entities.Weapons
         /// </summary>
         /// <param name="gameTime">Current game time.</param>
         /// <param name="map">Current entity map.</param>
+        /// <param name="force">Current attack force.</param>
         /// <param name="direction">The direction of the attack.</param>
-        void Attack(GameTime gameTime, Level level, Vector2 direction);
+        void Attack(GameTime gameTime, Level level, float force, Vector2 direction);
     }
 }

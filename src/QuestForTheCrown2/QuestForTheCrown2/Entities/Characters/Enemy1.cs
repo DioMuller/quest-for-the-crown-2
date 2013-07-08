@@ -35,6 +35,8 @@ namespace QuestForTheCrown2.Entities.Characters
             Speed = new Vector2(96);
 
             Health = 3;
+
+            CurrentDirection = new Vector2(0, 1);
         }
     }
 }

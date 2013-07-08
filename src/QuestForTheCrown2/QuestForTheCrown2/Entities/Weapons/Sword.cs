@@ -15,8 +15,12 @@ namespace QuestForTheCrown2.Entities.Weapons
     {
         bool _removeOnComplete, _rotationCompleted;
         float _desiredAngle, _swingedAngle;
-        float _swingSpeed = (float)Math.PI * 4;
+        float _swingSpeed = (float)Math.PI * 6;
         int _swingDirection, _keepRotating;
+        float _swingSpeedMultiplier;
+
+        Vector2 _currentAttackDirection;
+        float _currentAttackForce;
 
         public Sword()
             : base(@"sprites\Sword.png", null)
@@ -25,9 +29,21 @@ namespace QuestForTheCrown2.Entities.Weapons
             Origin = new Vector2(Size.X / 2, Size.Y * 0.2f);
         }
 
-        public void Attack(GameTime gameTime, Level level, Vector2 direction)
+        public void Attack(GameTime gameTime, Level level, float force, Vector2 direction)
         {
-            if (direction.Length() < 0.4)
+            if (force <= 0.01 && direction.Length() > 0.8)
+                force = direction.Length();
+            else if (direction.Length() < 0.4)
+                direction = Entity.CurrentDirection / 5;
+
+            if (_currentAttackDirection == direction && force == _currentAttackForce)
+                return;
+
+            _currentAttackDirection = direction;
+            _currentAttackForce = force;
+
+
+            if (force < 0.4 || direction == Vector2.Zero)
             {
                 _removeOnComplete = true;
                 if (!_rotationCompleted)
@@ -36,6 +52,8 @@ namespace QuestForTheCrown2.Entities.Weapons
                     level.RemoveEntity(this);
                 return;
             }
+
+            _swingSpeedMultiplier = force;
             _removeOnComplete = false;
             _rotationCompleted = false;
 
@@ -86,7 +104,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             if (!_rotationCompleted || _keepRotating > 0)
             {
                 var oldAngle = _swingedAngle;
-                _swingedAngle += (float)(_swingDirection * _swingSpeed * gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
+                _swingedAngle += (float)(_swingDirection * _swingSpeed * _swingSpeedMultiplier * gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
 
                 if (!_rotationCompleted && (_swingDirection > 0 == _swingedAngle > 0))
                 {
@@ -107,6 +125,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             }
 
             Angle = _desiredAngle + _swingedAngle;
+            Entity.Look(VectorHelper.AngleToV2(Angle + (float)(Math.PI / 2), 1), updateDirection: false);
         }
 
         private void Hit(Level level, Base.Entity ent)
@@ -122,7 +141,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 direction = new Vector2(-direction.Y, direction.X);
                 var oldPos = ent.Position;
                 ent.Position += direction;
-                if (level.CollidesWith(ent.CollisionRect).Any(e => e != ent) || level.Map.Collides(ent.CollisionRect) )
+                if (level.CollidesWith(ent.CollisionRect).Any(e => e != ent) || level.Map.Collides(ent.CollisionRect))
                     ent.Position = oldPos;
             }
         }
