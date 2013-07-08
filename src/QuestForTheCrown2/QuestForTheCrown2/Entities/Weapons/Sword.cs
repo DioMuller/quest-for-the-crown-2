@@ -122,7 +122,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 direction = new Vector2(-direction.Y, direction.X);
                 var oldPos = ent.Position;
                 ent.Position += direction;
-                if (level.CollidesWith(ent.CollisionRect).Any(e => e != ent))
+                if (level.CollidesWith(ent.CollisionRect).Any(e => e != ent) || level.Map.Collides(ent.CollisionRect) )
                     ent.Position = oldPos;
             }
         }
