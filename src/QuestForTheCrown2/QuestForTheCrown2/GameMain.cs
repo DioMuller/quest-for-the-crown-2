@@ -29,6 +29,7 @@ namespace QuestForTheCrown2
         Loading,
         Options,
         Credits,
+        GameOver,
         Quiting
     }
 

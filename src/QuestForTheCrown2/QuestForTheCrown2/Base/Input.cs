@@ -151,6 +151,23 @@ namespace QuestForTheCrown2.Base
             }
         }
 
+        public bool AttackButton
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case InputType.Controller:
+                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.X) || (GamePad.GetState((PlayerIndex)Index).Triggers.Right > 0.4f);
+                    case InputType.Keyboard:
+                    case InputType.KeyboardAndMouse:
+                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.LeftControl) || Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.RightControl) || Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Space);
+                    default:
+                        return false;
+                }
+            }
+        }
+
         /// <summary>
         /// Is input connected?
         /// </summary>
