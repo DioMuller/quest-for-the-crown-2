@@ -162,6 +162,33 @@
     <None Include="Content\maps\QuestForTheCrown.maps">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Content\maps\WizardsTomb\WizardsTomb01.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\WizardsTomb\WizardsTomb02.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\WizardsTomb\WizardsTomb03.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\WizardsTomb\WizardsTomb04.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\WizardsTomb\WizardsTomb05.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\WizardsTomb\WizardsTomb06.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\WizardsTomb\WizardsTomb07.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\WizardsTomb\WizardsTomb08.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\WizardsTomb\WizardsTomb09.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\tilesets\Dungeon 1.tsx">
@@ -187,33 +214,33 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\maps\Overworld07.tmx">
+    <Content Include="Content\maps\Overworld\Overworld07.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\maps\Overworld08.tmx">
+    <Content Include="Content\maps\Overworld\Overworld08.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\maps\Overworld09.tmx">
+    <Content Include="Content\maps\Overworld\Overworld09.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\maps\Overworld01.tmx">
+    <Content Include="Content\maps\Overworld\Overworld01.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\maps\Overworld02.tmx">
+    <Content Include="Content\maps\Overworld\Overworld02.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\maps\Overworld03.tmx">
+    <Content Include="Content\maps\Overworld\Overworld03.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\maps\Overworld04.tmx">
+    <Content Include="Content\maps\Overworld\Overworld04.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\maps\Overworld05.tmx">
+    <Content Include="Content\maps\Overworld\Overworld05.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\maps\Overworld06.tmx">
+    <Content Include="Content\maps\Overworld\Overworld06.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
