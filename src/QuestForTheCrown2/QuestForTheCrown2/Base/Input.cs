@@ -63,9 +63,34 @@ namespace QuestForTheCrown2.Base
         }
 
         /// <summary>
+        /// Attack button pressed?
+        /// </summary>
+        public bool Attack
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case InputType.Controller:
+                        var gpState = GamePad.GetState((PlayerIndex)Index);
+                        return gpState.IsButtonDown(Buttons.A)
+                            || gpState.Triggers.Right > 0.7;
+                    case InputType.Keyboard:
+                    case InputType.KeyboardAndMouse:
+                        var kbState = Keyboard.GetState((PlayerIndex)Index);
+                        return kbState.IsKeyDown(Keys.LeftControl)
+                            || kbState.IsKeyDown(Keys.RightControl)
+                            || kbState.IsKeyDown(Keys.Space);
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        /// <summary>
         /// Attack direction.
         /// </summary>
-        public Vector2 Attack
+        public Vector2 AttackDirection
         {
             get
             {
@@ -151,23 +176,6 @@ namespace QuestForTheCrown2.Base
             }
         }
 
-        public bool AttackButton
-        {
-            get
-            {
-                switch (Type)
-                {
-                    case InputType.Controller:
-                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.X) || (GamePad.GetState((PlayerIndex)Index).Triggers.Right > 0.4f);
-                    case InputType.Keyboard:
-                    case InputType.KeyboardAndMouse:
-                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.LeftControl) || Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.RightControl) || Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Space);
-                    default:
-                        return false;
-                }
-            }
-        }
-
         /// <summary>
         /// Is input connected?
         /// </summary>
@@ -216,7 +224,7 @@ namespace QuestForTheCrown2.Base
         {
             //Nothing else to do.
         }
-        
+
         /// <summary>
         /// Initializes input with desired input type and index.
         /// </summary>

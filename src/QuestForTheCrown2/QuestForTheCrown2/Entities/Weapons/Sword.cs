@@ -18,6 +18,9 @@ namespace QuestForTheCrown2.Entities.Weapons
         float _swingSpeed = (float)Math.PI * 4;
         int _swingDirection, _keepRotating;
 
+        Vector2 _currentAttackDirection;
+        bool _currentAttackButton;
+
         public Sword()
             : base(@"sprites\Sword.png", null)
         {
@@ -25,9 +28,21 @@ namespace QuestForTheCrown2.Entities.Weapons
             Origin = new Vector2(Size.X / 2, Size.Y * 0.2f);
         }
 
-        public void Attack(GameTime gameTime, Level level, Vector2 direction)
+        public void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
-            if (direction.Length() < 0.4)
+            if (!attackButton && direction.Length() > 0.8)
+                attackButton = true;
+            else if (direction.Length() < 0.4)
+                direction = Entity.CurrentDirection / 5;
+
+            if (_currentAttackDirection == direction && attackButton == _currentAttackButton)
+                return;
+
+            _currentAttackDirection = direction;
+            _currentAttackButton = attackButton;
+
+
+            if (!attackButton || direction == Vector2.Zero)
             {
                 _removeOnComplete = true;
                 if (!_rotationCompleted)
@@ -36,6 +51,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                     level.RemoveEntity(this);
                 return;
             }
+
             _removeOnComplete = false;
             _rotationCompleted = false;
 
@@ -79,7 +95,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             {
                 if (ent != this && ent != Entity && ent.Health != null)
                 {
-                    Hit(level, ent);
+                    ent.Hit(level, Angle);
                 }
             }
 
@@ -107,24 +123,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             }
 
             Angle = _desiredAngle + _swingedAngle;
-        }
-
-        private void Hit(Level level, Base.Entity ent)
-        {
-            if (!ent.IsBlinking)
-                ent.Health--;
-
-            if (ent.Health <= 0)
-                level.RemoveEntity(ent);
-            else
-            {
-                var direction = VectorHelper.AngleToV2(Angle, 5);
-                direction = new Vector2(-direction.Y, direction.X);
-                var oldPos = ent.Position;
-                ent.Position += direction;
-                if (level.CollidesWith(ent.CollisionRect).Any(e => e != ent) || level.Map.Collides(ent.CollisionRect) )
-                    ent.Position = oldPos;
-            }
+            Entity.Look(VectorHelper.AngleToV2(Angle + (float)(Math.PI / 2), 1), updateDirection: false);
         }
 
         private IEnumerable<Rectangle> GetCollisionRects()

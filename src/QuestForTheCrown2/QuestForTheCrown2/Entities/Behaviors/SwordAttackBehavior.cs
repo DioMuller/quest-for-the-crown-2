@@ -59,8 +59,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
         {
             if (_followBehavior.CurrentTarget.Distance < 36 && _lastAttackTime + _timeBetweenAttacks < gameTime.TotalGameTime)
             {
-                _weapon.Attack(gameTime, level, _followBehavior.CurrentTarget.Position);
-                _weapon.Attack(gameTime, level, Vector2.Zero);
+                _weapon.Attack(gameTime, level, true, _followBehavior.CurrentTarget.Position);
+                _weapon.Attack(gameTime, level, false, Vector2.Zero);
                 _lastAttackTime = gameTime.TotalGameTime;
             }
             else

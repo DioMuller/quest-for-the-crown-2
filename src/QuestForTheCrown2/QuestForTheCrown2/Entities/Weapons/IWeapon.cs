@@ -16,8 +16,9 @@ namespace QuestForTheCrown2.Entities.Weapons
         /// Perform the weapon attack.
         /// </summary>
         /// <param name="gameTime">Current game time.</param>
-        /// <param name="map">Current entity map.</param>
+        /// <param name="level">Current entity level.</param>
+        /// <param name="attackButton">True when the attack button is pressed.</param>
         /// <param name="direction">The direction of the attack.</param>
-        void Attack(GameTime gameTime, Level level, Vector2 direction);
+        void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction);
     }
 }

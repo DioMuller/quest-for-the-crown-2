@@ -35,32 +35,11 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="direction">Desired walk direction.</param>
         protected bool Walk(GameTime gameTime, Level level, Vector2 direction)
         {
-            if (Math.Abs(direction.X) >= Math.Abs(direction.Y))
-            {
-                if (direction.X > 0)
-                    Entity.CurrentView = "right";
-                else if (direction.X < 0)
-                    Entity.CurrentView = "left";
-            }
-            else
-            {
-                if (direction.Y < 0)
-                    Entity.CurrentView = "up";
-                else if (direction.Y > 0)
-                    Entity.CurrentView = "down";
-            }
+            Entity.Look(direction, updateDirection: true);
+            UpdateAnimation(direction);
 
-            if (direction.X != 0 || direction.Y != 0)
-            {
-                Entity.CurrentAnimation = "walking";
-                _stoppedFrameCount = 0;
-            }
-            else
-            {
-                if (_stoppedFrameCount++ > 1)
-                    Entity.CurrentAnimation = "stopped";
+            if (Entity.CurrentAnimation == "stopped")
                 return true;
-            }
 
             var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
 
@@ -77,7 +56,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                 Entity.Position = new Vector2(newX, newY);
                 return true;
             }
-            else if( Entity.Category == "Player" && level.Map.IsOutsideBorders(newRect) )
+            else if (Entity.Category == "Player" && level.Map.IsOutsideBorders(newRect))
             {
                 Direction teleportDirection = Direction.None;
 
@@ -89,6 +68,20 @@ namespace QuestForTheCrown2.Entities.Behaviors
                 level.GoToNeighbor(Entity, teleportDirection);
             }
             return false;
+        }
+
+        private void UpdateAnimation(Vector2 direction)
+        {
+            if (direction.X != 0 || direction.Y != 0)
+            {
+                Entity.CurrentAnimation = "walking";
+                _stoppedFrameCount = 0;
+            }
+            else
+            {
+                if (_stoppedFrameCount++ > 1)
+                    Entity.CurrentAnimation = "stopped";
+            }
         }
 
         protected void StopWalking(GameTime gameTime, Level level)

@@ -25,25 +25,6 @@ namespace QuestForTheCrown2.Entities.Base
         #region Properties
         public Entity Parent { get; set; }
 
-        // public int PlayerNumber
-        ///// <summary>
-        ///// Player number (1-4)
-        ///// </summary>
-        //public int PlayerNumber
-        //{
-        //    get
-        //    {
-        //        return _playerNumber;
-        //    }
-        //    set
-        //    {
-        //        if (value > 0 && value < 5)
-        //        {
-        //            _playerNumber = value;
-        //        }
-        //    }
-        //}
-
         /// <summary>
         /// Indicates in which category this entity is at.
         /// Values could be: "Player", "Enemy", "Item" and etc.
@@ -122,6 +103,7 @@ namespace QuestForTheCrown2.Entities.Base
         #region Position
         public Vector2 Position { get; set; }
         public Vector2 Speed { get; set; }
+        public Vector2 CurrentDirection { get; set; }
 
         /// <summary>
         /// Entity size
@@ -167,7 +149,7 @@ namespace QuestForTheCrown2.Entities.Base
         {
             get
             {
-                if (Angle != 0)
+                if (Angle != 0 && (Size.X != Size.Y || Origin != new Vector2(Size.X / 2, Size.Y / 2)))
                     throw new NotImplementedException();
 
                 return new Rectangle(
@@ -255,6 +237,30 @@ namespace QuestForTheCrown2.Entities.Base
             Weapons.AddRange(weapons);
         }
 
+        public virtual void Look(Vector2 direction, bool updateDirection)
+        {
+            if (direction == Vector2.Zero)
+                return;
+
+            if (Math.Abs(direction.X) >= Math.Abs(direction.Y))
+            {
+                if (direction.X > 0)
+                    CurrentView = "right";
+                else if (direction.X < 0)
+                    CurrentView = "left";
+            }
+            else
+            {
+                if (direction.Y < 0)
+                    CurrentView = "up";
+                else if (direction.Y > 0)
+                    CurrentView = "down";
+            }
+
+            if (updateDirection)
+                CurrentDirection = direction;
+        }
+
         #endregion
 
         #region Update
@@ -327,5 +333,31 @@ namespace QuestForTheCrown2.Entities.Base
                 frame.Rectangle, Color.White, Angle, Origin, 1, SpriteEffects.None, 1);
         }
         #endregion Draw
+
+        /// <summary>
+        /// Hit this entity in the desired angle.
+        /// </summary>
+        /// <param name="level">Current level</param>
+        /// <param name="angle">Projectile angle</param>
+        public void Hit(Level level, float angle, float moveDistance = 5)
+        {
+            if (Health == null)
+                return;
+
+            if (!IsBlinking)
+                Health--;
+
+            if (Health <= 0)
+                level.RemoveEntity(this);
+            else
+            {
+                var direction = VectorHelper.AngleToV2(angle, moveDistance);
+                direction = new Vector2(-direction.Y, direction.X);
+                var oldPos = Position;
+                Position += direction;
+                if (level.CollidesWith(CollisionRect).Any(e => e != this) || level.Map.Collides(CollisionRect))
+                    Position = oldPos;
+            }
+        }
     }
 }

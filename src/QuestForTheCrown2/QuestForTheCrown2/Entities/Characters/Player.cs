@@ -46,6 +46,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Health = 8;
             MaxHealth = 8;
+            CurrentDirection = new Vector2(0, 1);
         }
         #endregion Constructor
     }

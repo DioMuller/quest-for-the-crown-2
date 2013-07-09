@@ -14,7 +14,6 @@ namespace QuestForTheCrown2.Entities.Behaviors
         #region Attributes
         Input _input;
         int _currentWeapon;
-        Vector2 _currentAttackDirection;
         #endregion
 
         #region Constructors
@@ -46,20 +45,16 @@ namespace QuestForTheCrown2.Entities.Behaviors
         public override void Update(GameTime gameTime, Level level)
         {
             Walk(gameTime, level, _input.Movement);
-            Attack(gameTime, level, _input.Attack);
+            Attack(gameTime, level, _input.Attack, _input.AttackDirection);
         }
 
         /// <summary>
         /// Tries to attack with the current weapon.
         /// </summary>
         /// <param name="direction">The attack direction.</param>
-        void Attack(GameTime gameTime, Level level, Vector2 direction)
+        void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
-            if (_currentAttackDirection == direction)
-                return;
-
-            _currentAttackDirection = direction;
-            Entity.Weapons[_currentWeapon].Attack(gameTime, level, direction);
+            Entity.Weapons[_currentWeapon].Attack(gameTime, level, attackButton, direction);
         }
         #endregion
     }

@@ -54,6 +54,8 @@
     <Compile Include="Entities\Objects\Item.cs" />
     <Compile Include="Entities\Objects\SavePoint.cs" />
     <Compile Include="Entities\Objects\Entrance.cs" />
+    <Compile Include="Entities\Weapons\FireBall.cs" />
+    <Compile Include="Entities\Weapons\FireWand.cs" />
     <Compile Include="Entities\Weapons\IWeapon.cs" />
     <Compile Include="Entities\Weapons\Sword.cs" />
     <Compile Include="GUI\Components\ComponentList.cs" />
@@ -117,6 +119,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sprites\Empty.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sprites\FireBall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sprites\MainCharacter.png">
