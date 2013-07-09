@@ -95,7 +95,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             {
                 if (ent != this && ent != Entity && ent.Health != null)
                 {
-                    ent.Hit(level, Angle);
+                    ent.Hit(this, level, Angle);
                 }
             }
 

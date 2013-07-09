@@ -55,6 +55,8 @@
     <Compile Include="Entities\Objects\Item.cs" />
     <Compile Include="Entities\Objects\SavePoint.cs" />
     <Compile Include="Entities\Objects\Entrance.cs" />
+    <Compile Include="Entities\Weapons\Arrow.cs" />
+    <Compile Include="Entities\Weapons\Bow.cs" />
     <Compile Include="Entities\Weapons\FireBall.cs" />
     <Compile Include="Entities\Weapons\FireWand.cs" />
     <Compile Include="Entities\Weapons\IWeapon.cs" />
@@ -129,6 +131,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\licenses\music.txt" />
+    <Content Include="Content\sprites\Arrow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sprites\Bow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\sprites\Brendan.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
