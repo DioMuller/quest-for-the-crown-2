@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Base\Input.cs" />
+    <Compile Include="Base\SoundManager.cs" />
     <Compile Include="Base\VectorHelper.cs" />
     <Compile Include="Entities\Base\Animation.cs" />
     <Compile Include="Entities\Base\Frame.cs" />
@@ -94,6 +95,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bgm\Call to Adventure.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\bgm\Five Armies.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\bgm\Heroic Age.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\bgm\Suvaco do Cristo.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\gui\gui_background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -115,6 +128,7 @@
     <Content Include="Content\images\title.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\licenses\music.txt" />
     <Content Include="Content\sprites\Brendan.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

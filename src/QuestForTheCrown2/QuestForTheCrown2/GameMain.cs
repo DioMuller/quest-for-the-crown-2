@@ -115,6 +115,7 @@ namespace QuestForTheCrown2
             switch( _currentState )
             {
                 case GameState.MainMenu:
+                    SoundManager.PlayBGM("Call to Adventure");
                     _mainMenu.Update(gameTime);
                     break;
                 case GameState.Playing:
