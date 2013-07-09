@@ -51,6 +51,12 @@ namespace QuestForTheCrown2.Entities.Base
         public string Category { get; set; }
 
         /// <summary>
+        /// The current entity's max health.
+        /// Null if unlimited.
+        /// </summary>
+        public int? MaxHealth { get; set; }
+
+        /// <summary>
         /// The current entity's health.
         /// Null if it can't be destroyed.
         /// </summary>

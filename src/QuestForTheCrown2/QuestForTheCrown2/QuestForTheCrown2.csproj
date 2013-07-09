@@ -59,6 +59,7 @@
     <Compile Include="GUI\Components\ComponentList.cs" />
     <Compile Include="GUI\Components\Base\Component.cs" />
     <Compile Include="GUI\Components\Button.cs" />
+    <Compile Include="GUI\Components\GameGUI.cs" />
     <Compile Include="GUI\Screens\GameOverScreen.cs" />
     <Compile Include="GUI\Screens\CreditsScreen.cs" />
     <Compile Include="Levels\Level.cs" />
@@ -91,6 +92,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\gui\gui_background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\gui\health_empty.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\gui\health_full.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\gui\health_part.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\images\gameover.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

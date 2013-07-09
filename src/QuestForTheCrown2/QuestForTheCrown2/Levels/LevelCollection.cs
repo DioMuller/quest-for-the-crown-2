@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Characters;
+using QuestForTheCrown2.GUI.Components;
 
 namespace QuestForTheCrown2.Levels
 {
@@ -34,6 +35,11 @@ namespace QuestForTheCrown2.Levels
         /// Stored waypoints: Where the player was when he quit this collection.
         /// </summary>
         List<Waypoint> _storedWaypoints;
+
+        /// <summary>
+        /// Game GUI.
+        /// </summary>
+        GameGUI _gui;
         #endregion Attributes
 
         #region Properties
@@ -53,6 +59,22 @@ namespace QuestForTheCrown2.Levels
             }
         }
 
+        private IEnumerable<Entity> Players
+        {
+            get
+            {
+                //TODO: Find a LINQ query to do this?
+                List<Entity> entities = new List<Entity>();
+
+                foreach( Level lv in CurrentLevels )
+                {
+                    entities.AddRange(lv.Players);
+                }
+
+                return entities;
+            }
+        }
+
         public GameMain Parent { get; set; }
         #endregion Properties
 
@@ -64,6 +86,8 @@ namespace QuestForTheCrown2.Levels
         {
             _levels = new List<Level>();
             _storedWaypoints = new List<Waypoint>();
+
+            _gui = new GameGUI();
         }
         #endregion Constructor
 
@@ -169,6 +193,7 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds)
         {
+            //TODO: Change to viewport so the GUI won't get in the way?
             foreach (Level lv in CurrentLevels)
             {
                 var player = lv.Players.FirstOrDefault();
@@ -184,6 +209,12 @@ namespace QuestForTheCrown2.Levels
                     lv.Draw(gameTime, spriteBatch, camera);
                 }
             }
+
+            #region GUI Drawing
+            int guiSize = 100;
+            Rectangle GUIRect = new Rectangle(clientBounds.X, clientBounds.Y, clientBounds.Width, guiSize);
+            _gui.Draw(spriteBatch, GUIRect, Players);
+            #endregion GUI Drawing
         }
         #endregion Public Methods
 
