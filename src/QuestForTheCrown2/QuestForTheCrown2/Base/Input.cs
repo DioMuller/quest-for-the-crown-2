@@ -63,27 +63,26 @@ namespace QuestForTheCrown2.Base
         }
 
         /// <summary>
-        /// The current attack force
+        /// Attack button pressed?
         /// </summary>
-        public float Attack
+        public bool Attack
         {
             get
             {
-                switch(Type)
+                switch (Type)
                 {
                     case InputType.Controller:
                         var gpState = GamePad.GetState((PlayerIndex)Index);
-                        if (gpState.IsButtonDown(Buttons.A))
-                            return 1;
-                        return gpState.Triggers.Right;
+                        return gpState.IsButtonDown(Buttons.A)
+                            || gpState.Triggers.Right > 0.7;
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
                         var kbState = Keyboard.GetState((PlayerIndex)Index);
                         return kbState.IsKeyDown(Keys.LeftControl)
-                            || kbState .IsKeyDown(Keys.RightControl)
-                            || kbState.IsKeyDown(Keys.Space)? 1 : 0;
+                            || kbState.IsKeyDown(Keys.RightControl)
+                            || kbState.IsKeyDown(Keys.Space);
                     default:
-                        return 0;
+                        return false;
                 }
             }
         }
@@ -225,7 +224,7 @@ namespace QuestForTheCrown2.Base
         {
             //Nothing else to do.
         }
-        
+
         /// <summary>
         /// Initializes input with desired input type and index.
         /// </summary>

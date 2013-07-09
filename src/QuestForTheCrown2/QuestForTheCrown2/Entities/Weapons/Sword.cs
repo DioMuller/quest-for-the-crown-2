@@ -15,12 +15,11 @@ namespace QuestForTheCrown2.Entities.Weapons
     {
         bool _removeOnComplete, _rotationCompleted;
         float _desiredAngle, _swingedAngle;
-        float _swingSpeed = (float)Math.PI * 6;
+        float _swingSpeed = (float)Math.PI * 4;
         int _swingDirection, _keepRotating;
-        float _swingSpeedMultiplier;
 
         Vector2 _currentAttackDirection;
-        float _currentAttackForce;
+        bool _currentAttackButton;
 
         public Sword()
             : base(@"sprites\Sword.png", null)
@@ -29,21 +28,21 @@ namespace QuestForTheCrown2.Entities.Weapons
             Origin = new Vector2(Size.X / 2, Size.Y * 0.2f);
         }
 
-        public void Attack(GameTime gameTime, Level level, float force, Vector2 direction)
+        public void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
-            if (force <= 0.01 && direction.Length() > 0.8)
-                force = direction.Length();
+            if (!attackButton && direction.Length() > 0.8)
+                attackButton = true;
             else if (direction.Length() < 0.4)
                 direction = Entity.CurrentDirection / 5;
 
-            if (_currentAttackDirection == direction && force == _currentAttackForce)
+            if (_currentAttackDirection == direction && attackButton == _currentAttackButton)
                 return;
 
             _currentAttackDirection = direction;
-            _currentAttackForce = force;
+            _currentAttackButton = attackButton;
 
 
-            if (force < 0.4 || direction == Vector2.Zero)
+            if (!attackButton || direction == Vector2.Zero)
             {
                 _removeOnComplete = true;
                 if (!_rotationCompleted)
@@ -53,7 +52,6 @@ namespace QuestForTheCrown2.Entities.Weapons
                 return;
             }
 
-            _swingSpeedMultiplier = force;
             _removeOnComplete = false;
             _rotationCompleted = false;
 
@@ -104,7 +102,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             if (!_rotationCompleted || _keepRotating > 0)
             {
                 var oldAngle = _swingedAngle;
-                _swingedAngle += (float)(_swingDirection * _swingSpeed * _swingSpeedMultiplier * gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
+                _swingedAngle += (float)(_swingDirection * _swingSpeed * gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
 
                 if (!_rotationCompleted && (_swingDirection > 0 == _swingedAngle > 0))
                 {

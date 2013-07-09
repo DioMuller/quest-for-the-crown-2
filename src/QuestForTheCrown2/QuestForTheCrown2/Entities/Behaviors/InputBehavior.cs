@@ -52,9 +52,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// Tries to attack with the current weapon.
         /// </summary>
         /// <param name="direction">The attack direction.</param>
-        void Attack(GameTime gameTime, Level level, float attackForce, Vector2 direction)
+        void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
-            Entity.Weapons[_currentWeapon].Attack(gameTime, level, attackForce, direction);
+            Entity.Weapons[_currentWeapon].Attack(gameTime, level, attackButton, direction);
         }
         #endregion
     }
