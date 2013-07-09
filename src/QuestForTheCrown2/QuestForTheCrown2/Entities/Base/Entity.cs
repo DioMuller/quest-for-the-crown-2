@@ -143,7 +143,7 @@ namespace QuestForTheCrown2.Entities.Base
         {
             get
             {
-                if (Angle != 0)
+                if (Angle != 0 && (Size.X != Size.Y || Origin != new Vector2(Size.X / 2, Size.Y / 2)))
                     throw new NotImplementedException();
 
                 return new Rectangle(
@@ -327,5 +327,31 @@ namespace QuestForTheCrown2.Entities.Base
                 frame.Rectangle, Color.White, Angle, Origin, 1, SpriteEffects.None, 1);
         }
         #endregion Draw
+
+        /// <summary>
+        /// Hit this entity in the desired angle.
+        /// </summary>
+        /// <param name="level">Current level</param>
+        /// <param name="angle">Projectile angle</param>
+        public void Hit(Level level, float angle, float moveDistance = 5)
+        {
+            if (Health == null)
+                return;
+
+            if (!IsBlinking)
+                Health--;
+
+            if (Health <= 0)
+                level.RemoveEntity(this);
+            else
+            {
+                var direction = VectorHelper.AngleToV2(angle, moveDistance);
+                direction = new Vector2(-direction.Y, direction.X);
+                var oldPos = Position;
+                Position += direction;
+                if (level.CollidesWith(CollisionRect).Any(e => e != this) || level.Map.Collides(CollisionRect))
+                    Position = oldPos;
+            }
+        }
     }
 }

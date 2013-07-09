@@ -95,7 +95,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             {
                 if (ent != this && ent != Entity && ent.Health != null)
                 {
-                    Hit(level, ent);
+                    ent.Hit(level, Angle);
                 }
             }
 
@@ -124,24 +124,6 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             Angle = _desiredAngle + _swingedAngle;
             Entity.Look(VectorHelper.AngleToV2(Angle + (float)(Math.PI / 2), 1), updateDirection: false);
-        }
-
-        private void Hit(Level level, Base.Entity ent)
-        {
-            if (!ent.IsBlinking)
-                ent.Health--;
-
-            if (ent.Health <= 0)
-                level.RemoveEntity(ent);
-            else
-            {
-                var direction = VectorHelper.AngleToV2(Angle, 5);
-                direction = new Vector2(-direction.Y, direction.X);
-                var oldPos = ent.Position;
-                ent.Position += direction;
-                if (level.CollidesWith(ent.CollisionRect).Any(e => e != ent) || level.Map.Collides(ent.CollisionRect))
-                    ent.Position = oldPos;
-            }
         }
 
         private IEnumerable<Rectangle> GetCollisionRects()
