@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Base\Input.cs" />
     <Compile Include="Base\SoundManager.cs" />
+    <Compile Include="Base\SoundReference.cs" />
     <Compile Include="Base\VectorHelper.cs" />
     <Compile Include="Entities\Base\Animation.cs" />
     <Compile Include="Entities\Base\Frame.cs" />
@@ -129,6 +130,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\licenses\music.txt" />
+    <Content Include="Content\sound\select.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\sprites\Brendan.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

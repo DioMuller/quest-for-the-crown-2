@@ -88,6 +88,7 @@ namespace QuestForTheCrown2.GUI.Components
 
                 if( y < 0f ) OptionUp();
                 else OptionDown();
+                SoundManager.PlaySound("select");
             }
             else
             {
