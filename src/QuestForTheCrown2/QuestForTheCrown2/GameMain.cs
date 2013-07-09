@@ -55,9 +55,9 @@ namespace QuestForTheCrown2
         {
             _graphics = new GraphicsDeviceManager(this);
 
-            _graphics.IsFullScreen = false;
-            _graphics.PreferredBackBufferHeight = 720;
-            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.IsFullScreen = true;
+            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.PreferredBackBufferWidth = 1920;
 
             _currentState = GameState.MainMenu;
 
