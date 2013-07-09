@@ -63,15 +63,7 @@ namespace QuestForTheCrown2.Levels
         {
             get
             {
-                //TODO: Find a LINQ query to do this?
-                List<Entity> entities = new List<Entity>();
-
-                foreach( Level lv in CurrentLevels )
-                {
-                    entities.AddRange(lv.Players);
-                }
-
-                return entities;
+                return CurrentLevels.SelectMany(lv => lv.Players);
             }
         }
 

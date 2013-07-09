@@ -112,9 +112,6 @@ namespace QuestForTheCrown2
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (input.PauseButton)
-                Exit();
-
             switch( _currentState )
             {
                 case GameState.MainMenu:
