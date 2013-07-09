@@ -13,6 +13,7 @@ namespace QuestForTheCrown2.Entities.Weapons
         Entity _hitEntity;
         TimeSpan _maxHitTime = TimeSpan.FromSeconds(1);
         TimeSpan _entHitTime;
+        TimeSpan _timeFromCreation;
 
         public FireBall(Vector2 direction)
             : base(@"sprites\FireBall.png", null)
@@ -21,10 +22,13 @@ namespace QuestForTheCrown2.Entities.Weapons
             OverlapEntities = true;
             Angle = (float)Math.Atan2(-direction.X, direction.Y);
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
+            _timeFromCreation = TimeSpan.Zero;
         }
 
         public override void Update(GameTime gameTime, Levels.Level level)
         {
+            _timeFromCreation += gameTime.ElapsedGameTime;
+
             if (_hitEntity != null)
             {
                 if (gameTime.TotalGameTime > _entHitTime + _maxHitTime)
@@ -50,6 +54,11 @@ namespace QuestForTheCrown2.Entities.Weapons
                     Angle = 0;
                     return;
                 }
+            }
+
+            if (_timeFromCreation > TimeSpan.FromSeconds(1.0))
+            {
+                level.RemoveEntity(this);
             }
         }
     }
