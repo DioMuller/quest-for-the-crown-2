@@ -31,7 +31,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
             _timeFromCreation = TimeSpan.Zero;
 
-            Speed = new Vector2(96);
+            Speed = new Vector2(32 * 10);
 
             const int rectSize = 15;
             _collisionDirection = VectorHelper.AngleToV2((float)(Angle - _spriteAngle), rectSize);
