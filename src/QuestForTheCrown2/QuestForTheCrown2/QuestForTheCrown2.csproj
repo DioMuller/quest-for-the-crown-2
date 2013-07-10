@@ -51,6 +51,7 @@
     <Compile Include="Entities\Behaviors\WalkBehavior.cs" />
     <Compile Include="Entities\Behaviors\FollowBehavior.cs" />
     <Compile Include="Entities\Behaviors\InputBehavior.cs" />
+    <Compile Include="Entities\Characters\Crab.cs" />
     <Compile Include="Entities\Characters\Enemy1.cs" />
     <Compile Include="Entities\Characters\Player.cs" />
     <Compile Include="Entities\Objects\Item.cs" />

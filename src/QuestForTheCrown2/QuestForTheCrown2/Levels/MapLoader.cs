@@ -133,7 +133,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                     switch (type)
                     {
                         case "Player":
-                            entity = new Player { Position = new Vector2(x, y) };
+                            entity = new Player { Position = new Vector2(x, y), Category = "Player" };
                             entity.AddBehavior(
                                 new InputBehavior(Base.InputType.Controller),
                                 new InputBehavior(Base.InputType.Keyboard)
@@ -142,13 +142,19 @@ namespace QuestForTheCrown2.Levels.Mapping
                             entity.CurrentLevel = id;
                             break;
                         case "Enemy":
-                            //TODO: Get Enemy type and create refering to that.
-                            entity = new Enemy1 { Position = new Vector2(x, y) };
+                            entity = new Enemy1 { Position = new Vector2(x, y), Category = "Enemy" };
                             entity.AddBehavior(
                                 new SwordAttackBehavior("Player") { MaxDistance = 300 },
                                 new WalkAroundBehavior()
                             );
                             entity.AddWeapon(new Sword());
+                            entity.CurrentLevel = id;
+                            break;
+                        case "Crab":
+                            entity = new Crab { Position = new Vector2(x, y), Category = "Enemy" };
+                            entity.AddBehavior(
+                                new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 }
+                            );
                             entity.CurrentLevel = id;
                             break;
                         case "Item":
