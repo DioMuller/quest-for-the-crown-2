@@ -17,7 +17,7 @@ namespace QuestForTheCrown2.Entities.Characters
         /// <summary>
         /// Spritesheet path
         /// </summary>
-        const string spriteSheetPath = @"sprites\MainCharacter.png";
+        const string spriteSheetPath = @"sprites\Characters\main.png";
         #endregion Constants
 
         #region Constructor
@@ -25,22 +25,23 @@ namespace QuestForTheCrown2.Entities.Characters
         /// Builds main character with its base spritesheet and animations.
         /// </summary>
         public Player()
-            : base(spriteSheetPath, new Point(22, 28))
+            : base(spriteSheetPath, new Point(64, 64))
         {
             Category = "Player";
 
             TimeSpan walkFrameDuration = TimeSpan.FromMilliseconds(100);
-            SpriteSheet.AddAnimation("stopped", "down", line: 0, count: 1, frameDuration: walkFrameDuration);
+            SpriteSheet.AddAnimation("stopped", "up", line: 0, count: 1, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("stopped", "left", line: 1, count: 1, frameDuration: walkFrameDuration);
-            SpriteSheet.AddAnimation("stopped", "right", line: 2, count: 1, frameDuration: walkFrameDuration);
-            SpriteSheet.AddAnimation("stopped", "up", line: 3, count: 1, frameDuration: walkFrameDuration);
+            SpriteSheet.AddAnimation("stopped", "down", line: 2, count: 1, frameDuration: walkFrameDuration);
+            SpriteSheet.AddAnimation("stopped", "right", line: 3, count: 1, frameDuration: walkFrameDuration);
+            
 
-            SpriteSheet.AddAnimation("walking", "down", line: 0, frameDuration: walkFrameDuration);
+            SpriteSheet.AddAnimation("walking", "up", line: 0, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("walking", "left", line: 1, frameDuration: walkFrameDuration);
-            SpriteSheet.AddAnimation("walking", "right", line: 2, frameDuration: walkFrameDuration);
-            SpriteSheet.AddAnimation("walking", "up", line: 3, frameDuration: walkFrameDuration);
+            SpriteSheet.AddAnimation("walking", "down", line: 2, frameDuration: walkFrameDuration);
+            SpriteSheet.AddAnimation("walking", "right", line: 3, frameDuration: walkFrameDuration);
 
-            Padding = new Rectangle(2, 10, 2, 2);
+            Padding = new Rectangle(15, 10, 15, 2);
 
             Speed = new Vector2(96);
 
