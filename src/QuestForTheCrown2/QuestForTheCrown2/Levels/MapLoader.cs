@@ -142,29 +142,34 @@ namespace QuestForTheCrown2.Levels.Mapping
                             entity.CurrentLevel = id;
                             break;
                         case "Enemy":
-                            entity = new Enemy1 { Position = new Vector2(x, y), Category = "Enemy" };
-                            entity.AddBehavior(
-                                new SwordAttackBehavior("Player") { MaxDistance = 300 },
-                                new WalkAroundBehavior()
-                            );
-                            entity.AddWeapon(new Sword());
-                            entity.CurrentLevel = id;
-                            break;
-                        case "Crab":
-                            entity = new Crab { Position = new Vector2(x, y), Category = "Enemy" };
-                            entity.AddBehavior(
-                                new HitOnTouchBehavior(),
-                                new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 }
-                            );
-                            entity.CurrentLevel = id;
-                            break;
-                        case "Slime":
-                            entity = new Slime { Position = new Vector2(x, y), Category = "Enemy" };
-                            entity.AddBehavior(
-                                new HitOnTouchBehavior(),
-                                new FollowBehavior("Player", 5) { MaxDistance = 32 * 2 }
-                            );
-                            entity.CurrentLevel = id;
+                            switch( objname )
+                            {
+                                case "Crab":
+                                    entity = new Crab { Position = new Vector2(x, y), Category = "Enemy" };
+                                    entity.AddBehavior(
+                                        new HitOnTouchBehavior(),
+                                        new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 }
+                                    );
+                                    entity.CurrentLevel = id;
+                                    break;
+                                case "Slime":
+                                    entity = new Slime { Position = new Vector2(x, y), Category = "Enemy" };
+                                    entity.AddBehavior(
+                                        new HitOnTouchBehavior(),
+                                        new FollowBehavior("Player", 5) { MaxDistance = 32 * 2 }
+                                    );
+                                    entity.CurrentLevel = id;
+                                    break;
+                                default: 
+                                    entity = new Enemy1 { Position = new Vector2(x, y), Category = "Enemy" };
+                                    entity.AddBehavior(
+                                        new SwordAttackBehavior("Player") { MaxDistance = 300 },
+                                        new WalkAroundBehavior()
+                                    );
+                                    entity.AddWeapon(new Sword());
+                                    entity.CurrentLevel = id;
+                                    break;
+                            }
                             break;
                         case "Item":
                             entity = new Item { Position = new Vector2(x, y) };
