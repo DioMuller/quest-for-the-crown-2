@@ -46,11 +46,13 @@
     <Compile Include="Entities\Base\EntityUpdateBehavior.cs" />
     <Compile Include="Entities\Behaviors\BlinkBehavior.cs" />
     <Compile Include="Entities\Base\EntityRelativePosition.cs" />
+    <Compile Include="Entities\Behaviors\HitOnTouchBehavior.cs" />
     <Compile Include="Entities\Behaviors\WalkAroundBehavior.cs" />
     <Compile Include="Entities\Behaviors\SwordAttackBehavior.cs" />
     <Compile Include="Entities\Behaviors\WalkBehavior.cs" />
     <Compile Include="Entities\Behaviors\FollowBehavior.cs" />
     <Compile Include="Entities\Behaviors\InputBehavior.cs" />
+    <Compile Include="Entities\Characters\Slime.cs" />
     <Compile Include="Entities\Characters\Crab.cs" />
     <Compile Include="Entities\Characters\Enemy1.cs" />
     <Compile Include="Entities\Characters\Player.cs" />

@@ -102,6 +102,10 @@ namespace QuestForTheCrown2.Entities.Base
 
         #region Position
         public Vector2 Position { get; set; }
+
+        /// <summary>
+        /// Entity speed, in pixels per second.
+        /// </summary>
         public Vector2 Speed { get; set; }
         public Vector2 CurrentDirection { get; set; }
 

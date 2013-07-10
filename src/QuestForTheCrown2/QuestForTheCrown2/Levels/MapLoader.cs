@@ -153,7 +153,16 @@ namespace QuestForTheCrown2.Levels.Mapping
                         case "Crab":
                             entity = new Crab { Position = new Vector2(x, y), Category = "Enemy" };
                             entity.AddBehavior(
+                                new HitOnTouchBehavior(),
                                 new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 }
+                            );
+                            entity.CurrentLevel = id;
+                            break;
+                        case "Slime":
+                            entity = new Slime { Position = new Vector2(x, y), Category = "Enemy" };
+                            entity.AddBehavior(
+                                new HitOnTouchBehavior(),
+                                new FollowBehavior("Player", 5) { MaxDistance = 32 * 2 }
                             );
                             entity.CurrentLevel = id;
                             break;

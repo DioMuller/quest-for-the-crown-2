@@ -45,7 +45,11 @@ namespace QuestForTheCrown2.Entities.Behaviors
         public override bool IsActive(GameTime gameTime, Level level)
         {
             CurrentTarget = level.EntityCloserTo(Entity, TargetCategory);
-            return CurrentTarget != null && (MaxDistance == null || CurrentTarget.Distance < MaxDistance);
+            if (CurrentTarget != null && (MaxDistance == null || CurrentTarget.Distance < MaxDistance))
+                return true;
+
+            Walk(gameTime, level, Vector2.Zero);
+            return false;
         }
 
         /// <summary>
