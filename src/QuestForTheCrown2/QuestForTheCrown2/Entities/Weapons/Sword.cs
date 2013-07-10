@@ -25,7 +25,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             : base(@"sprites\Objects\Sword.png", null)
         {
             OverlapEntities = true;
-            Origin = new Vector2(Size.X / 2, Size.Y * 0.0f);
+            Origin = new Vector2(Size.X / 2, Size.Y * 0.2f);
         }
 
         public override void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
@@ -88,7 +88,8 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Update(GameTime gameTime, Level level)
         {
-            Position = Parent.CenterPosition;
+            var lookDirection = VectorHelper.AngleToV2(Angle + (float)(Math.PI / 2), 1);
+            Position = Parent.CenterPosition + lookDirection * new Vector2(15);
 
             foreach (var ent in GetCollisionRects().SelectMany(level.CollidesWith).Distinct())
             {
@@ -125,7 +126,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             }
 
             Angle = _desiredAngle + _swingedAngle;
-            Parent.Look(VectorHelper.AngleToV2(Angle + (float)(Math.PI / 2), 1), updateDirection: false);
+            Parent.Look(lookDirection, updateDirection: false);
         }
 
         private IEnumerable<Rectangle> GetCollisionRects()
@@ -137,7 +138,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             var location = new Vector2(Position.X, Position.Y);
 
-            for (int i = 0; i < 30; i += rectSize)
+            for (int i = 0; i < 35; i += rectSize)
             {
                 location += direction;
                 yield return new Rectangle((int)(location.X - rectSize / 2), (int)(location.Y - rectSize / 2), rectSize, rectSize);

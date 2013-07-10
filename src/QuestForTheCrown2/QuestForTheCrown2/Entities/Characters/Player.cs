@@ -41,7 +41,7 @@ namespace QuestForTheCrown2.Entities.Characters
             SpriteSheet.AddAnimation("walking", "down", line: 2, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("walking", "right", line: 3, frameDuration: walkFrameDuration);
 
-            Padding = new Rectangle(15, 10, 15, 2);
+            Padding = new Rectangle(22, 30, 22, 2);
 
             Speed = new Vector2(96);
 
