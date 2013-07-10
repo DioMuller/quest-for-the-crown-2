@@ -81,7 +81,11 @@ namespace QuestForTheCrown2.Entities.Weapons
                 {
                     _entHitTime = gameTime.TotalGameTime;
                     _hitEntity = ent;
-                    ent.Hit(this, level, Angle);
+
+                    var direction = VectorHelper.AngleToV2(Angle, 5);
+                    direction = new Vector2(-direction.Y, direction.X);
+
+                    ent.Hit(this, level, direction);
                     OverlapEntities = false;
                     _hitLocation = ent.CenterPosition - Position - _direction * new Vector2(8);
                     return;

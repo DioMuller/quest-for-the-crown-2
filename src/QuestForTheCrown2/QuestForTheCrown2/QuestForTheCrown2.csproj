@@ -57,11 +57,12 @@
     <Compile Include="Entities\Objects\SavePoint.cs" />
     <Compile Include="Entities\Objects\Entrance.cs" />
     <Compile Include="Entities\Weapons\Arrow.cs" />
+    <Compile Include="Entities\Weapons\Boomerang.cs" />
     <Compile Include="Entities\Weapons\Bow.cs" />
     <Compile Include="Entities\Weapons\FireBall.cs" />
     <Compile Include="Entities\Weapons\FireWand.cs" />
-    <Compile Include="Entities\Weapons\IWeapon.cs" />
     <Compile Include="Entities\Weapons\Sword.cs" />
+    <Compile Include="Entities\Weapons\Weapon.cs" />
     <Compile Include="GUI\Components\ComponentList.cs" />
     <Compile Include="GUI\Components\Base\Component.cs" />
     <Compile Include="GUI\Components\Button.cs" />
@@ -133,6 +134,9 @@
     </Content>
     <Content Include="Content\licenses\music.txt" />
     <Content Include="Content\sprites\Characters\skeleton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sprites\Objects\Boomerang.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sprites\Characters\zombie.png">

@@ -54,7 +54,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="direction">The attack direction.</param>
         void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
-            Entity.Weapons[_currentWeapon].Attack(gameTime, level, attackButton, direction);
+            if (Entity.Weapons.Count > 0)
+                Entity.Weapons[_currentWeapon % Entity.Weapons.Count].Attack(gameTime, level, attackButton, direction);
         }
         #endregion
     }

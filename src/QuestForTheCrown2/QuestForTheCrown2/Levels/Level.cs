@@ -78,7 +78,7 @@ namespace QuestForTheCrown2.Levels
         {
             _map.Draw(gameTime, spriteBatch, camera);
 
-            foreach (Entity en in _entities.Where(e => !e.IsInvisible).OrderBy(e => e.Position.Y + e.Size.Y))
+            foreach (Entity en in _entities.Where(e => !e.IsInvisible && !_oldEntities.Contains(e)).OrderBy(e => e.Position.Y + e.Size.Y))
             {
                 en.Draw(gameTime, spriteBatch, camera);
             }

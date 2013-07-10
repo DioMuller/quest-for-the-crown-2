@@ -11,7 +11,7 @@ using System.Text;
 
 namespace QuestForTheCrown2.Entities.Weapons
 {
-    class Sword : Entity, IWeapon
+    class Sword : Weapon
     {
         bool _removeOnComplete, _rotationCompleted;
         float _desiredAngle, _swingedAngle;
@@ -28,12 +28,12 @@ namespace QuestForTheCrown2.Entities.Weapons
             Origin = new Vector2(Size.X / 2, Size.Y * 0.2f);
         }
 
-        public void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
+        public override void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
             if (!attackButton && direction.Length() > 0.8)
                 attackButton = true;
             else if (direction.Length() < 0.4)
-                direction = Entity.CurrentDirection / 5;
+                direction = Parent.CurrentDirection / 5;
 
             if (_currentAttackDirection == direction && attackButton == _currentAttackButton)
                 return;
@@ -65,7 +65,6 @@ namespace QuestForTheCrown2.Entities.Weapons
                 else
                     _swingedAngle = ToRadian(-90);
                 Angle = _swingedAngle;
-                Parent = Entity;
                 level.AddEntity(this);
             }
             else if (_swingedAngle == 0)
@@ -89,13 +88,16 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Update(GameTime gameTime, Level level)
         {
-            Position = Entity.CenterPosition;
+            Position = Parent.CenterPosition;
 
             foreach (var ent in GetCollisionRects().SelectMany(level.CollidesWith).Distinct())
             {
-                if (ent != this && ent != Entity && ent.Health != null)
+                if (ent != this && ent != Parent && ent.Health != null)
                 {
-                    ent.Hit(this, level, Angle);
+                    var direction = VectorHelper.AngleToV2(Angle, 5);
+                    direction = new Vector2(-direction.Y, direction.X);
+
+                    ent.Hit(this, level, direction);
                 }
             }
 
@@ -123,7 +125,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             }
 
             Angle = _desiredAngle + _swingedAngle;
-            Entity.Look(VectorHelper.AngleToV2(Angle + (float)(Math.PI / 2), 1), updateDirection: false);
+            Parent.Look(VectorHelper.AngleToV2(Angle + (float)(Math.PI / 2), 1), updateDirection: false);
         }
 
         private IEnumerable<Rectangle> GetCollisionRects()
@@ -146,7 +148,5 @@ namespace QuestForTheCrown2.Entities.Weapons
         {
             return (float)(Math.PI / 180) * angle;
         }
-
-        public new Entity Entity { get; set; }
     }
 }

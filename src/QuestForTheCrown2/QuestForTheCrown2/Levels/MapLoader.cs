@@ -138,7 +138,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                                 new InputBehavior(Base.InputType.Controller),
                                 new InputBehavior(Base.InputType.Keyboard)
                             );
-                            entity.AddWeapon(new Bow { Entity = entity });
+                            entity.AddWeapon(new Boomerang());
                             entity.CurrentLevel = id;
                             break;
                         case "Enemy":
@@ -148,7 +148,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                                 new SwordAttackBehavior("Player") { MaxDistance = 300 },
                                 new WalkAroundBehavior()
                             );
-                            entity.AddWeapon(new Sword { Entity = entity });
+                            entity.AddWeapon(new Sword());
                             entity.CurrentLevel = id;
                             break;
                         case "Item":

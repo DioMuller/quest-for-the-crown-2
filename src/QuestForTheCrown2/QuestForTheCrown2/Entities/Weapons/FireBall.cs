@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Base;
 using System;
 using System.Collections.Generic;
@@ -54,7 +55,11 @@ namespace QuestForTheCrown2.Entities.Weapons
                 {
                     _entHitTime = gameTime.TotalGameTime;
                     _hitEntity = ent;
-                    ent.Hit(this, level, Angle);
+
+                    var direction = VectorHelper.AngleToV2(Angle, 5);
+                    direction = new Vector2(-direction.Y, direction.X);
+
+                    ent.Hit(this, level, direction);
                     OverlapEntities = false;
                     Position = ent.CenterPosition;
                     Angle = 0;

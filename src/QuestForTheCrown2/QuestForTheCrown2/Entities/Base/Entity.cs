@@ -56,7 +56,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// <summary>
         /// A list of all weapons available to this entity.
         /// </summary>
-        public List<IWeapon> Weapons { get; private set; }
+        public List<Weapon> Weapons { get; private set; }
 
         #region Draw
 
@@ -229,12 +229,24 @@ namespace QuestForTheCrown2.Entities.Base
         /// Attach weapons to the current entity.
         /// </summary>
         /// <param name="weapons"></param>
-        public void AddWeapon(params IWeapon[] weapons)
+        public void AddWeapon(params Weapon[] weapons)
         {
             if (Weapons == null)
-                Weapons = new List<IWeapon>();
+                Weapons = new List<Weapon>();
 
             Weapons.AddRange(weapons);
+
+            foreach (var weapon in weapons)
+                weapon.Parent = this;
+        }
+
+        public void RemoveWeapon(Weapon weapon)
+        {
+            if (Weapons == null)
+                return;
+
+            Weapons.Remove(weapon);
+            weapon.Parent = null;
         }
 
         public virtual void Look(Vector2 direction, bool updateDirection)
@@ -339,7 +351,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// </summary>
         /// <param name="level">Current level</param>
         /// <param name="angle">Projectile angle</param>
-        public virtual void Hit(Entity attacker, Level level, float angle, float force = 5)
+        public virtual void Hit(Entity attacker, Level level, Vector2 direction)
         {
             if (Health == null)
                 return;
@@ -351,8 +363,6 @@ namespace QuestForTheCrown2.Entities.Base
                 level.RemoveEntity(this);
             else
             {
-                var direction = VectorHelper.AngleToV2(angle, force);
-                direction = new Vector2(-direction.Y, direction.X);
                 var oldPos = Position;
                 Position += direction;
                 if (level.CollidesWith(CollisionRect).Any(e => e != this) || level.Map.Collides(CollisionRect))
