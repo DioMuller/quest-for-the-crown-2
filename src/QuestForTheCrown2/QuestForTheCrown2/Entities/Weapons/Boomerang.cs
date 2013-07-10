@@ -8,14 +8,12 @@ using System.Text;
 
 namespace QuestForTheCrown2.Entities.Weapons
 {
-    class Boomerang : Entity, IWeapon
+    class Boomerang : Weapon
     {
         Vector2 _direction;
         TimeSpan _startTime;
         TimeSpan _maxFlyTime = TimeSpan.FromSeconds(0.5);
         float _spinSpeed = (float)Math.PI / 8;
-
-        public new Entity Entity { get; set; }
 
         public Boomerang()
             : base(@"sprites\Boomerang.png", null)
@@ -25,29 +23,29 @@ namespace QuestForTheCrown2.Entities.Weapons
             //Padding = new Rectangle(4, 4, 4, 4);
         }
 
-        public void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
+        public override void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
             if (direction == Vector2.Zero)
-                direction = Entity.CurrentDirection;
+                direction = Parent.CurrentDirection;
 
             if (!level.ContainsEntity(this) && attackButton)
             {
                 _direction = direction;
                 _startTime = gameTime.TotalGameTime;
-                Position = Entity.CenterPosition + _direction;
+                Position = Parent.CenterPosition + _direction;
                 level.AddEntity(this);
             }
         }
 
         public override void Update(GameTime gameTime, Level level)
         {
-            if (Entity == null)
+            if (Parent == null)
             {
                 // Boomerang has no owner!
-                Entity = level.CollidesWith(CollisionRect).FirstOrDefault(e => e.Category == "Player");
-                if (Entity != null)
+                Parent = level.CollidesWith(CollisionRect).FirstOrDefault(e => e.Category == "Player");
+                if (Parent != null)
                 {
-                    Entity.AddWeapon(this);
+                    Parent.AddWeapon(this);
                     level.RemoveEntity(this);
                     OverlapEntities = false;
                 }
@@ -60,7 +58,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             if (flyingBack)
             {
-                _direction = new Vector2(Entity.CenterPosition.X - Position.X, Entity.CenterPosition.Y - Position.Y);
+                _direction = new Vector2(Parent.CenterPosition.X - Position.X, Parent.CenterPosition.Y - Position.Y);
                 _direction.Normalize();
             }
 
@@ -72,7 +70,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             {
                 if (flyingBack)
                 {
-                    Entity.RemoveWeapon(this);
+                    Parent.RemoveWeapon(this);
                     OverlapEntities = true;
                     return;
                 }
@@ -87,7 +85,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 if (ent == this)
                     continue;
 
-                if (ent == Entity)
+                if (ent == Parent)
                 {
                     if (flyingBack)
                     {

@@ -1,16 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Levels;
-using QuestForTheCrown2.Levels.Mapping;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace QuestForTheCrown2.Entities.Weapons
 {
-    public interface IWeapon
+    public abstract class Weapon : Entity
     {
-        /// <summary>
-        /// The entity in which this weapon is attached and will operate on.
-        /// </summary>
-        Entity Entity { get; set; }
+        public Weapon(string spriteSheetPath, Point? frameSize)
+            : base(spriteSheetPath, frameSize)
+        {
+        }
 
         /// <summary>
         /// Perform the weapon attack.
@@ -19,6 +22,6 @@ namespace QuestForTheCrown2.Entities.Weapons
         /// <param name="level">Current entity level.</param>
         /// <param name="attackButton">True when the attack button is pressed.</param>
         /// <param name="direction">The direction of the attack.</param>
-        void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction);
+        public abstract void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction);
     }
 }

@@ -61,8 +61,8 @@
     <Compile Include="Entities\Weapons\Bow.cs" />
     <Compile Include="Entities\Weapons\FireBall.cs" />
     <Compile Include="Entities\Weapons\FireWand.cs" />
-    <Compile Include="Entities\Weapons\IWeapon.cs" />
     <Compile Include="Entities\Weapons\Sword.cs" />
+    <Compile Include="Entities\Weapons\Weapon.cs" />
     <Compile Include="GUI\Components\ComponentList.cs" />
     <Compile Include="GUI\Components\Base\Component.cs" />
     <Compile Include="GUI\Components\Button.cs" />

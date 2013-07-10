@@ -11,7 +11,7 @@ using System.Text;
 
 namespace QuestForTheCrown2.Entities.Weapons
 {
-    class FireWand : Entity, IWeapon
+    class FireWand : Weapon
     {
         bool _oldAttackButton;
         int _timeFromCreation;
@@ -21,12 +21,9 @@ namespace QuestForTheCrown2.Entities.Weapons
         {
         }
 
-        public new Entity Entity { get; set; }
-
-        public void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
+        public override void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
-            Parent = Entity;
-            direction = Entity.CurrentDirection;
+            direction = Parent.CurrentDirection;
             
             if (Math.Abs(direction.X) > Math.Abs(direction.Y))
             {
@@ -44,7 +41,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             }
 
             if (attackButton && !_oldAttackButton)
-                level.AddEntity(new FireBall(direction) { Position = Entity.CenterPosition, Speed = new Vector2(5 * 32), Parent = Entity });
+                level.AddEntity(new FireBall(direction) { Position = Parent.CenterPosition, Speed = new Vector2(5 * 32), Parent = Parent });
             _oldAttackButton = attackButton;
         }
     }

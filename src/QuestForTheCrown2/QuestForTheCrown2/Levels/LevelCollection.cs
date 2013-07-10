@@ -91,6 +91,12 @@ namespace QuestForTheCrown2.Levels
         /// <param name="direction">Direction to teleport.</param>
         internal void GoToNeighbor(Entity entity, Level level, Direction direction)
         {
+            if (entity.Weapons != null)
+            {
+                foreach (var weapon in entity.Weapons)
+                    level.RemoveEntity(weapon);
+            }
+
             int neighbor = level.GetNeighbor(direction);
 
             if( neighbor == -1 )

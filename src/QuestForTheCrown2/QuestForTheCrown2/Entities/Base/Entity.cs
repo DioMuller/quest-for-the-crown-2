@@ -56,7 +56,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// <summary>
         /// A list of all weapons available to this entity.
         /// </summary>
-        public List<IWeapon> Weapons { get; private set; }
+        public List<Weapon> Weapons { get; private set; }
 
         #region Draw
 
@@ -229,21 +229,24 @@ namespace QuestForTheCrown2.Entities.Base
         /// Attach weapons to the current entity.
         /// </summary>
         /// <param name="weapons"></param>
-        public void AddWeapon(params IWeapon[] weapons)
+        public void AddWeapon(params Weapon[] weapons)
         {
             if (Weapons == null)
-                Weapons = new List<IWeapon>();
+                Weapons = new List<Weapon>();
 
             Weapons.AddRange(weapons);
+
+            foreach (var weapon in weapons)
+                weapon.Parent = this;
         }
 
-        public void RemoveWeapon(IWeapon weapon)
+        public void RemoveWeapon(Weapon weapon)
         {
             if (Weapons == null)
                 return;
 
             Weapons.Remove(weapon);
-            weapon.Entity = null;
+            weapon.Parent = null;
         }
 
         public virtual void Look(Vector2 direction, bool updateDirection)
