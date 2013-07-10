@@ -45,7 +45,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             Angle = (float)(Math.Atan2(direction.X, -direction.Y) + _spriteAngle);
 
             if (attackButton && !_currentAttackButton)
-                level.AddEntity(new Arrow(direction * -1) { Position = Entity.CenterPosition, Speed = new Vector2(5 * 32), Parent = Entity });
+                level.AddEntity(new Arrow(direction * -1) { Position = Entity.CenterPosition, Parent = Entity });
             _currentAttackButton = attackButton;
         }
 
