@@ -95,7 +95,10 @@ namespace QuestForTheCrown2.Entities.Weapons
             {
                 if (ent != this && ent != Entity && ent.Health != null)
                 {
-                    ent.Hit(this, level, Angle);
+                    var direction = VectorHelper.AngleToV2(Angle, 5);
+                    direction = new Vector2(-direction.Y, direction.X);
+
+                    ent.Hit(this, level, direction);
                 }
             }
 

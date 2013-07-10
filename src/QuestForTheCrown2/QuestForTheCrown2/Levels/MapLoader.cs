@@ -137,7 +137,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                                 new InputBehavior(Base.InputType.Controller),
                                 new InputBehavior(Base.InputType.Keyboard)
                             );
-                            entity.AddWeapon(new Bow { Entity = entity });
+                            entity.AddWeapon(new Boomerang { Entity = entity });
                             entity.CurrentLevel = id;
                             break;
                         case "Enemy":

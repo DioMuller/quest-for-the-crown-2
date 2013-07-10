@@ -237,6 +237,15 @@ namespace QuestForTheCrown2.Entities.Base
             Weapons.AddRange(weapons);
         }
 
+        public void RemoveWeapon(IWeapon weapon)
+        {
+            if (Weapons == null)
+                return;
+
+            Weapons.Remove(weapon);
+            weapon.Entity = null;
+        }
+
         public virtual void Look(Vector2 direction, bool updateDirection)
         {
             if (direction == Vector2.Zero)
@@ -339,7 +348,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// </summary>
         /// <param name="level">Current level</param>
         /// <param name="angle">Projectile angle</param>
-        public virtual void Hit(Entity attacker, Level level, float angle, float force = 5)
+        public virtual void Hit(Entity attacker, Level level, Vector2 direction)
         {
             if (Health == null)
                 return;
@@ -351,8 +360,6 @@ namespace QuestForTheCrown2.Entities.Base
                 level.RemoveEntity(this);
             else
             {
-                var direction = VectorHelper.AngleToV2(angle, force);
-                direction = new Vector2(-direction.Y, direction.X);
                 var oldPos = Position;
                 Position += direction;
                 if (level.CollidesWith(CollisionRect).Any(e => e != this) || level.Map.Collides(CollisionRect))

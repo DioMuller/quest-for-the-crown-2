@@ -57,6 +57,7 @@
     <Compile Include="Entities\Objects\SavePoint.cs" />
     <Compile Include="Entities\Objects\Entrance.cs" />
     <Compile Include="Entities\Weapons\Arrow.cs" />
+    <Compile Include="Entities\Weapons\Boomerang.cs" />
     <Compile Include="Entities\Weapons\Bow.cs" />
     <Compile Include="Entities\Weapons\FireBall.cs" />
     <Compile Include="Entities\Weapons\FireWand.cs" />
@@ -135,8 +136,11 @@
     <Content Include="Content\sprites\Arrow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\sprites\Boomerang.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\sprites\Bow.png">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sound\boomerang.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
