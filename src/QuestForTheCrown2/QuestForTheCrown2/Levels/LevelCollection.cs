@@ -128,7 +128,7 @@ namespace QuestForTheCrown2.Levels
             newLevel.AddEntity(entity);
 
             //TODO: Load this from an XML file, maybe?
-            entity.Position = new Vector2(newLevel.Map.PixelSize.X / 2, newLevel.Map.PixelSize.Y - entity.Size.Y - 1);
+            entity.Position = new Vector2(newLevel.Map.PixelSize.X / 2 - 20, newLevel.Map.PixelSize.Y - entity.Size.Y - 1);
         }
 
         /// <summary>
