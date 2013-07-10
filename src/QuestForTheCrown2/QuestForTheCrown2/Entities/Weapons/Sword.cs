@@ -25,7 +25,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             : base(@"sprites\Objects\Sword.png", null)
         {
             OverlapEntities = true;
-            Origin = new Vector2(Size.X / 2, Size.Y * 0.2f);
+            Origin = new Vector2(Size.X / 2, Size.Y * 0.0f);
         }
 
         public override void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
