@@ -26,14 +26,14 @@ namespace QuestForTheCrown2.Entities.Characters
             Category = "Enemy";
 
             TimeSpan stoppedFrameDuration = TimeSpan.FromMilliseconds(300);
-            SpriteSheet.AddAnimation("stopped", "down", line: 3, frameDuration: stoppedFrameDuration);
-            SpriteSheet.AddAnimation("stopped", "left", line: 2, frameDuration: stoppedFrameDuration);
+            SpriteSheet.AddAnimation("stopped", "left", line: 3, frameDuration: stoppedFrameDuration);
+            SpriteSheet.AddAnimation("stopped", "down", line: 2, frameDuration: stoppedFrameDuration);
             SpriteSheet.AddAnimation("stopped", "right", line: 1, frameDuration: stoppedFrameDuration);
             SpriteSheet.AddAnimation("stopped", "up", line: 0, frameDuration: stoppedFrameDuration);
 
             TimeSpan walkFrameDuration = TimeSpan.FromMilliseconds(100);
-            SpriteSheet.AddAnimation("walking", "down", line: 3, frameDuration: walkFrameDuration);
-            SpriteSheet.AddAnimation("walking", "left", line: 2, frameDuration: walkFrameDuration);
+            SpriteSheet.AddAnimation("walking", "left", line: 3, frameDuration: walkFrameDuration);
+            SpriteSheet.AddAnimation("walking", "down", line: 2, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("walking", "right", line: 1, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("walking", "up", line: 0, frameDuration: walkFrameDuration);
 

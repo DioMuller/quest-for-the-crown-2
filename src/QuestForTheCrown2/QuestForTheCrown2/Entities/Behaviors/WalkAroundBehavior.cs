@@ -20,13 +20,20 @@ namespace QuestForTheCrown2.Entities.Behaviors
         TimeSpan _lastStopTime;
         TimeSpan _maxWalkTime;
 
+        public TimeSpan MaxStoppedTime { get; set; }
+
+        public WalkAroundBehavior()
+        {
+            MaxStoppedTime = TimeSpan.MaxValue;
+        }
+
         #region Behavior
         public override bool IsActive(GameTime gameTime, Level level)
         {
             if (_random == null)
             {
                 _random = new Random((int)(unchecked(Environment.TickCount + Entity.Position.X * Entity.Position.Y)));
-                _maxStoppedTime = TimeSpan.FromSeconds(2 +_random.NextDouble() * 2);
+                _maxStoppedTime = TimeSpan.FromSeconds(Math.Min(2 +_random.NextDouble() * 2, MaxStoppedTime.TotalSeconds));
                 _maxWalkTime = TimeSpan.FromSeconds(4 + _random.NextDouble() * 4);
             }
 
