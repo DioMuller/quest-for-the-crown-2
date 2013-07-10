@@ -17,7 +17,7 @@ namespace QuestForTheCrown2.Entities.Weapons
         TimeSpan _timeFromCreation;
 
         public FireBall(Vector2 direction)
-            : base(@"sprites\FireBall.png", null)
+            : base(@"sprites\Objects\FireBall.png", null)
         {
             _direction = direction;
             OverlapEntities = true;

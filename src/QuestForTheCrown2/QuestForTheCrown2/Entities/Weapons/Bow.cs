@@ -19,7 +19,7 @@ namespace QuestForTheCrown2.Entities.Weapons
         bool _currentAttackButton;
 
         public Bow()
-            : base(@"sprites\Bow.png", null)
+            : base(@"sprites\Objects\Bow.png", null)
         {
             OverlapEntities = true;
             Origin = new Vector2(Size.X / 2, Size.Y / 2);

@@ -2,31 +2,31 @@
 <collection>
   <levels>
 	<!-- Overworld -->
-	<level id="1" neighbors="0,0,2,4" path="Content/maps/Overworld/Overworld01.tmx"/>
-  <level id="2" neighbors="1,0,3,5" path="Content/maps/Overworld/Overworld02.tmx"/>
-  <level id="3" neighbors="2,0,0,7" path="Content/maps/Overworld/Overworld03.tmx"/>
-	<level id="4" neighbors="0,1,5,6" path="Content/maps/Overworld/Overworld04.tmx"/>
-	<level id="5" neighbors="4,2,7,0" path="Content/maps/Overworld/Overworld05.tmx"/>
-	<level id="6" neighbors="0,4,8,0" path="Content/maps/Overworld/Overworld06.tmx"/>
-	<level id="7" neighbors="5,3,0,0" path="Content/maps/Overworld/Overworld07.tmx"/>
-	<level id="8" neighbors="6,5,9,0" path="Content/maps/Overworld/Overworld08.tmx"/>
-	<level id="9" neighbors="8,0,0,0" path="Content/maps/Overworld/Overworld09.tmx"/>
+	<level id="1" neighbors="0,0,2,4" path="Content/maps/Overworld/Overworld01.tmx" music="Heroic Age"/>
+  <level id="2" neighbors="1,0,3,5" path="Content/maps/Overworld/Overworld02.tmx"  music="Heroic Age"/>
+  <level id="3" neighbors="2,0,0,7" path="Content/maps/Overworld/Overworld03.tmx"  music="Heroic Age"/>
+	<level id="4" neighbors="0,1,5,6" path="Content/maps/Overworld/Overworld04.tmx" music="Heroic Age"/>
+	<level id="5" neighbors="4,2,7,0" path="Content/maps/Overworld/Overworld05.tmx" music="Heroic Age"/>
+	<level id="6" neighbors="0,4,8,0" path="Content/maps/Overworld/Overworld06.tmx" music="Heroic Age"/>
+	<level id="7" neighbors="5,3,0,0" path="Content/maps/Overworld/Overworld07.tmx" music="Heroic Age"/>
+	<level id="8" neighbors="6,5,9,0" path="Content/maps/Overworld/Overworld08.tmx" music="Heroic Age"/>
+	<level id="9" neighbors="8,0,0,0" path="Content/maps/Overworld/Overworld09.tmx" music="Heroic Age"/>
 	<!-- Beach Cave -->
-	<level id="10" neighbors="0,11,0,-1" path="Content/maps/BeachCave/BeachCave01.tmx"/>
-  <level id="11" neighbors="0,12,13,10" path="Content/maps/BeachCave/BeachCave02.tmx"/>
-	<level id="12" neighbors="0,0,0,11" path="Content/maps/BeachCave/BeachCave03.tmx"/>
-	<level id="13" neighbors="11,14,0,0" path="Content/maps/BeachCave/BeachCave04.tmx"/>
-	<level id="14" neighbors="0,15,0,13" path="Content/maps/BeachCave/BeachCave05.tmx"/>
-	<level id="15" neighbors="0,0,0,14" path="Content/maps/BeachCave/BeachCave06.tmx"/>
+	<level id="10" neighbors="0,11,0,-1" path="Content/maps/BeachCave/BeachCave01.tmx" music="Five Armies"/>
+  <level id="11" neighbors="0,12,13,10" path="Content/maps/BeachCave/BeachCave02.tmx" music="Five Armies"/>
+	<level id="12" neighbors="0,0,0,11" path="Content/maps/BeachCave/BeachCave03.tmx" music="Five Armies"/>
+	<level id="13" neighbors="11,14,0,0" path="Content/maps/BeachCave/BeachCave04.tmx" music="Five Armies"/>
+	<level id="14" neighbors="0,15,0,13" path="Content/maps/BeachCave/BeachCave05.tmx" music="Five Armies"/>
+	<level id="15" neighbors="0,0,0,14" path="Content/maps/BeachCave/BeachCave06.tmx" music="Five Armies"/>
 	<!-- Wizards Tomb -->
-	<level id="16" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb01.tmx"/>
-	<level id="17" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb02.tmx"/>
-	<level id="18" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb03.tmx"/>
-	<level id="19" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb04.tmx"/>
-	<level id="20" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb05.tmx"/>
-	<level id="21" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb06.tmx"/>
-	<level id="22" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb07.tmx"/>
-	<level id="23" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb08.tmx"/>
-	<level id="23" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb09.tmx"/>
+	<level id="16" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb01.tmx" music="Five Armies"/>
+	<level id="17" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb02.tmx" music="Five Armies"/>
+	<level id="18" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb03.tmx" music="Five Armies"/>
+	<level id="19" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb04.tmx" music="Five Armies"/>
+	<level id="20" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb05.tmx" music="Five Armies"/>
+	<level id="21" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb06.tmx" music="Five Armies"/>
+	<level id="22" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb07.tmx" music="Five Armies"/>
+	<level id="23" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb08.tmx" music="Five Armies"/>
+	<level id="23" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb09.tmx" music="Five Armies"/>
   </levels>
 </collection>

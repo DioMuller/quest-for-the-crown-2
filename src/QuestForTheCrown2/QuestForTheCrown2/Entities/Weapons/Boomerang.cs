@@ -16,7 +16,7 @@ namespace QuestForTheCrown2.Entities.Weapons
         float _spinSpeed = (float)Math.PI / 8;
 
         public Boomerang()
-            : base(@"sprites\Boomerang.png", null)
+            : base(@"sprites\Objects\Boomerang.png", null)
         {
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
             Speed = new Vector2(32 * 8);
