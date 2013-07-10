@@ -12,7 +12,7 @@ namespace QuestForTheCrown2.Entities.Objects
     /// </summary>
     public class Item : Entity
     {
-        public Item() : base(@"sprites/Empty.png", new Point(32, 32))
+        public Item() : base(@"sprites/Objects/Empty.png", new Point(32, 32))
         {
             OverlapEntities = false;
             Health = null;

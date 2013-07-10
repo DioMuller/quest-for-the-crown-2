@@ -132,11 +132,17 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\licenses\music.txt" />
-    <Content Include="Content\sprites\Arrow.png">
+    <Content Include="Content\sprites\Characters\skeleton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\sprites\Bow.png">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Content\sprites\Characters\zombie.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sprites\Objects\Arrow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sprites\Objects\Bow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sound\boomerang.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -165,16 +171,16 @@
     <Content Include="Content\sprites\Brendan.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\sprites\Empty.png">
+    <Content Include="Content\sprites\Objects\Empty.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\sprites\FireBall.png">
+    <Content Include="Content\sprites\Objects\FireBall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sprites\MainCharacter.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\sprites\Sword.png">
+    <Content Include="Content\sprites\Objects\Sword.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\tiles\dungeon_01.png">
@@ -230,6 +236,7 @@
     </Content>
     <None Include="Content\maps\QuestForTheCrown.maps">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <Content Include="Content\maps\WizardsTomb\WizardsTomb01.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

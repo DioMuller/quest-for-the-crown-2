@@ -23,7 +23,7 @@ namespace QuestForTheCrown2.Entities.Weapons
         Vector2 _collisionDirection;
 
         public Arrow(Vector2 direction)
-            : base(@"sprites\Arrow.png", null)
+            : base(@"sprites\Objects\Arrow.png", null)
         {
             _direction = direction;
             OverlapEntities = true;

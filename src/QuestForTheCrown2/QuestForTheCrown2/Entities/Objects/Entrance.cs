@@ -17,7 +17,7 @@ namespace QuestForTheCrown2.Entities.Objects
 
         public int Dungeon { get; private set; }
 
-        public Entrance(int dungeon) : base(@"sprites/Empty.png", new Point(32, 32))
+        public Entrance(int dungeon) : base(@"sprites/Objects/Empty.png", new Point(32, 32))
         {
             IsInvisible = true;
             Dungeon = dungeon;  

@@ -13,7 +13,7 @@ namespace QuestForTheCrown2.Entities.Objects
     public class SavePoint : Entity
     {
         public SavePoint()
-            : base(@"sprites/Empty.png", new Point(32, 32))
+            : base(@"sprites/Objects/Empty.png", new Point(32, 32))
         {
             OverlapEntities = true;
             Health = null;

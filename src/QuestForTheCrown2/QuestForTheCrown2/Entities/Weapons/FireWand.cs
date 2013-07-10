@@ -17,7 +17,7 @@ namespace QuestForTheCrown2.Entities.Weapons
         int _timeFromCreation;
 
         public FireWand()
-            : base(@"sprites\Sword.png", null)
+            : base(@"sprites\Objects\Sword.png", null)
         {
         }
 
