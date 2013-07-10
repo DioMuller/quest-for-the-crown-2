@@ -174,6 +174,16 @@ namespace QuestForTheCrown2.Levels.Mapping
                                     );
                                     entity.CurrentLevel = id;
                                     break;
+                                case "Skeleton":
+                                    entity = new Skeleton { Position = new Vector2(x, y), Category = "Enemy" };
+                                    entity.AddBehavior(
+                                        new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
+                                        new HitOnTouchBehavior(e => e.Category == "Player"),
+                                        new FollowBehavior("Player", 5) { MaxDistance = float.MaxValue }//,
+                                        //new WalkAroundBehavior { MaxStoppedTime = TimeSpan.FromSeconds(2) }
+                                    );
+                                    entity.CurrentLevel = id;
+                                    break;
                                 default:
                                     entity = new Enemy1 { Position = new Vector2(x, y), Category = "Enemy" };
                                     entity.AddBehavior(
