@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using QuestForTheCrown2.Entities.Characters;
 using System.Text.RegularExpressions;
+using QuestForTheCrown2.Base;
 
 namespace QuestForTheCrown2.Levels
 {
@@ -49,6 +50,8 @@ namespace QuestForTheCrown2.Levels
         }
 
         internal LevelCollection Parent { get; set; }
+
+        public string BGM { get; set; }
         #endregion Properties
 
         #region Constructor
@@ -87,6 +90,8 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Update(GameTime gameTime)
         {
+            SoundManager.PlayBGM(BGM);
+
             if (Players.Any(p => p.LevelTransitionPercent != 0))
                 return;
 
