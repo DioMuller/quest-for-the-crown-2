@@ -177,6 +177,46 @@ namespace QuestForTheCrown2.Base
         }
 
         /// <summary>
+        /// Is Next Weapon Button pressed?
+        /// </summary>
+        public bool NextWeapon
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case InputType.Controller:
+                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.RightShoulder) || GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.DPadRight);
+                    case InputType.Keyboard:
+                    case InputType.KeyboardAndMouse:
+                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.E);
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Is Previous Weapon Button pressed?
+        /// </summary>
+        public bool PreviousWeapon
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case InputType.Controller:
+                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.LeftShoulder) || GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.DPadLeft);
+                    case InputType.Keyboard:
+                    case InputType.KeyboardAndMouse:
+                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Q);
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        /// <summary>
         /// Is input connected?
         /// </summary>
         public bool IsConnected
