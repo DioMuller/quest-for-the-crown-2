@@ -61,6 +61,8 @@ namespace QuestForTheCrown2
 
             _currentState = GameState.MainMenu;
 
+            OptionsManager.LoadOptions();
+
             Content.RootDirectory = "Content";
         }
 

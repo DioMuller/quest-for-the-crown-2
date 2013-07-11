@@ -66,7 +66,7 @@ namespace QuestForTheCrown2.Base
         /// </summary>
         public static void LoadOptions()
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Domain | IsolatedStorageScope.Assembly, null, null))
             {
                 if( !store.FileExists(OptionsFile) )
                 {
@@ -98,32 +98,33 @@ namespace QuestForTheCrown2.Base
 
         public static void SaveOptions()
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Domain | IsolatedStorageScope.Assembly, null, null))
             {
                 if (CurrentOptions == null)
                 {
                     CurrentOptions = new Options();
                 }
 
-                List<string> content = new List<string>();
+                StringBuilder content = new StringBuilder();
 
-                content.Add("<options>");
+                content.AppendLine("<options>");
 
-                content.Add("<ResolutionWidth>" + CurrentOptions.ResolutionWidth.ToString() + "</ResolutionWidth>");
-                content.Add("<ResolutionHeight>" + CurrentOptions.ResolutionHeight.ToString() + "</ResolutionHeight>");
-                content.Add("<Fullscreen>" + CurrentOptions.Fullscreen.ToString() + "</Fullscreen>");
-                content.Add("<InvertAim>" + CurrentOptions.InvertAim.ToString() + "</InvertAim>");
+                content.AppendLine("<ResolutionWidth>" + CurrentOptions.ResolutionWidth.ToString() + "</ResolutionWidth>");
+                content.AppendLine("<ResolutionHeight>" + CurrentOptions.ResolutionHeight.ToString() + "</ResolutionHeight>");
+                content.AppendLine("<Fullscreen>" + CurrentOptions.Fullscreen.ToString() + "</Fullscreen>");
+                content.AppendLine("<InvertAim>" + CurrentOptions.InvertAim.ToString() + "</InvertAim>");
 
-                content.Add("</options>");
+                content.AppendLine("</options>");
 
-                if (store.FileExists(OptionsFile)) store.DeleteFile(OptionsFile);
-
-                using (StreamWriter sw = new StreamWriter(store.OpenFile(OptionsFile, FileMode.Open)))
+                if (store.FileExists(OptionsFile))
                 {
-                    foreach( string st in content )
-                    {
-                        sw.WriteLine(st);
-                    }
+                    store.CopyFile(OptionsFile, OptionsFile + ".bkp");
+                    store.DeleteFile(OptionsFile);
+                }
+
+                using (StreamWriter sw = new StreamWriter(store.OpenFile(OptionsFile, FileMode.Create)))
+                {
+                    sw.WriteLine(content.ToString());
                 }
             }
         }
