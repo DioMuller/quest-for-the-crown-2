@@ -6,7 +6,7 @@
   <level id="2" neighbors="1,0,3,5" path="Content/maps/Overworld/Overworld02.tmx"  music="Heroic Age"/>
   <level id="3" neighbors="2,0,0,7" path="Content/maps/Overworld/Overworld03.tmx"  music="Heroic Age"/>
 	<level id="4" neighbors="0,1,5,6" path="Content/maps/Overworld/Overworld04.tmx" music="Heroic Age"/>
-	<level id="5" neighbors="4,2,7,0" path="Content/maps/Overworld/Overworld05.tmx" music="Heroic Age"/>
+	<level id="5" neighbors="4,2,7,8" path="Content/maps/Overworld/Overworld05.tmx" music="Heroic Age"/>
 	<level id="6" neighbors="0,4,8,0" path="Content/maps/Overworld/Overworld06.tmx" music="Heroic Age"/>
 	<level id="7" neighbors="5,3,0,0" path="Content/maps/Overworld/Overworld07.tmx" music="Heroic Age"/>
 	<level id="8" neighbors="6,5,9,0" path="Content/maps/Overworld/Overworld08.tmx" music="Heroic Age"/>
