@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Base\Input.cs" />
+    <Compile Include="Base\OptionsManager.cs" />
     <Compile Include="Base\SoundManager.cs" />
     <Compile Include="Base\SoundReference.cs" />
     <Compile Include="Base\VectorHelper.cs" />
