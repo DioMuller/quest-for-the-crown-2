@@ -77,6 +77,7 @@
     <Compile Include="GUI\Components\Button.cs" />
     <Compile Include="GUI\Components\GameGUI.cs" />
     <Compile Include="GUI\Components\SelectionBox.cs" />
+    <Compile Include="GUI\Screens\OptionsScreen.cs" />
     <Compile Include="GUI\Screens\GameOverScreen.cs" />
     <Compile Include="GUI\Screens\CreditsScreen.cs" />
     <Compile Include="Levels\Level.cs" />
@@ -131,6 +132,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\gui\health_part.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\images\arrow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\images\gameover.png">

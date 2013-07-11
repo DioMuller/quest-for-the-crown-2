@@ -118,7 +118,6 @@ namespace QuestForTheCrown2.Base
 
                 if (store.FileExists(OptionsFile))
                 {
-                    store.CopyFile(OptionsFile, OptionsFile + ".bkp");
                     store.DeleteFile(OptionsFile);
                 }
 

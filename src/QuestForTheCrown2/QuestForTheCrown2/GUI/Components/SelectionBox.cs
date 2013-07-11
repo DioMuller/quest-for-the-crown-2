@@ -11,7 +11,17 @@ namespace QuestForTheCrown2.GUI.Components
     class SelectionBox : Component
     {
         #region Attributes
-        private List<string> _options { get; set; }
+        /// <summary>
+        /// Options
+        /// </summary>
+        private List<string> _options;
+
+        /// <summary>
+        /// Current Selection
+        /// </summary>
+        private int _current;
+
+        private Texture2D _arrow;
         #endregion Attributes
 
         #region Properties
@@ -28,7 +38,7 @@ namespace QuestForTheCrown2.GUI.Components
 
         #region Constructor
         public SelectionBox(string label)
-            : base()
+            : base(label)
         {
             Font = GameContent.LoadContent<SpriteFont>("fonts/DefaultFont");
             Label = label;
@@ -43,6 +53,11 @@ namespace QuestForTheCrown2.GUI.Components
                     SelectNext();
                 }
             });
+
+            _options = new List<string>();
+            _current = -1;
+
+            _arrow = GameContent.LoadContent<Texture2D>("images/arrow.png");
         }
         #endregion Constructor
 
@@ -54,11 +69,56 @@ namespace QuestForTheCrown2.GUI.Components
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+
+            #region Draw Label
             Color fontColor = Selected ? Color.Black : Color.White;
             Vector2 size = Font.MeasureString(Label);
-            Vector2 fontPosition = new Vector2( Position.Center.X - size.X/2 , Position.Center.Y - size.Y/2);
-
+            Vector2 fontPosition = new Vector2( Position.X + 20 , Position.Center.Y - size.Y/2);
             spriteBatch.DrawString(Font, Label, fontPosition, fontColor);
+            #endregion Draw Label
+
+            #region Draw Option
+            Rectangle position = new Rectangle(Position.Center.X, Position.Y, Position.Width/2, Position.Height);
+
+            if( _current != 0 ) spriteBatch.Draw( _arrow, new Rectangle( position.X, position.Y, 32, 32 ), fontColor);
+            if (_current != _options.Count - 1) spriteBatch.Draw(_arrow, new Rectangle(position.X + position.Width - 32, position.Y, 32, 32), null, fontColor, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f );
+
+
+            if(  _current >= 0 )
+            {
+                int textSize = Convert.ToInt32(Font.MeasureString( _options[_current] ).X);
+                Vector2 textPosition = new Vector2(position.Center.X - (textSize / 2), position.Y);
+                spriteBatch.DrawString(Font, _options[_current], textPosition, fontColor);
+            }
+            #endregion Draw Option
+        }
+
+        public void AddOption(string option)
+        {
+            _options.Add(option);
+
+            if( _options.Count == 1 ) _current = 0;
+        }
+
+        public void SelectOption(string option)
+        {
+            _current = _options.IndexOf(option);
+        }
+
+        private void SelectPrevious()
+        {
+            if( _current > 0 )
+            {
+                _current--;
+            }
+        }
+
+        private void SelectNext()
+        {
+            if( _current < _options.Count - 1 )
+            {
+                _current++;
+            }
         }
         #endregion Methods
     }

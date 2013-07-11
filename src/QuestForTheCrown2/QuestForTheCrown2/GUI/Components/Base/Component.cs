@@ -36,6 +36,11 @@ namespace QuestForTheCrown2.GUI.Components
         /// Selected texture.
         /// </summary>
         public Texture2D SelectedTexture { get; set; }
+
+        /// <summary>
+        /// Component identifier.
+        /// </summary>
+        public string Name { get; private set; }
         #endregion Properties
 
         #region Delegates
@@ -48,9 +53,10 @@ namespace QuestForTheCrown2.GUI.Components
         /// <summary>
         /// Creates component and initializes the texture with a default value.
         /// </summary>
-        public Component()
+        public Component(string name)
         {
             SelectedTexture = GameContent.LoadContent<Texture2D>("images/menuselected.png");
+            Name = name;
         }
         #endregion Constructor
         

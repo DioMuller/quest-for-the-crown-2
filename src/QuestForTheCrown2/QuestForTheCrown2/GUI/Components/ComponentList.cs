@@ -77,17 +77,33 @@ namespace QuestForTheCrown2.GUI.Components
             {
                 if( _components.Count > 0 )
                 {
-                    _components[_selectedOption].Select();
+                    if( _components[_selectedOption].Select != null )
+                    {
+                        _components[_selectedOption].Select();
+                    }
                 }
             }
 
+            float x = _input.Movement.X;
             float y = _input.Movement.Y;
+
             if (y != 0 && _timeout <= 0)
             {
                 _timeout = 200;
 
                 if( y < 0f ) OptionUp();
                 else OptionDown();
+                SoundManager.PlaySound("select");
+            }
+            else if (x != 0 && _timeout <= 0)
+            {
+                _timeout = 200;
+
+                if( _components[_selectedOption].SelectionChanged != null )
+                {
+                    _components[_selectedOption].SelectionChanged( x );
+                }
+
                 SoundManager.PlaySound("select");
             }
             else
