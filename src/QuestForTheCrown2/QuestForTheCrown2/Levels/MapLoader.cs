@@ -164,6 +164,16 @@ namespace QuestForTheCrown2.Levels.Mapping
                                     );
                                     entity.CurrentLevel = id;
                                     break;
+                                case "Bat":
+                                    entity = new Bat { Position = new Vector2(x, y), Category = "Enemy" };
+                                    entity.AddBehavior(
+                                        //new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
+                                        new HitOnTouchBehavior(e => e.Category == "Player"),
+                                        new TouchAndDodgeBehavior("Player", 32 * 2)
+                                    );
+                                    entity.CurrentLevel = id;
+                                    break;
+
                                 case "Zombie":
                                     entity = new Zombie { Position = new Vector2(x, y), Category = "Enemy" };
                                     entity.AddBehavior(
