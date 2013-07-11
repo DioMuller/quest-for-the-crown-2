@@ -135,6 +135,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                         case "Player":
                             entity = new Player { Position = new Vector2(x, y), Category = "Player" };
                             entity.AddBehavior(
+                                new BlinkBehavior(TimeSpan.FromSeconds(1)),
                                 new InputBehavior(Base.InputType.Controller),
                                 new InputBehavior(Base.InputType.Keyboard)
                             );
@@ -142,11 +143,12 @@ namespace QuestForTheCrown2.Levels.Mapping
                             entity.CurrentLevel = id;
                             break;
                         case "Enemy":
-                            switch( objname )
+                            switch (objname)
                             {
                                 case "Crab":
                                     entity = new Crab { Position = new Vector2(x, y), Category = "Enemy" };
                                     entity.AddBehavior(
+                                        new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
                                         new HitOnTouchBehavior(),
                                         new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 }
                                     );
@@ -155,14 +157,47 @@ namespace QuestForTheCrown2.Levels.Mapping
                                 case "Slime":
                                     entity = new Slime { Position = new Vector2(x, y), Category = "Enemy" };
                                     entity.AddBehavior(
-                                        new HitOnTouchBehavior(),
-                                        new FollowBehavior("Player", 5) { MaxDistance = 32 * 2 }
+                                        //new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
+                                        new HitOnTouchBehavior(e => e.Category == "Player"),
+                                        new FollowBehavior("Player", 5) { MaxDistance = 32 * 2 },
+                                        new WalkAroundBehavior()
                                     );
                                     entity.CurrentLevel = id;
                                     break;
-                                default: 
+                                case "Bat":
+                                    entity = new Bat { Position = new Vector2(x, y), Category = "Enemy" };
+                                    entity.AddBehavior(
+                                        //new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
+                                        new HitOnTouchBehavior(e => e.Category == "Player"),
+                                        new TouchAndDodgeBehavior("Player", 32 * 2)
+                                    );
+                                    entity.CurrentLevel = id;
+                                    break;
+
+                                case "Zombie":
+                                    entity = new Zombie { Position = new Vector2(x, y), Category = "Enemy" };
+                                    entity.AddBehavior(
+                                        new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
+                                        new HitOnTouchBehavior(e => e.Category == "Player"),
+                                        new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 },
+                                        new WalkAroundBehavior { MaxStoppedTime = TimeSpan.Zero }
+                                    );
+                                    entity.CurrentLevel = id;
+                                    break;
+                                case "Skeleton":
+                                    entity = new Skeleton { Position = new Vector2(x, y), Category = "Enemy" };
+                                    entity.AddBehavior(
+                                        new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
+                                        new HitOnTouchBehavior(e => e.Category == "Player"),
+                                        new FollowBehavior("Player", 5) { MaxDistance = float.MaxValue }//,
+                                        //new WalkAroundBehavior { MaxStoppedTime = TimeSpan.FromSeconds(2) }
+                                    );
+                                    entity.CurrentLevel = id;
+                                    break;
+                                default:
                                     entity = new Enemy1 { Position = new Vector2(x, y), Category = "Enemy" };
                                     entity.AddBehavior(
+                                        new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
                                         new SwordAttackBehavior("Player") { MaxDistance = 300 },
                                         new WalkAroundBehavior()
                                     );

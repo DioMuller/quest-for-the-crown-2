@@ -10,12 +10,12 @@ using QuestForTheCrown2.Levels.Mapping;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
-    class Enemy1 : Entity
+    class Zombie : Entity
     {
-        const string spriteSheetPath = @"sprites\Brendan.png";
+        const string spriteSheetPath = @"sprites\Characters\zombie.png";
 
-        public Enemy1()
-            : base(spriteSheetPath, new Point(32, 50))
+        public Zombie()
+            : base(spriteSheetPath, new Point(32, 64))
         {
             Category = "Enemy";
 
@@ -30,9 +30,9 @@ namespace QuestForTheCrown2.Entities.Characters
             SpriteSheet.AddAnimation("walking", "right", line: 2, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("walking", "up", line: 3, frameDuration: walkFrameDuration);
 
-            Padding = new Rectangle(4, 20, 4, 2);
+            Padding = new Rectangle(4, 38, 4, 2);
 
-            Speed = new Vector2(32 * 3);
+            Speed = new Vector2(32);
 
             Health = 3;
 

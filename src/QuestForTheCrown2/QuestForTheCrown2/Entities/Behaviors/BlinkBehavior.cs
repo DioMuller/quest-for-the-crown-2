@@ -7,14 +7,35 @@ using System.Text;
 
 namespace QuestForTheCrown2.Entities.Behaviors
 {
+    /// <summary>
+    /// Enables one entity to blink when its health is decreased.
+    /// </summary>
     class BlinkBehavior : EntityUpdateBehavior
     {
         int? oldHealth;
         TimeSpan _lastBlinkChange;
         TimeSpan? _startBlink;
 
-        TimeSpan _maxBlinkTime = TimeSpan.FromSeconds(1);
+        TimeSpan BlinkDuration { get; set; }
         TimeSpan _blinkChangeTime = TimeSpan.FromMilliseconds(50);
+
+
+        /// <summary>
+        /// Created a new BlinkBehavior.
+        /// </summary>
+        public BlinkBehavior()
+        {
+            BlinkDuration = TimeSpan.FromSeconds(1);
+        }
+
+        /// <summary>
+        /// Created a new BlinkBehavior.
+        /// </summary>
+        /// <param name="blinkDuration">The maximum ammount of time for an entity to be blinking.</param>
+        public BlinkBehavior(TimeSpan blinkDuration)
+        {
+            BlinkDuration = blinkDuration;
+        }
 
         public override void Update(GameTime gameTime, Levels.Level level)
         {
@@ -39,7 +60,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                 Entity.IsInvisible = !Entity.IsInvisible;
             }
 
-            if (gameTime.TotalGameTime > _startBlink + _maxBlinkTime)
+            if (gameTime.TotalGameTime > _startBlink + BlinkDuration)
             {
                 Entity.IsInvisible = false;
                 Entity.IsBlinking = false;

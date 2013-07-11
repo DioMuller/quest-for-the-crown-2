@@ -10,6 +10,13 @@ namespace QuestForTheCrown2.Entities.Behaviors
 {
     class HitOnTouchBehavior : EntityUpdateBehavior
     {
+        Func<Entity, bool> _canHit;
+
+        public HitOnTouchBehavior(Func<Entity, bool> canHit = null)
+        {
+            _canHit = canHit;
+        }
+
         public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
             return true;
@@ -25,7 +32,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                                             height: col.Height + 8))
                             .FirstOrDefault(e => e != Entity);
 
-            if (ent != null)
+            if (ent != null && (_canHit == null || _canHit(ent)))
                 ent.Hit(Entity, level, Entity.CurrentDirection);
         }
     }

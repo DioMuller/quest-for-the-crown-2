@@ -202,8 +202,6 @@ namespace QuestForTheCrown2.Entities.Base
             _framesPerLine = SpriteSheet.Texture.Width / SpriteSheet.FrameSize.X;
 
             Speed = new Vector2(SpriteSheet.FrameSize.X, SpriteSheet.FrameSize.X);
-
-            AddBehavior(new BlinkBehavior());
         }
         #endregion
 

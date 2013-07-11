@@ -15,5 +15,12 @@ namespace QuestForTheCrown2.Base
             direction.Y = (float)Math.Sin(angle) * length;
             return direction;
         }
+
+        public static Vector2 Rotate(this Vector2 vector, int angle)
+        {
+            return new Vector2(
+                x: (vector.X * (float)Math.Cos(angle)) - (vector.Y * (float)Math.Sin(angle)),
+                y: (vector.Y * (float)Math.Cos(angle)) + (vector.X * (float)Math.Sin(angle)));
+        }
     }
 }
