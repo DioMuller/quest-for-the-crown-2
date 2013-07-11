@@ -19,14 +19,14 @@
 	<level id="14" neighbors="0,15,0,13" path="Content/maps/BeachCave/BeachCave05.tmx" music="Five Armies"/>
 	<level id="15" neighbors="0,0,0,14" path="Content/maps/BeachCave/BeachCave06.tmx" music="Five Armies"/>
 	<!-- Wizards Tomb -->
-	<level id="16" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb01.tmx" music="Five Armies"/>
-	<level id="17" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb02.tmx" music="Five Armies"/>
-	<level id="18" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb03.tmx" music="Five Armies"/>
-	<level id="19" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb04.tmx" music="Five Armies"/>
-	<level id="20" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb05.tmx" music="Five Armies"/>
-	<level id="21" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb06.tmx" music="Five Armies"/>
-	<level id="22" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb07.tmx" music="Five Armies"/>
-	<level id="23" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb08.tmx" music="Five Armies"/>
-	<level id="23" neighbors="0,0,0,0" path="Content/maps/WizardsTomb/WizardsTomb09.tmx" music="Five Armies"/>
+	<level id="16" neighbors="0,17,0,-1" path="Content/maps/WizardsTomb/WizardsTomb01.tmx" music="Five Armies"/>
+	<level id="17" neighbors="0,18,0,16" path="Content/maps/WizardsTomb/WizardsTomb02.tmx" music="Five Armies"/>
+	<level id="18" neighbors="0,0,19,17" path="Content/maps/WizardsTomb/WizardsTomb03.tmx" music="Five Armies"/>
+	<level id="19" neighbors="18,0,20,0" path="Content/maps/WizardsTomb/WizardsTomb04.tmx" music="Five Armies"/>
+	<level id="20" neighbors="19,0,0,21" path="Content/maps/WizardsTomb/WizardsTomb05.tmx" music="Five Armies"/>
+	<level id="21" neighbors="0,20,0,22" path="Content/maps/WizardsTomb/WizardsTomb06.tmx" music="Five Armies"/>
+	<level id="22" neighbors="23,21,0,0" path="Content/maps/WizardsTomb/WizardsTomb07.tmx" music="Five Armies"/>
+	<level id="23" neighbors="0,24,22,0" path="Content/maps/WizardsTomb/WizardsTomb08.tmx" music="Five Armies"/>
+	<level id="24" neighbors="0,0,0,23" path="Content/maps/WizardsTomb/WizardsTomb09.tmx" music="Five Armies"/>
   </levels>
 </collection>
