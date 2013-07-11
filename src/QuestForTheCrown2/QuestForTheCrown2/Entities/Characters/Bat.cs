@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using QuestForTheCrown2.Entities.Base;
+using QuestForTheCrown2.Entities.Behaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,12 @@ namespace QuestForTheCrown2.Entities.Characters
             Health = 1;
             MaxHealth = 1;
             CurrentDirection = new Vector2(0, 1);
+
+            AddBehavior(
+                //new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
+                new HitOnTouchBehavior(e => e.Category == "Player"),
+                new TouchAndDodgeBehavior("Player", 32 * 2)
+            );
         }
         #endregion Constructor
     }

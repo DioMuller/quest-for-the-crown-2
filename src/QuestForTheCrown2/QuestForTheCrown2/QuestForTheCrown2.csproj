@@ -55,6 +55,7 @@
     <Compile Include="Entities\Behaviors\FollowBehavior.cs" />
     <Compile Include="Entities\Behaviors\InputBehavior.cs" />
     <Compile Include="Entities\Characters\Bat.cs" />
+    <Compile Include="Entities\Characters\Goon.cs" />
     <Compile Include="Entities\Characters\Skeleton.cs" />
     <Compile Include="Entities\Characters\Zombie.cs" />
     <Compile Include="Entities\Characters\Slime.cs" />

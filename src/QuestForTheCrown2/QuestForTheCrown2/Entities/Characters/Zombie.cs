@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Levels.Mapping;
+using QuestForTheCrown2.Entities.Behaviors;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
@@ -36,7 +37,14 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Health = 3;
 
-            CurrentDirection = new Vector2(0, 1);
+            Look(new Vector2(0, 1), true);
+
+            AddBehavior(
+                new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
+                new HitOnTouchBehavior(e => e.Category == "Player"),
+                new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 },
+                new WalkAroundBehavior { MaxStoppedTime = TimeSpan.Zero }
+            );
         }
     }
 }

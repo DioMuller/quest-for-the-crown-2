@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Levels.Mapping;
 using QuestForTheCrown2.Entities.Weapons;
+using QuestForTheCrown2.Entities.Behaviors;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
@@ -38,6 +39,13 @@ namespace QuestForTheCrown2.Entities.Characters
             Health = 5;
 
             CurrentDirection = new Vector2(0, 1);
+
+            AddBehavior(
+                new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
+                new HitOnTouchBehavior(e => e.Category == "Player"),
+                new FollowBehavior("Player", 5) { MaxDistance = float.MaxValue }//,
+                //new WalkAroundBehavior { MaxStoppedTime = TimeSpan.FromSeconds(2) }
+            );
         }
 
         public override void Hit(Entity attacker, Levels.Level level, Vector2 direction)

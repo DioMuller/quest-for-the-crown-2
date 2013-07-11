@@ -120,109 +120,42 @@ namespace QuestForTheCrown2.Levels.Mapping
             #endregion Layers
 
             #region Objects
+            var enemyFactory = new Dictionary<string, Func<Entity>>
+            {
+                { "Crab", () => new Crab() },
+                { "Slime", () => new Slime() },
+                { "Bat", () => new Bat() },
+                { "Zombie", () => new Zombie() },
+                { "Skeleton", () => new Skeleton() },
+                { "Goon", () => new Goon() },
+            };
+
+            var entityFactory = new Dictionary<string, Func<string, Entity>>
+            {
+                { "Player", n => new Player() },
+                { "Enemy", n => enemyFactory.ContainsKey(n)? enemyFactory[n]() : new Enemy1() },
+                { "Item", n => new Item() },
+                { "Entrance", n => new Entrance(int.Parse(n)) },
+                { "SavePoint", n => new SavePoint() },
+            };
+
             foreach (XElement objs in mapElement.Elements("objectgroup"))
             {
                 foreach (XElement obj in objs.Elements("object"))
                 {
-                    Entity entity;
-                    string objname = obj.Attribute("name").Value;
-                    int x = int.Parse(obj.Attribute("x").Value);
-                    int y = int.Parse(obj.Attribute("y").Value);
                     string type = obj.Attribute("type").Value;
+                    string objName = obj.Attribute("name").Value;
 
-                    switch (type)
+                    if (entityFactory.ContainsKey(type))
                     {
-                        case "Player":
-                            entity = new Player { Position = new Vector2(x, y), Category = "Player" };
-                            entity.AddBehavior(
-                                new BlinkBehavior(TimeSpan.FromSeconds(1)),
-                                new InputBehavior(Base.InputType.Controller),
-                                new InputBehavior(Base.InputType.Keyboard)
-                            );
-                            entity.AddWeapon(new Sword());
-                            entity.CurrentLevel = id;
-                            break;
-                        case "Enemy":
-                            switch (objname)
-                            {
-                                case "Crab":
-                                    entity = new Crab { Position = new Vector2(x, y), Category = "Enemy" };
-                                    entity.AddBehavior(
-                                        new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
-                                        new HitOnTouchBehavior(),
-                                        new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 }
-                                    );
-                                    entity.CurrentLevel = id;
-                                    break;
-                                case "Slime":
-                                    entity = new Slime { Position = new Vector2(x, y), Category = "Enemy" };
-                                    entity.AddBehavior(
-                                        //new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
-                                        new HitOnTouchBehavior(e => e.Category == "Player"),
-                                        new FollowBehavior("Player", 5) { MaxDistance = 32 * 2 },
-                                        new WalkAroundBehavior()
-                                    );
-                                    entity.CurrentLevel = id;
-                                    break;
-                                case "Bat":
-                                    entity = new Bat { Position = new Vector2(x, y), Category = "Enemy" };
-                                    entity.AddBehavior(
-                                        //new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
-                                        new HitOnTouchBehavior(e => e.Category == "Player"),
-                                        new TouchAndDodgeBehavior("Player", 32 * 2)
-                                    );
-                                    entity.CurrentLevel = id;
-                                    break;
+                        var entity = entityFactory[type](objName);
+                        entity.Category = type;
 
-                                case "Zombie":
-                                    entity = new Zombie { Position = new Vector2(x, y), Category = "Enemy" };
-                                    entity.AddBehavior(
-                                        new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
-                                        new HitOnTouchBehavior(e => e.Category == "Player"),
-                                        new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 },
-                                        new WalkAroundBehavior { MaxStoppedTime = TimeSpan.Zero }
-                                    );
-                                    entity.CurrentLevel = id;
-                                    break;
-                                case "Skeleton":
-                                    entity = new Skeleton { Position = new Vector2(x, y), Category = "Enemy" };
-                                    entity.AddBehavior(
-                                        new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
-                                        new HitOnTouchBehavior(e => e.Category == "Player"),
-                                        new FollowBehavior("Player", 5) { MaxDistance = float.MaxValue }//,
-                                        //new WalkAroundBehavior { MaxStoppedTime = TimeSpan.FromSeconds(2) }
-                                    );
-                                    entity.CurrentLevel = id;
-                                    break;
-                                default:
-                                    entity = new Enemy1 { Position = new Vector2(x, y), Category = "Enemy" };
-                                    entity.AddBehavior(
-                                        new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
-                                        new SwordAttackBehavior("Player") { MaxDistance = 300 },
-                                        new WalkAroundBehavior()
-                                    );
-                                    entity.AddWeapon(new Sword());
-                                    entity.CurrentLevel = id;
-                                    break;
-                            }
-                            break;
-                        case "Item":
-                            entity = new Item { Position = new Vector2(x, y) };
-                            break;
-                        case "Entrance":
-                            //Name MUST be the int value of the dungeon id.
-                            entity = new Entrance(int.Parse(objname)) { Position = new Vector2(x, y) };
-                            break;
-                        case "SavePoint":
-                            entity = new SavePoint { Position = new Vector2(x, y) };
-                            break;
-                        default:
-                            entity = null;
-                            break;
-                    }
+                        entity.Position = new Vector2(
+                            x: int.Parse(obj.Attribute("x").Value),
+                            y: int.Parse(obj.Attribute("y").Value));
 
-                    if (entity != null)
-                    {
+                        entity.CurrentLevel = id;
                         entities.Add(entity);
                     }
                 }

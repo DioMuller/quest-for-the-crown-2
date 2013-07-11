@@ -228,6 +228,16 @@ namespace QuestForTheCrown2.Entities.Base
         }
 
         /// <summary>
+        /// Finds the behavior of the specified type.
+        /// </summary>
+        /// <typeparam name="TBehavior"></typeparam>
+        /// <returns></returns>
+        public TBehavior GetBehavior<TBehavior>() where TBehavior : EntityUpdateBehavior
+        {
+            return Behaviors.SelectMany(b => b.Value.OfType<TBehavior>()).FirstOrDefault();
+        }
+
+        /// <summary>
         /// Attach weapons to the current entity.
         /// </summary>
         /// <param name="weapons"></param>

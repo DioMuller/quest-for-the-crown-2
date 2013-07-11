@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using QuestForTheCrown2.Entities.Base;
+using QuestForTheCrown2.Entities.Behaviors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +44,13 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Health = 2;
             MaxHealth = 2;
-            CurrentDirection = new Vector2(0, 1);
+            Look(new Vector2(0, 1), true);
+
+            AddBehavior(
+                new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
+                new HitOnTouchBehavior(),
+                new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 }
+            );
         }
         #endregion Constructor
 

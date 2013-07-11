@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Levels.Mapping;
+using QuestForTheCrown2.Entities.Behaviors;
+using QuestForTheCrown2.Entities.Weapons;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
@@ -36,7 +38,15 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Health = 3;
 
-            CurrentDirection = new Vector2(0, 1);
+            Look(new Vector2(0, 1), true);
+
+            AddBehavior(
+                new HitOnTouchBehavior(e => e.Category == "Player"),
+                new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
+                new SwordAttackBehavior("Player") { MaxDistance = 300 },
+                new WalkAroundBehavior()
+            );
+            AddWeapon(new Sword());
         }
     }
 }

@@ -8,6 +8,9 @@ using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Levels.Mapping;
 using QuestForTheCrown2.Levels;
+using QuestForTheCrown2.Entities.Behaviors;
+using QuestForTheCrown2.Entities.Weapons;
+using QuestForTheCrown2.Base;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
@@ -47,7 +50,14 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Health = 8;
             MaxHealth = 8;
-            CurrentDirection = new Vector2(0, 1);
+            Look(new Vector2(0, 1), true);
+
+            AddBehavior(
+                new BlinkBehavior(TimeSpan.FromSeconds(1)),
+                new InputBehavior(InputType.Controller),
+                new InputBehavior(InputType.Keyboard)
+            );
+            AddWeapon(new Sword());
         }
         #endregion Constructor
     }
