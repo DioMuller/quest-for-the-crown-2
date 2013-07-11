@@ -55,8 +55,11 @@ namespace QuestForTheCrown2.Levels
         #endregion Properties
 
         #region Constructor
-        public Level(int id, Map map)
+        public Level(int id, Map map, IEnumerable<Entity> entities = null)
         {
+            //Updates collision map
+            map.UpdateCollision();
+
             Id = id;
             _map = map;
             _entities = new List<Entity>();
@@ -64,6 +67,9 @@ namespace QuestForTheCrown2.Levels
             _oldEntities = new Queue<Entity>();
             _neighbors = new int[4];
             _entitiesByCategory = new Dictionary<string, List<Entity>>();
+
+            if (entities != null)
+                AddEntity(entities);
         }
         #endregion Constructor
 
@@ -159,7 +165,8 @@ namespace QuestForTheCrown2.Levels
         public void AddEntity(IEnumerable<Entity> entities)
         {
             foreach (Entity en in entities)
-                AddEntity(en);
+                if (en != null)
+                    AddEntity(en);
         }
 
         /// <summary>

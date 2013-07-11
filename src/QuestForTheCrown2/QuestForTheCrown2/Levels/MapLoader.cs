@@ -58,7 +58,6 @@ namespace QuestForTheCrown2.Levels.Mapping
         {
             Map map = null;
             XDocument doc = XDocument.Load(tmxFile);
-            List<Entity> entities = new List<Entity>();
 
             #region Create Map
             XElement mapElement = doc.Element("map");
@@ -129,46 +128,36 @@ namespace QuestForTheCrown2.Levels.Mapping
                 { "Skeleton", () => new Skeleton() },
                 { "Goon", () => new Goon() },
             };
-
             var entityFactory = new Dictionary<string, Func<string, Entity>>
             {
                 { "Player", n => new Player() },
-                { "Enemy", n => enemyFactory.ContainsKey(n)? enemyFactory[n]() : new Enemy1() },
                 { "Item", n => new Item() },
                 { "Entrance", n => new Entrance(int.Parse(n)) },
                 { "SavePoint", n => new SavePoint() },
+                { "Enemy", n => enemyFactory.ContainsKey(n)? enemyFactory[n]() : new Enemy1() },
             };
 
-            foreach (XElement objs in mapElement.Elements("objectgroup"))
-            {
-                foreach (XElement obj in objs.Elements("object"))
-                {
-                    string type = obj.Attribute("type").Value;
-                    string objName = obj.Attribute("name").Value;
-
-                    if (entityFactory.ContainsKey(type))
-                    {
-                        var entity = entityFactory[type](objName);
-                        entity.Category = type;
-
-                        entity.Position = new Vector2(
-                            x: int.Parse(obj.Attribute("x").Value),
-                            y: int.Parse(obj.Attribute("y").Value));
-
-                        entity.CurrentLevel = id;
-                        entities.Add(entity);
-                    }
-                }
-            }
+            var entities = mapElement.Elements("objectgroup")
+                                     .Elements("object")
+                                     .Select(n => CreateEntity(entityFactory, id, n));
             #endregion Objects
 
-            //Updates collision map
-            map.UpdateCollision();
+            return new Level(id, map, entities);
+        }
 
+        static Entity CreateEntity(Dictionary<string, Func<string, Entity>> entityFactory, int levelId, XElement node)
+        {
+            var type = node.Attribute("type").Value;
 
-            Level level = new Level(id, map);
-            level.AddEntity(entities);
-            return level;
+            if (!entityFactory.ContainsKey(type))
+                return null;
+
+            var entity = entityFactory[type](node.Attribute("name").Value);
+            entity.CurrentLevel = levelId;
+            entity.Category = type;
+            entity.Position = new Vector2(x: int.Parse(node.Attribute("x").Value),
+                                          y: int.Parse(node.Attribute("y").Value));
+            return entity;
         }
 
         private static Tileset LoadTileset(int firstgid, string tsxFile)
