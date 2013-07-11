@@ -10,9 +10,15 @@ namespace QuestForTheCrown2.GUI.Components
 {
     #region Delegates
     /// <summary>
-    /// Called when the button is selected.
+    /// Called when the component is selected.
     /// </summary>
     public delegate void SelectDelegate();
+
+    /// <summary>
+    /// Selection was changed.
+    /// </summary>
+    /// <param name="value">Change value.</param>
+    public delegate void SelectionChangeDelegate(float value);
     #endregion Delegates
 
     public class Component
@@ -33,7 +39,9 @@ namespace QuestForTheCrown2.GUI.Components
         #endregion Properties
 
         #region Delegates
-        public SelectDelegate Select;
+        public SelectDelegate Select { get; protected set; }
+
+        public SelectionChangeDelegate SelectionChanged { get; protected set; }
         #endregion Delegates
 
         #region Constructor
