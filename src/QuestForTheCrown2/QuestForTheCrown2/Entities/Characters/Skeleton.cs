@@ -43,15 +43,17 @@ namespace QuestForTheCrown2.Entities.Characters
             AddBehavior(
                 new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
                 new HitOnTouchBehavior(e => e.Category == "Player"),
+                new SwordAttackBehavior("Player") { MaxDistance = 300 },
                 new FollowBehavior("Player", 5) { MaxDistance = float.MaxValue }//,
                 //new WalkAroundBehavior { MaxStoppedTime = TimeSpan.FromSeconds(2) }
             );
+            AddWeapon(new Sword());
         }
 
         public override void Hit(Entity attacker, Levels.Level level, Vector2 direction)
         {
             if (attacker is FireBall)
-                Health--;
+                Health -= 2;
 
             base.Hit(attacker, level, direction);
         }
