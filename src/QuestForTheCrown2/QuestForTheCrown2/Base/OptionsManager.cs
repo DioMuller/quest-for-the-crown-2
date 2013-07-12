@@ -75,23 +75,31 @@ namespace QuestForTheCrown2.Base
                 }
                 else
                 {
-                    string content;
-
-                    using (StreamReader sr = new StreamReader(store.OpenFile(OptionsFile, FileMode.Open)))
+                    try
                     {
-                        content = sr.ReadToEnd();
+                        string content;
+
+                        using (StreamReader sr = new StreamReader(store.OpenFile(OptionsFile, FileMode.Open)))
+                        {
+                            content = sr.ReadToEnd();
+                        }
+
+                        XDocument doc = XDocument.Parse(content);
+                        XElement root = doc.Element("options");
+
+                        CurrentOptions = new Options
+                        {
+                            ResolutionWidth = int.Parse(root.Element("ResolutionWidth").Value),
+                            ResolutionHeight = int.Parse(root.Element("ResolutionHeight").Value),
+                            Fullscreen = bool.Parse(root.Element("Fullscreen").Value),
+                            InvertAim = bool.Parse(root.Element("InvertAim").Value)
+                        };
                     }
-                 
-                    XDocument doc = XDocument.Parse(content);
-                    XElement root = doc.Element("options");
-
-                    CurrentOptions = new Options
+                    catch
                     {
-                        ResolutionWidth = int.Parse(root.Element("ResolutionWidth").Value),
-                        ResolutionHeight = int.Parse(root.Element("ResolutionHeight").Value),
-                        Fullscreen = bool.Parse(root.Element("Fullscreen").Value),
-                        InvertAim = bool.Parse(root.Element("InvertAim").Value)
-                    };
+                        store.CreateFile(OptionsFile);
+                        CurrentOptions = new Options();
+                    }
                 }
             }
         }
