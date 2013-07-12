@@ -35,6 +35,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Base\Extensions.cs" />
     <Compile Include="Base\Input.cs" />
     <Compile Include="Base\OptionsManager.cs" />
     <Compile Include="Base\SoundManager.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Entities\Weapons\Bow.cs" />
     <Compile Include="Entities\Weapons\FireBall.cs" />
     <Compile Include="Entities\Weapons\FireWand.cs" />
+    <Compile Include="Entities\Base\Container.cs" />
     <Compile Include="Entities\Weapons\Sword.cs" />
     <Compile Include="Entities\Weapons\Weapon.cs" />
     <Compile Include="GUI\Components\ComponentList.cs" />

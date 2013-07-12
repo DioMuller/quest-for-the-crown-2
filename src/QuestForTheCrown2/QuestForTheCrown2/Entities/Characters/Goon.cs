@@ -36,7 +36,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Speed = new Vector2(32 * 3);
 
-            Health = 4;
+            Health = new Container(4);
 
             Look(new Vector2(0, 1), true);
 

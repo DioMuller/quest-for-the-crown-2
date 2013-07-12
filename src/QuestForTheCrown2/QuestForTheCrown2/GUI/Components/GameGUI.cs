@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Characters;
+using QuestForTheCrown2.Entities.Weapons;
 
 namespace QuestForTheCrown2.GUI.Components
 {
@@ -37,32 +38,32 @@ namespace QuestForTheCrown2.GUI.Components
 
             //spritebatch.Draw(_background, rectangle, Color.White);
 
-            for( int i = 0; i < list.Count(); i++ )
+            for (int i = 0; i < list.Count; i++)
             {
-                int maxhealth =  list[i].MaxHealth.GetValueOrDefault();
-                int health = list[i].Health.GetValueOrDefault();
-                int difference = Convert.ToInt32(_font.MeasureString( "Player " + (i+1) ).X) + 35;
 
-                spritebatch.DrawString(_font, "Player " + (i+1), new Vector2( 20 + (i * width), 20), Color.White);
+                int maxhealth = list[i].Health.Maximum ?? list[i].Health;
+                int health = list[i].Health;
+                int difference = Convert.ToInt32(_font.MeasureString("Player " + (i + 1)).X) + 35;
+
+                spritebatch.DrawString(_font, "Player " + (i + 1), new Vector2(20 + (i * width), 20), Color.White);
 
                 #region Draw Health
-                while( maxhealth > 0 )
+                while (maxhealth > 0)
                 {
-                    Rectangle rect = new Rectangle( difference, 25, 20, 20);
+                    Rectangle rect = new Rectangle(difference, 25, 20, 20);
 
-                        if( health >= 4 )
-                        {
-                            spritebatch.Draw( _fullHealth, rect, Color.White );
-                        }
-                        else
-                        {
-                            //TODO: Find a more elegant way to do this.
-                            spritebatch.Draw(_emptyHealth, rect, Color.White);
-                            if (health > 0) spritebatch.Draw(_partHealth, new Rectangle( rect.X, rect.Y, 10, 10), Color.White);
-                            if (health > 1) spritebatch.Draw(_partHealth, new Rectangle(rect.X + 10, rect.Y, 10, 10), null, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f );
-                            if (health > 2) spritebatch.Draw(_partHealth, new Rectangle(rect.X, rect.Y + 10, 10, 10), null, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipVertically, 0f);
-                        }
-                        
+                    if (health >= 4)
+                    {
+                        spritebatch.Draw(_fullHealth, rect, Color.White);
+                    }
+                    else
+                    {
+                        //TODO: Find a more elegant way to do this.
+                        spritebatch.Draw(_emptyHealth, rect, Color.White);
+                        if (health > 0) spritebatch.Draw(_partHealth, new Rectangle(rect.X, rect.Y, 10, 10), Color.White);
+                        if (health > 1) spritebatch.Draw(_partHealth, new Rectangle(rect.X + 10, rect.Y, 10, 10), null, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                        if (health > 2) spritebatch.Draw(_partHealth, new Rectangle(rect.X, rect.Y + 10, 10, 10), null, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipVertically, 0f);
+                    }
 
                     difference += 30;
                     maxhealth -= 4;
@@ -70,7 +71,6 @@ namespace QuestForTheCrown2.GUI.Components
                 }
                 #endregion Draw Health
             }
-            
         }
     }
 }

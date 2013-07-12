@@ -19,7 +19,6 @@ namespace QuestForTheCrown2.Entities.Base
         readonly int _framesPerLine;
         Animation _lastAnimation;
         TimeSpan _lastFrameStartTime;
-        //private int _playerNumber;
         #endregion
 
         #region Properties
@@ -31,17 +30,25 @@ namespace QuestForTheCrown2.Entities.Base
         /// </summary>
         public string Category { get; set; }
 
-        /// <summary>
-        /// The current entity's max health.
-        /// Null if unlimited.
-        /// </summary>
-        public int? MaxHealth { get; set; }
+        #region Containers
+        public Container Health
+        {
+            get { return Containers.GetOrDefault("Health"); }
+            set { Containers["Health"] = value; }
+        }
 
-        /// <summary>
-        /// The current entity's health.
-        /// Null if it can't be destroyed.
-        /// </summary>
-        public int? Health { get; set; }
+        public Container Magic
+        {
+            get { return Containers.GetOrDefault("Magic"); }
+            set { Containers["Magic"] = value; }
+        }
+
+        public Container Arrows
+        {
+            get { return Containers.GetOrDefault("Arrows"); }
+            set { Containers["Arrows"] = value; }
+        }
+        #endregion
 
         /// <summary>
         /// Indicates if the current entity cannot be hit.
@@ -57,6 +64,11 @@ namespace QuestForTheCrown2.Entities.Base
         /// A list of all weapons available to this entity.
         /// </summary>
         public List<Weapon> Weapons { get; private set; }
+
+        /// <summary>
+        /// Status of the entity's ammo, health and magic.
+        /// </summary>
+        public Dictionary<string, Container> Containers { get; set; }
 
         #region Draw
 
@@ -202,6 +214,7 @@ namespace QuestForTheCrown2.Entities.Base
             _framesPerLine = SpriteSheet.Texture.Width / SpriteSheet.FrameSize.X;
 
             Speed = new Vector2(SpriteSheet.FrameSize.X, SpriteSheet.FrameSize.X);
+            Containers = new Dictionary<string, Container>();
         }
         #endregion
 
@@ -285,6 +298,47 @@ namespace QuestForTheCrown2.Entities.Base
                 CurrentDirection = direction;
         }
 
+        #region Containers
+        public int? ContainerMaximum(string containerName)
+        {
+            if (!Containers.ContainsKey(containerName))
+                return null;
+            return Containers[containerName].Maximum;
+        }
+
+        public int? ContainerQuantity(string containerName)
+        {
+            if (!Containers.ContainsKey(containerName))
+                return null;
+            return Containers[containerName].Quantity;
+        }
+
+        public bool IncreaseQuantity(string containerName, int byQuantity = 1)
+        {
+            Container container;
+            if (!Containers.TryGetValue(containerName, out container))
+                return false;
+
+            if (container.Quantity >= container.Maximum)
+                return false;
+
+            container.Quantity = (int)Math.Min(container.Maximum.Value, container.Quantity + byQuantity);
+            return true;
+        }
+
+        public bool DecreaseQuantity(string containerName, int byQuantity = 1)
+        {
+            Container container;
+            if (!Containers.TryGetValue(containerName, out container))
+                return false;
+
+            if (container.Quantity < byQuantity)
+                return false;
+
+            container.Quantity = container.Quantity - byQuantity;
+            return true;
+        }
+        #endregion
         #endregion
 
         #region Update
@@ -329,6 +383,30 @@ namespace QuestForTheCrown2.Entities.Base
                 _lastFrameStartTime = gameTime.TotalGameTime;
             }
         }
+
+        /// <summary>
+        /// Hit this entity in the desired angle.
+        /// </summary>
+        /// <param name="level">Current level</param>
+        /// <param name="angle">Projectile angle</param>
+        public virtual void Hit(Entity attacker, Level level, Vector2 direction)
+        {
+            if (Health == null)
+                return;
+
+            if (!IsBlinking)
+                Health--;
+
+            if (Health <= 0)
+                level.RemoveEntity(this);
+            else
+            {
+                var oldPos = Position;
+                Position += direction;
+                if (level.CollidesWith(CollisionRect).Any(e => e != this) || level.Map.Collides(CollisionRect))
+                    Position = oldPos;
+            }
+        }
         #endregion
 
         #region Draw
@@ -367,29 +445,5 @@ namespace QuestForTheCrown2.Entities.Base
                 frame.Rectangle, Color.White, Angle, Origin, 1, SpriteEffects.None, 1);
         }
         #endregion Draw
-
-        /// <summary>
-        /// Hit this entity in the desired angle.
-        /// </summary>
-        /// <param name="level">Current level</param>
-        /// <param name="angle">Projectile angle</param>
-        public virtual void Hit(Entity attacker, Level level, Vector2 direction)
-        {
-            if (Health == null)
-                return;
-
-            if (!IsBlinking)
-                Health--;
-
-            if (Health <= 0)
-                level.RemoveEntity(this);
-            else
-            {
-                var oldPos = Position;
-                Position += direction;
-                if (level.CollidesWith(CollisionRect).Any(e => e != this) || level.Map.Collides(CollisionRect))
-                    Position = oldPos;
-            }
-        }
     }
 }

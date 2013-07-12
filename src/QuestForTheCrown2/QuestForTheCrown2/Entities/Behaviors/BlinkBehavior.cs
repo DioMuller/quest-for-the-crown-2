@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using QuestForTheCrown2.Entities.Base;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace QuestForTheCrown2.Entities.Behaviors
 {
@@ -18,6 +15,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         TimeSpan BlinkDuration { get; set; }
         TimeSpan _blinkChangeTime = TimeSpan.FromMilliseconds(50);
+
+        Container _healthContainer;
 
 
         /// <summary>
@@ -39,12 +38,12 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override void Update(GameTime gameTime, Levels.Level level)
         {
-            if (oldHealth != null && oldHealth > Entity.Health)
+            if (oldHealth != null && oldHealth > _healthContainer.Quantity)
                 _startBlink = gameTime.TotalGameTime;
 
             Blink(gameTime);
 
-            oldHealth = Entity.Health;
+            oldHealth = _healthContainer.Quantity;
         }
 
         void Blink(GameTime gameTime)
@@ -70,7 +69,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
-            return Entity.Health != null;
+            return Entity.Containers.TryGetValue("Health", out _healthContainer);
         }
     }
 }

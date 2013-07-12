@@ -14,7 +14,6 @@ namespace QuestForTheCrown2.Entities.Weapons
     class FireWand : Weapon
     {
         bool _oldAttackButton;
-        int _timeFromCreation;
 
         public FireWand()
             : base(@"sprites\Objects\Sword.png", null)

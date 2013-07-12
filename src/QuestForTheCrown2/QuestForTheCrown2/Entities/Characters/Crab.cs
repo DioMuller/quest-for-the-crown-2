@@ -42,8 +42,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Speed = new Vector2(100);
 
-            Health = 2;
-            MaxHealth = 2;
+            Health = new Container(2);
             Look(new Vector2(0, 1), true);
 
             AddBehavior(
