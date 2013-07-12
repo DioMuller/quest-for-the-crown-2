@@ -155,9 +155,9 @@ namespace QuestForTheCrown2.Levels
         /// </summary>
         /// <param name="index">Level index.</param>
         /// <returns>The level.</returns>
-        internal Level GetLevel(int index)
+        internal Level GetLevel(int id)
         {
-            return _levels[index];
+            return _levels.Where( l => l.Id == id).First();
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace QuestForTheCrown2.Levels
         /// <param name="player">Player.</param>
         private void SlideScreen(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds, Level lv, Entity player)
         {
-            var newLevel = GetLevel(player.TransitioningToLevel - 1);
+            var newLevel = GetLevel(player.TransitioningToLevel);
             Vector2 camera = GetCameraPosition(player, lv.Map.PixelSize, clientBounds);
             Vector2 camera2 = GetCameraPosition(player, newLevel.Map.PixelSize, clientBounds);
 
