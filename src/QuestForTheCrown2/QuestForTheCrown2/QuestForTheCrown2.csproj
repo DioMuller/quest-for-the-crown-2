@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Base\Extensions.cs" />
+    <Compile Include="Base\GameStateManager.cs" />
     <Compile Include="Base\Input.cs" />
     <Compile Include="Base\OptionsManager.cs" />
     <Compile Include="Base\SoundManager.cs" />
