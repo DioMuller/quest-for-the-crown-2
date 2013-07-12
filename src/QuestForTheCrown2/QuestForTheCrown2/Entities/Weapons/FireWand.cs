@@ -39,8 +39,12 @@ namespace QuestForTheCrown2.Entities.Weapons
                     direction = new Vector2(0, -1);
             }
 
-            if (attackButton && !_oldAttackButton)
+            if (attackButton && !_oldAttackButton && Parent.Magic > 0)
+            {
+                Parent.Magic--;
                 level.AddEntity(new FireBall(direction) { Position = Parent.CenterPosition, Speed = new Vector2(5 * 32), Parent = Parent });
+            }
+
             _oldAttackButton = attackButton;
         }
     }

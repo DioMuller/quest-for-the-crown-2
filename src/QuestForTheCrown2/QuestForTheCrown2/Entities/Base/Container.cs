@@ -38,21 +38,32 @@ namespace QuestForTheCrown2.Entities.Base
 
         public static bool operator <=(Container a, int quantity)
         {
+            if (a == null)
+                a = new Container(0);
+
             return a.Quantity <= quantity;
         }
 
         public static bool operator >=(Container a, int quantity)
         {
+            if (a == null)
+                a = new Container(0);
+
             return a.Quantity >= quantity;
         }
 
         public static bool operator <(Container a, int quantity)
         {
+            if (a == null)
+                a = new Container(0);
+
             return a.Quantity < quantity;
         }
 
         public static bool operator >(Container a, int quantity)
         {
+            if (a == null)
+                a = new Container(0);
             return a.Quantity > quantity;
         }
 
@@ -90,7 +101,7 @@ namespace QuestForTheCrown2.Entities.Base
             return Quantity;
         }
 
-        public static implicit operator int (Container container)
+        public static implicit operator int(Container container)
         {
             return container.Quantity;
         }
