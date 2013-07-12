@@ -35,7 +35,7 @@ namespace QuestForTheCrown2.GUI.Components
             List<Entity> list = players.ToList<Entity>();
             int width = rectangle.X / 4;
 
-            spritebatch.Draw(_background, rectangle, Color.White);
+            //spritebatch.Draw(_background, rectangle, Color.White);
 
             for( int i = 0; i < list.Count(); i++ )
             {

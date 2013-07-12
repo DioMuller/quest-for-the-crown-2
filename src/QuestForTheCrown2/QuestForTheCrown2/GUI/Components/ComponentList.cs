@@ -8,6 +8,8 @@ using QuestForTheCrown2.Base;
 
 namespace QuestForTheCrown2.GUI.Components
 {
+    public delegate void ValueChangeDelegate();
+
     public class ComponentList
     {
         #region Attributes
@@ -32,6 +34,10 @@ namespace QuestForTheCrown2.GUI.Components
         /// </summary>
         private int _selectedOption;
         #endregion Attributes
+
+        #region Delegates
+        public ValueChangeDelegate ValueChanged;
+        #endregion Delegates
 
         #region Properties
 
@@ -102,6 +108,7 @@ namespace QuestForTheCrown2.GUI.Components
                 if( _components[_selectedOption].SelectionChanged != null )
                 {
                     _components[_selectedOption].SelectionChanged( x );
+                    if( ValueChanged != null ) ValueChanged();
                 }
 
                 SoundManager.PlaySound("select");
@@ -182,6 +189,20 @@ namespace QuestForTheCrown2.GUI.Components
                 _selectedOption++;
                 _components[_selectedOption].Selected = true;
             }
+        }
+
+        /// <summary>
+        /// Gets component value.
+        /// </summary>
+        /// <param name="name">Component name</param>
+        /// <returns>value</returns>
+        public string GetValue(string name)
+        {
+            Component comp = _components.Where((c) => c.Name == name).FirstOrDefault();
+
+            if( comp == null ) return String.Empty;
+            if( comp is SelectionBox ) return ((SelectionBox) comp).SelectedOption; 
+            else return comp.Name;
         }
         #endregion Methods
     }

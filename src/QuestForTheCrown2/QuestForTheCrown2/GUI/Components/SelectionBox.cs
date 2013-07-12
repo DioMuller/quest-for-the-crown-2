@@ -34,6 +34,16 @@ namespace QuestForTheCrown2.GUI.Components
         /// Font used.
         /// </summary>
         public SpriteFont Font { get; set; }
+
+        public string SelectedOption
+        {
+            get
+            {
+                if( _current == -1 ) return String.Empty;
+
+                return _options[_current];
+            }
+        }
         #endregion Properties
 
         #region Constructor

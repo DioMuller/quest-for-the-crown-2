@@ -52,6 +52,18 @@ namespace QuestForTheCrown2.GUI.Screens
             inverted.SelectOption(OptionsManager.CurrentOptions.InvertAim ? "On" : "Off");
             _list.AddComponent(inverted);
 
+            _list.ValueChanged += new ValueChangeDelegate( () =>
+            {
+                string res = _list.GetValue("Resolution");
+                string ful = _list.GetValue("Fullscreen");
+                string aim = _list.GetValue("Inverted Aim");
+
+                OptionsManager.CurrentOptions.ResolutionWidth = Convert.ToInt32(res.Split('x')[0]);
+                OptionsManager.CurrentOptions.ResolutionHeight = Convert.ToInt32( res.Split('x')[1] );
+                OptionsManager.CurrentOptions.Fullscreen = (ful == "On");
+                OptionsManager.CurrentOptions.InvertAim = (aim == "On");
+            });
+
             _list.AddComponent(new Button("Save", new SelectDelegate(() =>
             {
                 OptionsManager.SaveOptions();
