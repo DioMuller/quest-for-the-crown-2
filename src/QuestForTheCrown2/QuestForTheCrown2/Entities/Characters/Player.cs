@@ -46,7 +46,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Padding = new Rectangle(22, 30, 22, 2);
 
-            Speed = new Vector2(32 * 3);
+            Speed = new Vector2(32 * 5);
 
             Health = 8;
             MaxHealth = 8;
@@ -57,7 +57,7 @@ namespace QuestForTheCrown2.Entities.Characters
                 new InputBehavior(InputType.Controller),
                 new InputBehavior(InputType.Keyboard)
             );
-            AddWeapon(new Sword());
+            AddWeapon(new Bow());
         }
         #endregion Constructor
     }

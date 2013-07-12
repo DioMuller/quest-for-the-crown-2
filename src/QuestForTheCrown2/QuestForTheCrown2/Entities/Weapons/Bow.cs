@@ -41,8 +41,10 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             Position = Parent.CenterPosition;
 
+            direction *= (OptionsManager.CurrentOptions.InvertAim ? 1 : -1);
+
             if (direction == Vector2.Zero)
-                direction = Parent.CurrentDirection * (OptionsManager.CurrentOptions.InvertAim?-1:1);
+                direction = Parent.CurrentDirection * -1;
 
             Angle = (float)(Math.Atan2(direction.X, -direction.Y) + _spriteAngle);
 

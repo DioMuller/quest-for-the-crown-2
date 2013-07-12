@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Weapons;
 using System;
@@ -52,7 +53,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                     Entity.Look(_followBehavior.CurrentTarget.Position, true);
 
                     bool fireArrow = _lastAttackTime + TimeBetweenAttacks < gameTime.TotalGameTime;
-                    _bow.Attack(gameTime, level, fireArrow, _followBehavior.CurrentTarget.Position * -1);
+                    _bow.Attack(gameTime, level, fireArrow, _followBehavior.CurrentTarget.Position * (OptionsManager.CurrentOptions.InvertAim? -1:1));
 
                     if (fireArrow)
                         _lastAttackTime = gameTime.TotalGameTime;

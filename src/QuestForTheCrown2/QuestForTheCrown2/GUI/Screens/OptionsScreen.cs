@@ -36,7 +36,7 @@ namespace QuestForTheCrown2.GUI.Screens
             SelectionBox resolution = new SelectionBox("Resolution");
             resolution.AddOption("800x600");
             resolution.AddOption("1280x720");
-            resolution.AddOption("1960x1080");
+            resolution.AddOption("1920x1080");
             resolution.SelectOption(OptionsManager.CurrentOptions.ResolutionWidth + "x" + OptionsManager.CurrentOptions.ResolutionHeight);
             _list.AddComponent(resolution);
 
