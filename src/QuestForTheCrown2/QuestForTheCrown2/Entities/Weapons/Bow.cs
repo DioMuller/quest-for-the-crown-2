@@ -18,6 +18,8 @@ namespace QuestForTheCrown2.Entities.Weapons
         //Vector2 _currentAttackDirection;
         bool _currentAttackButton;
 
+        public Arrow LastShotArrow { get; private set; }
+
         public Bow()
             : base(@"sprites\Objects\Bow.png", null)
         {
@@ -45,7 +47,10 @@ namespace QuestForTheCrown2.Entities.Weapons
             Angle = (float)(Math.Atan2(direction.X, -direction.Y) + _spriteAngle);
 
             if (attackButton && !_currentAttackButton)
-                level.AddEntity(new Arrow(direction * -1) { Position = Parent.CenterPosition, Parent = Parent });
+            {
+                LastShotArrow = new Arrow(direction * -1) { Position = Parent.CenterPosition, Parent = Parent };
+                level.AddEntity(LastShotArrow);
+            }
             _currentAttackButton = attackButton;
         }
     }

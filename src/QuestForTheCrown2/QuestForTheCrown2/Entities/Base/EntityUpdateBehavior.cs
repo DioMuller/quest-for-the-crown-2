@@ -35,5 +35,9 @@ namespace QuestForTheCrown2.Entities.Base
         /// </summary>
         /// <param name="deltaTime"></param>
         public abstract void Update(GameTime gameTime, Level level);
+
+        public virtual void Deactivated(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
+        {
+        }
     }
 }

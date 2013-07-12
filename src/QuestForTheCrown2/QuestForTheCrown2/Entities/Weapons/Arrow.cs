@@ -26,6 +26,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             : base(@"sprites\Objects\Arrow.png", null)
         {
             _direction = direction;
+            _direction.Normalize();
             OverlapEntities = true;
             Angle = (float)(Math.Atan2(-direction.X, direction.Y) + _spriteAngle);
             Origin = new Vector2(Size.X / 2, Size.Y / 2);

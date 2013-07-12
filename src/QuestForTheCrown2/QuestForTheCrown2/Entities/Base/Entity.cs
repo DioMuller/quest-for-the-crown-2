@@ -292,17 +292,27 @@ namespace QuestForTheCrown2.Entities.Base
         {
             if (Behaviors != null)
             {
+                var activeBehaviors = new List<EntityUpdateBehavior>();
+
                 foreach (var behaviorGroup in Behaviors)
                 {
                     if (behaviorGroup.Key == string.Empty)
                         foreach (var behavior in behaviorGroup.Value.Where(b => b.IsActive(gameTime, level)))
-                            behavior.Update(gameTime, level);
+                            activeBehaviors.Add(behavior);
                     else
                     {
                         var bh = behaviorGroup.Value.Where(b => b.IsActive(gameTime, level)).FirstOrDefault();
                         if (bh != null)
-                            bh.Update(gameTime, level);
+                            activeBehaviors.Add(bh);
                     }
+                }
+
+                foreach (var bh in Behaviors.SelectMany(b => b.Value))
+                {
+                    if (activeBehaviors.Contains(bh))
+                        bh.Update(gameTime, level);
+                    else
+                        bh.Deactivated(gameTime, level);
                 }
             }
 
