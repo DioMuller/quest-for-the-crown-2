@@ -142,6 +142,9 @@ namespace QuestForTheCrown2
                     _mainMenu.Update(gameTime);
                     break;
                 case GameState.NewGame:
+                    if (_overworld == null)
+                        break;
+
                     var player = _overworld.Players.First();
                     GameStateManager.DeleteAllSaves();
                     GameStateManager.SelectSaveData(new Base.GameState
