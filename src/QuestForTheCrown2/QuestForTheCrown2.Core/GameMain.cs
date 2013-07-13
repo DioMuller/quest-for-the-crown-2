@@ -70,12 +70,10 @@ namespace QuestForTheCrown2
             InactiveSleepTime = TimeSpan.FromSeconds(1);
  
             _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft;
-#else
+            #else
             _graphics.IsFullScreen = OptionsManager.CurrentOptions.Fullscreen;
             _graphics.PreferredBackBufferHeight = OptionsManager.CurrentOptions.ResolutionHeight;
             _graphics.PreferredBackBufferWidth = OptionsManager.CurrentOptions.ResolutionWidth;
-
-            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0 / 30.0);
             #endif
 
             _currentState = GameState.MainMenu;
