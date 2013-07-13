@@ -62,13 +62,20 @@ namespace QuestForTheCrown2
 
             #if OUYA
             _graphics.IsFullScreen = true;
-            _graphics.PreferredBackBufferWidth = 1280;
-            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
+            // 30 FPS
+            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0/30.0);
+            // Extend battery life under lock.
+            InactiveSleepTime = TimeSpan.FromSeconds(1);
+ 
             _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft;
-            #else
+#else
             _graphics.IsFullScreen = OptionsManager.CurrentOptions.Fullscreen;
             _graphics.PreferredBackBufferHeight = OptionsManager.CurrentOptions.ResolutionHeight;
             _graphics.PreferredBackBufferWidth = OptionsManager.CurrentOptions.ResolutionWidth;
+
+            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0 / 30.0);
             #endif
 
             _currentState = GameState.MainMenu;
