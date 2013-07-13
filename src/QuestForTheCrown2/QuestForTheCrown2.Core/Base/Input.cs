@@ -242,7 +242,7 @@ namespace QuestForTheCrown2.Base
         /// <summary>
         /// Initializes input with controller, if possible. If not, initializes with the keyboard.
         /// </summary>
-        public Input()
+        public Input(int delay = 0)
         {
             if (GamePad.GetState(PlayerIndex.One).IsConnected)
             {

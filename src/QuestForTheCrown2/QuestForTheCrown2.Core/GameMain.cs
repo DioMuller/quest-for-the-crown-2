@@ -27,12 +27,13 @@ namespace QuestForTheCrown2
     {
         MainMenu,
         Playing,
-        Loading,
+        LoadGame,
         Options,
         Credits,
         GameOver,
         Quiting,
-        NewGame
+        NewGame,
+        LoadingGame
     }
 
     /// <summary>
@@ -48,6 +49,7 @@ namespace QuestForTheCrown2
         CreditsScreen _credits;
         GameOverScreen _gameOver;
         OptionsScreen _options;
+        LoadScreen _loadscreen;
 
         Levels.LevelCollection _overworld;
 
@@ -109,6 +111,7 @@ namespace QuestForTheCrown2
             _credits = new CreditsScreen(this);
             _gameOver = new GameOverScreen(this);
             _options = new OptionsScreen(this);
+            _loadscreen = new LoadScreen(this);
 
             System.Threading.ThreadPool.QueueUserWorkItem(LoadContentAsync);
         }
@@ -143,13 +146,14 @@ namespace QuestForTheCrown2
                     break;
                 case GameState.NewGame:
                     var player = _overworld.Players.First();
-                    GameStateManager.DeleteAllSaves();
+                    //GameStateManager.DeleteAllSaves();
                     GameStateManager.SelectSaveData(new Base.GameState
                     {
                         AllowWeapon = new List<string> { "Sword" },
                         DungeonsComplete = new List<string>(),
                         Player = GameStateManager.GetPlayerState(player)
                     });
+                    GameStateManager.SaveData();
                     ChangeState(GameState.Playing);
                     break;
                 case GameState.Playing:
@@ -158,15 +162,15 @@ namespace QuestForTheCrown2
                         _overworld.Update(gameTime);
                     }
                     break;
-                case GameState.Loading:
-                    if (GameStateManager.AllStates.Any())
+                case GameState.LoadGame:
+                    _loadscreen.Update(gameTime);
+                    break;
+                case GameState.LoadingGame:
+                    if( _overworld != null && _overworld.Parent != null )
                     {
-                        GameStateManager.SelectSaveData(GameStateManager.AllStates.OrderByDescending(s => s.LastPlayDate).First());
                         GameStateManager.LoadPlayerState(_overworld.Players.First());
                         ChangeState(GameState.Playing);
                     }
-                    else
-                        ChangeState(GameState.NewGame);
                     break;
                 case GameState.Options:
                     _options.Update(gameTime);
@@ -207,7 +211,8 @@ namespace QuestForTheCrown2
                         _overworld.Draw(gameTime, _spriteBatch, Window.ClientBounds);
                     }
                     break;
-                case GameState.Loading:
+                case GameState.LoadGame:
+                    _loadscreen.Draw(gameTime, _spriteBatch);
                     break;
                 case GameState.Options:
                     _options.Draw(gameTime, _spriteBatch);
