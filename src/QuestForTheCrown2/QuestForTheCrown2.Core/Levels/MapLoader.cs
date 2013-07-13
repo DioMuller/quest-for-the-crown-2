@@ -136,7 +136,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                     { "Slime", () => new Slime() },
                     { "Bat", () => new Bat() },
                     { "Zombie", () => new Zombie() },
-                    { "Skeleton", () => new Skeleton() },
+                    { "Skelleton", () => new Skeleton() },
                     { "Goon", () => new Goon() },
                 };
                 var entityFactory = new Dictionary<string, Func<string, Entity>>
@@ -145,7 +145,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                     { "Item", n => new Item() },
                     { "Entrance", n => new Entrance(int.Parse(n)) },
                     { "SavePoint", n => new SavePoint() },
-                    { "Enemy", n => enemyFactory.ContainsKey(n)? enemyFactory[n]() : new Enemy1() },
+                    { "Enemy", n => enemyFactory.ContainsKey(n)? enemyFactory[n]() : new Slime() },
                 };
 
                 entities = mapElement.Elements("objectgroup")
