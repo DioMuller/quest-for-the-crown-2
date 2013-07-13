@@ -35,7 +35,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
             _bow = Entity.Weapons.OfType<Bow>().FirstOrDefault();
             _followBehavior.Entity = Entity;
 
-            return _bow != null &&
+            return _bow != null && Entity.Arrows > 0 &&
                    _followBehavior.IsActive(gameTime, level);
         }
 
