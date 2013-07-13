@@ -14,7 +14,7 @@ namespace QuestForTheCrown2.Entities.Characters
 {
     class Goon : Entity
     {
-        const string spriteSheetPath = @"sprites\Characters\Goon.png";
+        const string spriteSheetPath = @"sprites\Characters\goon.png";
 
         public Goon()
             : base(spriteSheetPath, new Point(64, 64))

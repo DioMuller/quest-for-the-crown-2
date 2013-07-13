@@ -28,7 +28,7 @@ namespace QuestForTheCrown2.Entities.Weapons
         }
 
         public Bow()
-            : base(@"sprites\Objects\Bow.png", new Point(30, 30))
+            : base(@"sprites\Objects\bow.png", new Point(30, 30))
         {
             OverlapEntities = true;
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
