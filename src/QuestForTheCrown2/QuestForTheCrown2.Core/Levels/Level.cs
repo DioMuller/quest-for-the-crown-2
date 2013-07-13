@@ -235,7 +235,7 @@ namespace QuestForTheCrown2.Levels
         /// </summary>
         /// <param name="predicate">The function that checks the entity.</param>
         /// <returns>All entities where the predicate is true.</returns>
-        public IEnumerable<object> FindEntities(Func<Entity, bool> predicate)
+        public IEnumerable<Entity> FindEntities(Func<Entity, bool> predicate)
         {
             return _entities.Where(predicate);
         }

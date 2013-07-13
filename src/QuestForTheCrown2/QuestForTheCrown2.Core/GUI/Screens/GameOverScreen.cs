@@ -94,7 +94,7 @@ namespace QuestForTheCrown2.GUI.Screens
 
             
 
-            PrintString(spriteBatch, "You where defeated. Evil has won.", window, _goimagePosition.Y + _goimagePosition.Height + 50);
+            PrintString(spriteBatch, "You were defeated. Evil has won.", window, _goimagePosition.Y + _goimagePosition.Height + 50);
             PrintString(spriteBatch, "Press CANCEL to return to the menu.", window, _goimagePosition.Y + _goimagePosition.Height + 100);
         }
 
