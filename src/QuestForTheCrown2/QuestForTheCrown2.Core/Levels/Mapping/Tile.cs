@@ -33,6 +33,8 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// Tile id.
         /// </summary>
         public int Id { get; private set; }
+
+        public Tileset Parent { get; private set; }
         #endregion Properties
 
         #region Constructor
@@ -41,10 +43,11 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// </summary>
         /// <param name="id">Tile id.</param>
         /// <param name="terrain">Terrain id.</param>
-        public Tile( int id)
+        public Tile( int id, Tileset parent)
         {
             Id = id;
             _terrain = new int[4]{0,0,0,0};
+            Parent = parent;
         }
         #endregion Constructor
 

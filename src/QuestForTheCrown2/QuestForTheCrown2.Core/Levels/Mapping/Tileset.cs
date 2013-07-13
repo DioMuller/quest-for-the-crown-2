@@ -95,7 +95,7 @@ namespace QuestForTheCrown2.Levels.Mapping
 
             for( int i = 0; i < NumRows * NumCols; i++ )
             {
-                Tiles[i] = new Tile(i);
+                Tiles[i] = new Tile(i, this);
             }
         }
         #endregion Constructor

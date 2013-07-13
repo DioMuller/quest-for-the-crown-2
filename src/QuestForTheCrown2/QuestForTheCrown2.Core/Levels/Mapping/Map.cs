@@ -17,6 +17,8 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// Collision map.
         /// </summary>
         private int[,] _collisionMap;
+
+        private Dictionary<int, Tile> _tileDict = null;
         #endregion Attributes
 
         #region Properties
@@ -129,14 +131,14 @@ namespace QuestForTheCrown2.Levels.Mapping
                         int tileId = layer.GetData(x, y);
                         if (tileId != 0)
                         {
-                            Tileset set = GetTileset(tileId);
-                            spriteBatch.Draw(set.Texture,
+                            Tile tile = _tileDict[tileId];
+                            spriteBatch.Draw(tile.Parent.Texture,
                                 new Rectangle(
                                     (int)(x * TileSize.X - camera.X),
                                     (int)(y * TileSize.Y - camera.Y),
                                     TileSize.X,
                                     TileSize.Y),
-                                set.GetRect(tileId),
+                                tile.Parent.GetRect(tileId),
                                 Color.White);
                         }
                     }
@@ -197,7 +199,21 @@ namespace QuestForTheCrown2.Levels.Mapping
                 }
             }
         }
+
+        internal void UpdateTilesets()
+        {
+            _tileDict = new Dictionary<int,Tile>();
+
+            foreach(Tileset ts in Tilesets)
+            {
+                foreach( Tile tile in ts.Tiles )
+                {
+                    _tileDict.Add(tile.Id + ts.FirstGID, tile);
+                }
+            }
+        }
         #endregion Internal Methods
+
         #endregion Methods
     }
 }
