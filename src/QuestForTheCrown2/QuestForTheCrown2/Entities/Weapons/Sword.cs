@@ -88,6 +88,10 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Update(GameTime gameTime, Level level)
         {
+            base.Update(gameTime, level);
+            if (Parent == null)
+                return;
+
             var lookDirection = VectorHelper.AngleToV2(Angle + (float)(Math.PI / 2), 1);
             Position = Parent.CenterPosition + lookDirection * new Vector2(15);
 

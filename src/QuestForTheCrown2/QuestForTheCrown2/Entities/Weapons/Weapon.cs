@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Levels;
 using System;
@@ -23,5 +24,29 @@ namespace QuestForTheCrown2.Entities.Weapons
         /// <param name="attackButton">True when the attack button is pressed.</param>
         /// <param name="direction">The direction of the attack.</param>
         public abstract void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction);
+
+        public override void Update(GameTime gameTime, Level level)
+        {
+            // If Weapon has no owner!
+            if (Parent == null)
+            {
+                // Check if weapon is not allowed
+                if (!GameStateManager.CurrentState.AllowWeapon.Contains(GetType().ToString()))
+                    level.RemoveEntity(this);
+                else
+                {
+                    Parent = level.CollidesWith(CollisionRect).FirstOrDefault(e => e.Category == "Player");
+                    if (Parent != null)
+                    {
+                        Parent.AddWeapon(this);
+                        level.RemoveEntity(this);
+                        OverlapEntities = false;
+                    }
+                    return;
+                }
+            }
+
+            base.Update(gameTime, level);
+        }
     }
 }

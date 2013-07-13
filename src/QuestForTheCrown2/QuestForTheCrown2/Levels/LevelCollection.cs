@@ -59,7 +59,7 @@ namespace QuestForTheCrown2.Levels
             }
         }
 
-        private IEnumerable<Entity> Players
+        public IEnumerable<Entity> Players
         {
             get
             {

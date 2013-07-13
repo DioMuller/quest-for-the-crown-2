@@ -45,11 +45,11 @@ namespace QuestForTheCrown2.GUI.Screens
 
             _list = new ComponentList();
 
-            _list.AddComponent(new Button("New Game", new SelectDelegate(() => _parent.ChangeState(GameState.Playing))));
-            _list.AddComponent(new Button("Load Game", new SelectDelegate(() => _parent.ChangeState(GameState.Loading))));
-            _list.AddComponent(new Button("Options", new SelectDelegate(() => _parent.ChangeState(GameState.Options))));
-            _list.AddComponent(new Button("Credits", new SelectDelegate(() => _parent.ChangeState(GameState.Credits))));
-            _list.AddComponent(new Button("Quit Game", new SelectDelegate(() => _parent.ChangeState(GameState.Quiting))));
+            _list.AddComponent(new Button("New Game", () => _parent.ChangeState(GameState.NewGame)));
+            _list.AddComponent(new Button("Load Game", () => _parent.ChangeState(GameState.Loading)));
+            _list.AddComponent(new Button("Options", () => _parent.ChangeState(GameState.Options)));
+            _list.AddComponent(new Button("Credits", () => _parent.ChangeState(GameState.Credits)));
+            _list.AddComponent(new Button("Quit Game", () => _parent.ChangeState(GameState.Quiting)));
 
             _window = Rectangle.Empty;
 
@@ -77,7 +77,7 @@ namespace QuestForTheCrown2.GUI.Screens
         {
             Rectangle window = _parent.Window.ClientBounds;
 
-            if( window != _window )
+            if (window != _window)
             {
                 _logoPosition = new Rectangle(Convert.ToInt32(window.Center.X - (_logo.Width / 2)), Convert.ToInt32(0.2f * (window.Height - window.Y)), _logo.Width, _logo.Height);
                 _list.Position = new Rectangle(window.Center.X - 150, Convert.ToInt32(0.4f * (window.Height - window.Y)), 300, 600);

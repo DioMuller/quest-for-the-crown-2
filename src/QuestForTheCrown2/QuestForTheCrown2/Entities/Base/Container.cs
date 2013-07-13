@@ -5,6 +5,7 @@ using System.Text;
 
 namespace QuestForTheCrown2.Entities.Base
 {
+    [Serializable]
     public class Container
     {
         public Container()

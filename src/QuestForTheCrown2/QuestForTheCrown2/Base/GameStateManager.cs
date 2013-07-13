@@ -12,75 +12,108 @@ using System.Xml.Linq;
 
 namespace QuestForTheCrown2.Base
 {
+    [Serializable]
+    public class PlayerState
+    {
+        public int CurrentLevel { get; set; }
+        public Vector2 Position { get; set; }
+        public Dictionary<string, Container> Containers { get; set; }
+        public List<string> Weapons { get; set; }
+    }
+
+    [Serializable]
     public class GameState
     {
-        public Player Player { get; set; }
-        public List<string> DungeonsComplete { get; private set; }
-        public List<string> AllowWeapon { get; private set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastPlayDate { get; set; }
+
+        public PlayerState Player { get; set; }
+        public List<string> DungeonsComplete { get; set; }
+        public List<string> AllowWeapon { get; set; }
 
         public GameState()
         {
+            CreationDate = DateTime.Now;
             DungeonsComplete = new List<string>();
             AllowWeapon = new List<string>();
         }
     }
 
-    public class GameStateManager
+    public static class GameStateManager
     {
+        static GameStateManager()
+        {
+            LoadData();
+        }
+
         private const string SaveFile = "SavedGames.xml";
 
-        private static int _currentState;
+        private static int _currentState = -1;
 
         public static List<GameState> AllStates { get; private set; }
-        public static GameState CurrentState 
+        public static GameState CurrentState
         {
             get
             {
-                if (_currentState < 0) return null;
+                if (_currentState >= AllStates.Count) return null;
                 return AllStates[_currentState];
             }
         }
 
         public static void LoadData()
         {
+            try { AllStates = Serialization.Load<List<GameState>>(SaveFile); }
+            catch { }
+
+            if (AllStates == null)
+                AllStates = new List<GameState>();
+        }
+
+        public static void SaveData()
+        {
+            AllStates.Save(SaveFile);
+        }
+
+        public static void DeleteAllSaves()
+        {
             AllStates = new List<GameState>();
-            _currentState = 0;
+        }
 
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Domain | IsolatedStorageScope.Assembly, null, null))
+        public static void SelectSaveData(GameState state)
+        {
+            if (AllStates.Contains(state))
+                _currentState = AllStates.IndexOf(state);
+            else
             {
-                if (!store.FileExists(SaveFile))
-                {
-                    store.CreateFile(SaveFile);
-                }
-                else
-                {
-                    try
-                    {
-                        string content;
+                _currentState = AllStates.Count;
+                AllStates.Add(state);
+            }
+            state.LastPlayDate = DateTime.Now;
+        }
 
-                        using (StreamReader sr = new StreamReader(store.OpenFile(SaveFile, FileMode.Open)))
+        public static void SelectSaveData(int id)
+        {
+            _currentState = id;
+            var state = CurrentState;
+            if (state == null)
+                throw new ArgumentOutOfRangeException("Specified save state does not exists");
+            state.LastPlayDate = DateTime.Now;
+        }
+
+        public static PlayerState GetPlayerState(Entity player)
+        {
+            return new PlayerState
                         {
-                            content = sr.ReadToEnd();
-                        }
+                            CurrentLevel = player.CurrentLevel,
+                            Position = player.Position,
+                            Containers = player.Containers,
+                            Weapons = player.Weapons.Select(w => w.GetType().Name).ToList()
+                        };
+        }
 
-                        XDocument doc = XDocument.Parse(content);
-                        XElement root = doc.Element("saves");
-                        
-                        foreach (XElement save in root.Elements("save"))
-                        {
-                            #region Load Player
-                            XElement playerElement = save.Element("Player");
-                            Player player = new Player()
-                            {
-                                Position = new Vector2(float.Parse(playerElement.Attribute("X").Value),float.Parse(save.Element("Player").Attribute("Y").Value)),
-                                Health = new Container(
-                                    quantity: int.Parse(playerElement.Attribute("Health").Value),
-                                    maximum: int.Parse(playerElement.Attribute("MaxHealth").Value)),
-                            };
-                            #endregion Load Player
-
-                            #region Load Player Weapons
-                            var weaponFactory = new Dictionary<string, Func<Weapon>>
+        public static void LoadPlayerState(Entity player)
+        {
+            var weaponFactory = new Dictionary<string, Func<Weapon>>
                             {
                                 { "Sword", () => new Sword() },
                                 { "Bow", () => new Bow() },
@@ -88,30 +121,20 @@ namespace QuestForTheCrown2.Base
                                 { "FireWand", () => new FireWand() },
                             };
 
-                            var entities = playerElement.Element("Weapons")
-                                .Elements("Weapon")
-                                .Select(n => CreateWeapon(weaponFactory, n));
+            var playerStatus = GameStateManager.CurrentState.Player;
 
-                            player.Weapons.AddRange(entities);
-                            #endregion Load Player Weapons
-
-                            GameState state = new GameState();
-                        }
-                    }
-                    catch
-                    {
-                        store.CreateFile(SaveFile);
-                        AllStates = new List<GameState>();
-                        _currentState = 0;
-                    }
-                }
-            }
+            player.CurrentLevel = playerStatus.CurrentLevel;
+            player.Containers = playerStatus.Containers;
+            player.Weapons = playerStatus.Weapons.Select(name =>
+                {
+                    var weapon = CreateWeapon(weaponFactory, name);
+                    weapon.Parent = player;
+                    return weapon;
+                }).ToList();
         }
 
-        static Weapon CreateWeapon(Dictionary<string, Func<Weapon>> entityFactory, XElement node)
+        static Weapon CreateWeapon(Dictionary<string, Func<Weapon>> entityFactory, string type)
         {
-            string type = node.Attribute("Name").Value;
-
             if (!entityFactory.ContainsKey(type))
                 return null;
 

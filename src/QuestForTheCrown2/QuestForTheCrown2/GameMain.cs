@@ -1,5 +1,6 @@
 ﻿#region Using Statements
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -30,7 +31,8 @@ namespace QuestForTheCrown2
         Options,
         Credits,
         GameOver,
-        Quiting
+        Quiting,
+        NewGame
     }
 
     /// <summary>
@@ -128,11 +130,22 @@ namespace QuestForTheCrown2
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            switch( _currentState )
+            switch (_currentState)
             {
                 case GameState.MainMenu:
                     SoundManager.PlayBGM("Call to Adventure");
                     _mainMenu.Update(gameTime);
+                    break;
+                case GameState.NewGame:
+                    var player = _overworld.Players.First();
+                    GameStateManager.DeleteAllSaves();
+                    GameStateManager.SelectSaveData(new Base.GameState
+                    {
+                        AllowWeapon = new List<string> { "Sword" },
+                        DungeonsComplete = new List<string>(),
+                        Player = GameStateManager.GetPlayerState(player)
+                    });
+                    ChangeState(GameState.Playing);
                     break;
                 case GameState.Playing:
                     if( _overworld != null ) 
@@ -141,6 +154,14 @@ namespace QuestForTheCrown2
                     }
                     break;
                 case GameState.Loading:
+                    if (GameStateManager.AllStates.Any())
+                    {
+                        GameStateManager.SelectSaveData(GameStateManager.AllStates.OrderByDescending(s => s.LastPlayDate).First());
+                        GameStateManager.LoadPlayerState(_overworld.Players.First());
+                        ChangeState(GameState.Playing);
+                    }
+                    else
+                        ChangeState(GameState.NewGame);
                     break;
                 case GameState.Options:
                     _options.Update(gameTime);
@@ -154,8 +175,8 @@ namespace QuestForTheCrown2
                 case GameState.Quiting:
                     Exit();
                     break;
-            }            
-            
+            }
+
 
             base.Update(gameTime);
         }
@@ -192,8 +213,8 @@ namespace QuestForTheCrown2
                 case GameState.GameOver:
                     _gameOver.Draw(gameTime, _spriteBatch);
                     break;
-            }    
- 
+            }
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
@@ -207,7 +228,7 @@ namespace QuestForTheCrown2
         {
             _currentState = state;
 
-            if( state == GameState.Playing )
+            if (state == GameState.Playing)
             {
                 _overworld = MapLoader.LoadLevels("Content/maps/QuestForTheCrown.maps");
                 _overworld.Parent = this;
