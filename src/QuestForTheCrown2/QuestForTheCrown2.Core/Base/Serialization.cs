@@ -54,13 +54,17 @@ namespace QuestForTheCrown2.Base
                 var writePath = GetSaveFileName(store, path);
                 using (var fs = store.OpenFile(writePath, FileMode.OpenOrCreate, FileAccess.Write))
                 {
-                    var ser = new BinaryFormatter();
-                    ser.Serialize(fs, obj);
+                    try
+                    {
+                        var ser = new BinaryFormatter();
+                        ser.Serialize(fs, obj);
 
-                    if (writePath != path)
-                        store.CopyFile(writePath, path, true);
-                    if (store.FileExists(path + "~"))
-                        store.DeleteFile(path + "~");
+                        if (writePath != path)
+                            store.CopyFile(writePath, path, true);
+                        if (store.FileExists(path + "~"))
+                            store.DeleteFile(path + "~");
+                    }
+                    catch { }
                 }
             }
         }
