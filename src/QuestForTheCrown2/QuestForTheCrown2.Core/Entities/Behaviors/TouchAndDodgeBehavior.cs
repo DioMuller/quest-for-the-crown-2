@@ -119,7 +119,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                         angle = _forcedAngle.Value;
 
                     var targetRoute = new Vector2(-normalized.X, -normalized.Y);
-                    var rotated = targetRoute.Rotate(angle * 30);
+                    var rotated = targetRoute.Rotate(angle * MathHelper.ToRadians(30));
                     var rotatedSafe = new Vector2(rotated.X * Distance, rotated.Y * Distance);
                     var walkRoute = new Vector2(entLocation.X + rotatedSafe.X * safeXMult * 1.05f, entLocation.Y + rotatedSafe.Y * 1.05f) - entLocation;
                     normalized = new Vector2(walkRoute.X, walkRoute.Y);

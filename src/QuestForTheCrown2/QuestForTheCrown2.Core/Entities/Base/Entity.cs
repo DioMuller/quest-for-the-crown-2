@@ -151,7 +151,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// The current entity rotation angle.
         /// This is used during the Draw method, in conjunction with the RotationCenter.
         /// </summary>
-        public float Angle { get; protected set; }
+        public float Angle { get; set; }
 
         /// <summary>
         /// The draw point of the entity, the default is (0,0) which represents the upper-left corner.
@@ -165,9 +165,6 @@ namespace QuestForTheCrown2.Entities.Base
         {
             get
             {
-                if (Angle != 0 && (Size.X != Size.Y || Origin != new Vector2(Size.X / 2, Size.Y / 2)))
-                    throw new NotImplementedException();
-
                 return new Rectangle(
                     x: (int)(Position.X + Padding.X),
                     y: (int)(Position.Y + Padding.Y),
