@@ -57,6 +57,8 @@ namespace QuestForTheCrown2.Entities.Characters
                 new InputBehavior(InputType.Keyboard)
             );
             AddWeapon(new Bow());
+            Arrows = new Container(5);
+            Magic = new Container(10);
         }
         #endregion Constructor
     }
