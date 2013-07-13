@@ -33,6 +33,10 @@ namespace QuestForTheCrown2.GUI.Components
         /// Current selected option.
         /// </summary>
         private int _selectedOption;
+        /// <summary>
+        /// Time delay.
+        /// </summary>
+        private int _timeDelay;
         #endregion Attributes
 
         #region Delegates
@@ -67,6 +71,7 @@ namespace QuestForTheCrown2.GUI.Components
         {
             _components = new List<Component>();
             _input = new Input();
+            _timeDelay = 1000;
 
             _timeout = 0;
         }
@@ -79,43 +84,51 @@ namespace QuestForTheCrown2.GUI.Components
         /// <param name="gameTime">Current game time.</param>
         public void Update(GameTime gameTime)
         {
-            if( _input.ConfirmButton )
+            if( _timeDelay <= 0 )
             {
-                if( _components.Count > 0 )
+                if( _input.ConfirmButton )
                 {
-                    if( _components[_selectedOption].Select != null )
+                    if( _components.Count > 0 )
                     {
-                        _components[_selectedOption].Select();
+                        if( _components[_selectedOption].Select != null )
+                        {
+                            _timeDelay = 1000;
+                            _components[_selectedOption].Select();
+                        }
                     }
                 }
-            }
 
-            float x = _input.Movement.X;
-            float y = _input.Movement.Y;
+                float x = _input.Movement.X;
+                float y = _input.Movement.Y;
 
-            if (y != 0 && _timeout <= 0)
-            {
-                _timeout = 200;
-
-                if( y < 0f ) OptionUp();
-                else OptionDown();
-                SoundManager.PlaySound("select");
-            }
-            else if (x != 0 && _timeout <= 0)
-            {
-                _timeout = 200;
-
-                if( _components[_selectedOption].SelectionChanged != null )
+                if (y != 0 && _timeout <= 0)
                 {
-                    _components[_selectedOption].SelectionChanged( x );
-                    if( ValueChanged != null ) ValueChanged();
-                }
+                    _timeout = 200;
 
-                SoundManager.PlaySound("select");
+                    if( y < 0f ) OptionUp();
+                    else OptionDown();
+                    SoundManager.PlaySound("select");
+                }
+                else if (x != 0 && _timeout <= 0)
+                {
+                    _timeout = 200;
+
+                    if( _components[_selectedOption].SelectionChanged != null )
+                    {
+                        _components[_selectedOption].SelectionChanged( x );
+                        if( ValueChanged != null ) ValueChanged();
+                    }
+
+                    SoundManager.PlaySound("select");
+                }
+                else
+                {
+                    _timeout -= gameTime.ElapsedGameTime.Milliseconds;
+                }
             }
             else
             {
-                _timeout -= gameTime.ElapsedGameTime.Milliseconds;
+                _timeDelay -= gameTime.ElapsedGameTime.Milliseconds;
             }
         }
 
