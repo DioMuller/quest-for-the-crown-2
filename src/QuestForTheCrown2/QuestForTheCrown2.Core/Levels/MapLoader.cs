@@ -113,6 +113,8 @@ namespace QuestForTheCrown2.Levels.Mapping
 
                     map.Tilesets.Add(tileset);
                 }
+
+                map.UpdateTilesets();
                 #endregion Tilesets
 
                 #region Layers
