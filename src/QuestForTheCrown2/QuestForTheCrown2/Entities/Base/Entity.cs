@@ -63,7 +63,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// <summary>
         /// A list of all weapons available to this entity.
         /// </summary>
-        public List<Weapon> Weapons { get; private set; }
+        public List<Weapon> Weapons { get; set; }
 
         /// <summary>
         /// Status of the entity's ammo, health and magic.
