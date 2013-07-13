@@ -19,6 +19,7 @@ namespace QuestForTheCrown2.Entities.Base
         readonly int _framesPerLine;
         Animation _lastAnimation;
         TimeSpan _lastFrameStartTime;
+        Weapon _currentWeapon;
         #endregion
 
         #region Properties
@@ -64,6 +65,14 @@ namespace QuestForTheCrown2.Entities.Base
         /// A list of all weapons available to this entity.
         /// </summary>
         public List<Weapon> Weapons { get; set; }
+
+        /// <summary>
+        /// Reference to the current entity's weapon.
+        /// </summary>
+        public Weapon CurrentWeapon
+        {
+            get { return _currentWeapon; }
+        }
 
         /// <summary>
         /// Status of the entity's ammo, health and magic.
@@ -151,7 +160,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// The current entity rotation angle.
         /// This is used during the Draw method, in conjunction with the RotationCenter.
         /// </summary>
-        public float Angle { get; protected set; }
+        public float Angle { get; set; }
 
         /// <summary>
         /// The draw point of the entity, the default is (0,0) which represents the upper-left corner.
@@ -165,9 +174,6 @@ namespace QuestForTheCrown2.Entities.Base
         {
             get
             {
-                if (Angle != 0 && (Size.X != Size.Y || Origin != new Vector2(Size.X / 2, Size.Y / 2)))
-                    throw new NotImplementedException();
-
                 return new Rectangle(
                     x: (int)(Position.X + Padding.X),
                     y: (int)(Position.Y + Padding.Y),
@@ -296,6 +302,19 @@ namespace QuestForTheCrown2.Entities.Base
 
             if (updateDirection)
                 CurrentDirection = direction;
+        }
+
+        public virtual void ChangeWeapon(Weapon nextWeapon, Level level)
+        {
+            if (nextWeapon == _currentWeapon)
+                return;
+
+            var oldWeapon = _currentWeapon;
+            if (oldWeapon != null)
+                oldWeapon.Unequiped(level);
+            _currentWeapon = nextWeapon;
+            if (_currentWeapon != null)
+                _currentWeapon.Equiped(level);
         }
 
         #region Containers

@@ -48,5 +48,18 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             base.Update(gameTime, level);
         }
+
+        /// <summary>
+        /// Called when the weapon is equiped.
+        /// </summary>
+        public virtual void Equiped(Level level) { }
+
+        /// <summary>
+        /// Called when the weapon is unequiped.
+        /// </summary>
+        public virtual void Unequiped(Level level)
+        {
+            level.RemoveEntity(this);
+        }
     }
 }

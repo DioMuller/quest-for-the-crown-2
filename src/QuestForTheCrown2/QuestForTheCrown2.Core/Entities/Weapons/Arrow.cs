@@ -10,46 +10,50 @@ namespace QuestForTheCrown2.Entities.Weapons
 {
     class Arrow : Entity
     {
-        Vector2 _direction;
         Vector2 _hitLocation;
-        Entity _hitEntity;
+        public Entity HitEntity { get; set; }
         TimeSpan _maxHitTime = TimeSpan.FromSeconds(5);
         TimeSpan _entHitTime;
         TimeSpan _timeFromCreation;
 
         double _spriteAngle = (Math.PI / 8) * 6;
 
-
-        Vector2 _collisionDirection;
-
         public Arrow(Vector2 direction)
             : base(@"sprites\Objects\Arrow.png", null)
         {
-            _direction = direction;
-            _direction.Normalize();
+            direction.Normalize();
+            CurrentDirection = direction;
             OverlapEntities = true;
-            Angle = (float)(Math.Atan2(-direction.X, direction.Y) + _spriteAngle);
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
             _timeFromCreation = TimeSpan.Zero;
 
             Speed = new Vector2(32 * 10);
-
-            const int rectSize = 15;
-            _collisionDirection = VectorHelper.AngleToV2((float)(Angle - _spriteAngle), rectSize);
-            _collisionDirection = new Vector2(-_collisionDirection.Y, _collisionDirection.X);
         }
 
         public override Rectangle CollisionRect
         {
             get
             {
-                var location = Position + _collisionDirection;
+                var location = Position + CollisionDirection;
                 return new Rectangle((int)(location.X - 4), (int)(location.Y - 4), 8, 8);
+            }
+        }
+
+        Vector2 CollisionDirection
+        {
+            get
+            {
+                const int rectSize = 15;
+                var collisionDirection = VectorHelper.AngleToV2((float)(Angle - _spriteAngle), rectSize);
+                collisionDirection = new Vector2(-collisionDirection.Y, collisionDirection.X);
+                return collisionDirection;
             }
         }
 
         public override void Update(GameTime gameTime, Levels.Level level)
         {
+            Angle = (float)(Math.Atan2(-CurrentDirection.X, CurrentDirection.Y) + _spriteAngle);
+
             _timeFromCreation += gameTime.ElapsedGameTime;
 
             if (level.Map.Collides(CollisionRect))
@@ -58,37 +62,37 @@ namespace QuestForTheCrown2.Entities.Weapons
                 return;
             }
 
-            if (_hitEntity != null)
+            if (HitEntity != null)
             {
-                if (gameTime.TotalGameTime > _entHitTime + _maxHitTime || !level.ContainsEntity(_hitEntity))
+                if (gameTime.TotalGameTime > _entHitTime + _maxHitTime || !level.ContainsEntity(HitEntity))
                 {
                     level.RemoveEntity(this);
                 }
                 else
                 {
                     OverlapEntities = !OverlapEntities;
-                    Position = _hitEntity.CenterPosition - _hitLocation;
+                    Position = HitEntity.CenterPosition - _hitLocation;
                 }
 
                 return;
             }
 
             var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-            Position += _direction * (float)timeFactor * Speed;
+            Position += CurrentDirection * (float)timeFactor * Speed;
 
             foreach (var ent in level.CollidesWith(CollisionRect).Distinct())
             {
                 if (ent != this && ent != Parent && ent.Health != null)
                 {
                     _entHitTime = gameTime.TotalGameTime;
-                    _hitEntity = ent;
+                    HitEntity = ent;
 
                     var direction = VectorHelper.AngleToV2(Angle, 5);
                     direction = new Vector2(-direction.Y, direction.X);
 
                     ent.Hit(this, level, direction);
                     OverlapEntities = false;
-                    _hitLocation = ent.CenterPosition - Position - _direction * new Vector2(8);
+                    _hitLocation = ent.CenterPosition - Position - CurrentDirection * new Vector2(8);
                     return;
                 }
             }

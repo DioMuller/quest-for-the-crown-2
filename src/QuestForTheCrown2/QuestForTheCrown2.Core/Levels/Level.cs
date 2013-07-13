@@ -197,10 +197,10 @@ namespace QuestForTheCrown2.Levels
         /// </summary>
         /// <param name="rect">Collision rect.</param>
         /// <returns>Entities that collide with the rectangle.</returns>
-        public IEnumerable<Entity> CollidesWith(Rectangle rect)
+        public IEnumerable<Entity> CollidesWith(Rectangle rect, bool includeOverlaping = false)
         {
             return (from ent in _entities
-                    where !ent.OverlapEntities && rect.Intersects(ent.CollisionRect)
+                    where (!ent.OverlapEntities || includeOverlaping) && rect.Intersects(ent.CollisionRect)
                     select ent);
         }
         #endregion Methods

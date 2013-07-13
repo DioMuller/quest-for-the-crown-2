@@ -44,6 +44,13 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="map">Current entity map.</param>
         public override void Update(GameTime gameTime, Level level)
         {
+            if (_input.PreviousWeapon)
+                AdvanceWeapons(level, -1);
+            else if (_input.NextWeapon)
+                AdvanceWeapons(level, 1);
+            else
+                AdvanceWeapons(level, 0);
+
             Walk(gameTime, level, _input.Movement);
             Attack(gameTime, level, _input.AttackButton, _input.AttackDirection);
         }
@@ -54,9 +61,24 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="direction">The attack direction.</param>
         void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
-            if (Entity.Weapons.Count > 0)
-                Entity.Weapons[_currentWeapon % Entity.Weapons.Count].Attack(gameTime, level, attackButton, direction);
+            if (_currentWeapon < Entity.Weapons.Count)
+                Entity.Weapons[_currentWeapon].Attack(gameTime, level, attackButton, direction);
         }
         #endregion
+
+        /// <summary>
+        /// Advance the current weapon.
+        /// </summary>
+        /// <param name="count">Number of weapons to advance.</param>
+        void AdvanceWeapons(Level level, int count)
+        {
+            if (Entity.Weapons.Count == 0)
+                Entity.ChangeWeapon(null, level);
+            else
+            {
+                _currentWeapon = (_currentWeapon + count + Entity.Weapons.Count) % Entity.Weapons.Count;
+                Entity.ChangeWeapon(Entity.Weapons[_currentWeapon], level);
+            }
+        }
     }
 }

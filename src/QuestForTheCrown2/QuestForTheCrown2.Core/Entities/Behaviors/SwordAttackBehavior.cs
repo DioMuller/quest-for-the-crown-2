@@ -14,7 +14,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
     class SwordAttackBehavior : WalkBehavior
     {
         #region Attributes
-        Sword _weapon;
+        Sword _sword;
         FollowBehavior _followBehavior;
         TimeSpan _lastAttackTime, _timeBetweenAttacks = TimeSpan.FromSeconds(2);
 
@@ -43,10 +43,10 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         public override bool IsActive(GameTime gameTime, Level level)
         {
-            _weapon = Entity.Weapons.OfType<Sword>().FirstOrDefault();
+            _sword = Entity.Weapons.OfType<Sword>().FirstOrDefault();
             _followBehavior.Entity = Entity;
 
-            return _weapon != null &&
+            return _sword != null &&
                    _followBehavior.IsActive(gameTime, level);
         }
 
@@ -57,10 +57,12 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="map">Current entity map.</param>
         public override void Update(GameTime gameTime, Level level)
         {
+            Entity.ChangeWeapon(_sword, level);
+
             if (_followBehavior.CurrentTarget.Distance < 36 && _lastAttackTime + _timeBetweenAttacks < gameTime.TotalGameTime)
             {
-                _weapon.Attack(gameTime, level, true, _followBehavior.CurrentTarget.Position);
-                _weapon.Attack(gameTime, level, false, Vector2.Zero);
+                _sword.Attack(gameTime, level, true, _followBehavior.CurrentTarget.Position);
+                _sword.Attack(gameTime, level, false, Vector2.Zero);
                 _lastAttackTime = gameTime.TotalGameTime;
             }
             else

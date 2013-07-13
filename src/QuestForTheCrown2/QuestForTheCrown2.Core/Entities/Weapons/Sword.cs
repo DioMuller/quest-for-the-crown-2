@@ -30,6 +30,8 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
+            CurrentDirection = direction;
+
             if (!attackButton && direction.Length() > 0.8)
                 attackButton = true;
             else if (direction.Length() < 0.4)
@@ -61,9 +63,9 @@ namespace QuestForTheCrown2.Entities.Weapons
             if (!level.ContainsEntity(this))
             {
                 if (_desiredAngle > 0)
-                    _swingedAngle = ToRadian(90);
+                    _swingedAngle = MathHelper.ToRadians(90);
                 else
-                    _swingedAngle = ToRadian(-90);
+                    _swingedAngle = MathHelper.ToRadians(-90);
                 Angle = _swingedAngle;
                 level.AddEntity(this);
             }
@@ -95,9 +97,14 @@ namespace QuestForTheCrown2.Entities.Weapons
             var lookDirection = VectorHelper.AngleToV2(Angle + (float)(Math.PI / 2), 1);
             Position = Parent.CenterPosition + lookDirection * new Vector2(15);
 
-            foreach (var ent in GetCollisionRects().SelectMany(level.CollidesWith).Distinct())
+            foreach (var ent in GetCollisionRects().SelectMany(e => level.CollidesWith(e, true)).Distinct())
             {
-                if (ent != this && ent != Parent && ent.Health != null)
+                if (ent is Arrow && ((Arrow)ent).HitEntity == null)
+                {
+                    ent.CurrentDirection = Parent.CurrentDirection.Rotate(-_swingedAngle / 4);
+                    ent.Parent = Parent;
+                }
+                else if (ent != this && ent != Parent && ent.Health != null)
                 {
                     var direction = VectorHelper.AngleToV2(Angle, 5);
                     direction = new Vector2(-direction.Y, direction.X);
@@ -147,11 +154,6 @@ namespace QuestForTheCrown2.Entities.Weapons
                 location += direction;
                 yield return new Rectangle((int)(location.X - rectSize / 2), (int)(location.Y - rectSize / 2), rectSize, rectSize);
             }
-        }
-
-        static float ToRadian(float angle)
-        {
-            return (float)(Math.PI / 180) * angle;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
             _bow = Entity.Weapons.OfType<Bow>().FirstOrDefault();
             _followBehavior.Entity = Entity;
 
-            return _bow != null &&
+            return _bow != null && Entity.Arrows > 0 &&
                    _followBehavior.IsActive(gameTime, level);
         }
 
@@ -46,6 +46,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
+            Entity.ChangeWeapon(_bow, level);
+
             if (_followBehavior.CurrentTarget.Distance <= _followBehavior.Distance && !level.ContainsEntity(_bow.LastShotArrow))
             {
                 if (_lastAttackTime + TimeSpan.FromSeconds(0.5) < gameTime.TotalGameTime)

@@ -48,6 +48,8 @@ namespace QuestForTheCrown2.Entities.Characters
                 new WalkAroundBehavior()
             );
             AddWeapon(new Bow());
+
+            Arrows = new Container(20);
         }
 
         public override void Hit(Entity attacker, Levels.Level level, Vector2 direction)
