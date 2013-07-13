@@ -73,6 +73,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 CurrentAnimation = "loaded";
             else
                 CurrentAnimation = "unloaded";
+
             base.Update(gameTime, level);
         }
     }

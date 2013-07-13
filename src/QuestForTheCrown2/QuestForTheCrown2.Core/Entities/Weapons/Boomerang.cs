@@ -39,18 +39,9 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Update(GameTime gameTime, Level level)
         {
+            base.Update(gameTime, level);
             if (Parent == null)
-            {
-                // Boomerang has no owner!
-                Parent = level.CollidesWith(CollisionRect).FirstOrDefault(e => e.Category == "Player");
-                if (Parent != null)
-                {
-                    Parent.AddWeapon(this);
-                    level.RemoveEntity(this);
-                    OverlapEntities = false;
-                }
                 return;
-            }
 
             var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
 
