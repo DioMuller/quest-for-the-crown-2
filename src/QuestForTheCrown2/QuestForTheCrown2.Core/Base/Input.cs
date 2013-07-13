@@ -62,30 +62,6 @@ namespace QuestForTheCrown2.Base
             }
         }
 
-        /// <summary>
-        /// Attack button pressed?
-        /// </summary>
-        public bool Attack
-        {
-            get
-            {
-                switch (Type)
-                {
-                    case InputType.Controller:
-                        var gpState = GamePad.GetState((PlayerIndex)Index);
-                        return gpState.IsButtonDown(Buttons.A)
-                            || gpState.Triggers.Right > 0.7;
-                    case InputType.Keyboard:
-                    case InputType.KeyboardAndMouse:
-                        var kbState = Keyboard.GetState((PlayerIndex)Index);
-                        return kbState.IsKeyDown(Keys.LeftControl)
-                            || kbState.IsKeyDown(Keys.RightControl)
-                            || kbState.IsKeyDown(Keys.Space);
-                    default:
-                        return false;
-                }
-            }
-        }
 
         /// <summary>
         /// Attack direction.
@@ -129,7 +105,7 @@ namespace QuestForTheCrown2.Base
                         return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.Start);
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
-                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Enter);
+                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.F1);
                     default:
                         return false;
                 }
@@ -149,7 +125,7 @@ namespace QuestForTheCrown2.Base
                         return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.A);
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
-                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Space);
+                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Enter);
                     default:
                         return false;
                 }
@@ -170,6 +146,31 @@ namespace QuestForTheCrown2.Base
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
                         return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Escape);
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Attack button pressed?
+        /// </summary>
+        public bool AttackButton
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case InputType.Controller:
+                        var gpState = GamePad.GetState((PlayerIndex)Index);
+                        return gpState.IsButtonDown(Buttons.X)
+                            || gpState.Triggers.Right > 0.7;
+                    case InputType.Keyboard:
+                    case InputType.KeyboardAndMouse:
+                        var kbState = Keyboard.GetState((PlayerIndex)Index);
+                        return kbState.IsKeyDown(Keys.LeftControl)
+                            || kbState.IsKeyDown(Keys.RightControl)
+                            || kbState.IsKeyDown(Keys.Space);
                     default:
                         return false;
                 }
