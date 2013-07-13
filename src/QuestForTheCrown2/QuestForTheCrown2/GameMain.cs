@@ -58,13 +58,18 @@ namespace QuestForTheCrown2
 
             OptionsManager.LoadOptions();
 
+            #if OUYA
+            _graphics.IsFullScreen = true;
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft;
+            #else
             _graphics.IsFullScreen = OptionsManager.CurrentOptions.Fullscreen;
             _graphics.PreferredBackBufferHeight = OptionsManager.CurrentOptions.ResolutionHeight;
             _graphics.PreferredBackBufferWidth = OptionsManager.CurrentOptions.ResolutionWidth;
+            #endif
 
             _currentState = GameState.MainMenu;
-
-
 
             Content.RootDirectory = "Content";
         }
@@ -98,6 +103,11 @@ namespace QuestForTheCrown2
             _gameOver = new GameOverScreen(this);
             _options = new OptionsScreen(this);
 
+            System.Threading.ThreadPool.QueueUserWorkItem(LoadContentAsync);
+        }
+
+        private void LoadContentAsync(object asyncState)
+        {
             _overworld = MapLoader.LoadLevels("Content/maps/QuestForTheCrown.maps");
             _overworld.Parent = this;
         }
@@ -125,7 +135,10 @@ namespace QuestForTheCrown2
                     _mainMenu.Update(gameTime);
                     break;
                 case GameState.Playing:
-                    _overworld.Update(gameTime);
+                    if( _overworld != null ) 
+                    {
+                        _overworld.Update(gameTime);
+                    }
                     break;
                 case GameState.Loading:
                     break;
@@ -163,7 +176,10 @@ namespace QuestForTheCrown2
                     _mainMenu.Draw(gameTime, _spriteBatch);
                     break;
                 case GameState.Playing:
-                    _overworld.Draw(gameTime, _spriteBatch, Window.ClientBounds);
+                    if( _overworld != null )
+                    {
+                        _overworld.Draw(gameTime, _spriteBatch, Window.ClientBounds);
+                    }
                     break;
                 case GameState.Loading:
                     break;

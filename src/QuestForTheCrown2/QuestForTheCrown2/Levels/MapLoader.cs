@@ -27,25 +27,30 @@ namespace QuestForTheCrown2.Levels.Mapping
         public static LevelCollection LoadLevels(string path)
         {
             LevelCollection collection = new LevelCollection();
-            XDocument doc = XDocument.Load(path);
-            XElement root = doc.Element("collection");
+            
+            using( var stream = TitleContainer.OpenStream(path) )
+            {    
+                XDocument doc = XDocument.Load(stream);
+                XElement root = doc.Element("collection");
 
-            #region Load Levels
-            foreach (XElement el in root.Element("levels").Elements("level"))
-            {
-                int id = int.Parse(el.Attribute("id").Value);
-                int[] neighbors = (from string element in el.Attribute("neighbors").Value.Split(',') select int.Parse(element)).ToArray<int>();
-                Level level = LoadMap(id, el.Attribute("path").Value);
-                level.BGM = el.Attribute("music").Value;
-
-                for (int i = 0; i < 4; i++)
+                #region Load Levels
+                foreach (XElement el in root.Element("levels").Elements("level"))
                 {
-                    level.SetNeighbor((Direction)i, neighbors[i]);
-                }
+                    int id = int.Parse(el.Attribute("id").Value);
+                    int[] neighbors = (from string element in el.Attribute("neighbors").Value.Split(',') select int.Parse(element)).ToArray<int>();
+                    Level level = LoadMap(id, el.Attribute("path").Value);
+                    level.BGM = el.Attribute("music").Value;
 
-                collection.AddLevel(level);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        level.SetNeighbor((Direction)i, neighbors[i]);
+                    }
+
+                    collection.AddLevel(level);
+                }
+                #endregion Load Levels
             }
-            #endregion Load Levels
+
             return collection;
         }
 
@@ -57,90 +62,95 @@ namespace QuestForTheCrown2.Levels.Mapping
         private static Level LoadMap(int id, string tmxFile)
         {
             Map map = null;
-            XDocument doc = XDocument.Load(tmxFile);
+            List<Entity> entities = new List<Entity>();
 
-            #region Create Map
-            XElement mapElement = doc.Element("map");
-            string name = Path.GetFileName(tmxFile).Replace(".tmx", "");
-            Point size = new Point(int.Parse(mapElement.Attribute("width").Value), int.Parse(mapElement.Attribute("height").Value));
-            Point tileSize = new Point(int.Parse(mapElement.Attribute("tilewidth").Value), int.Parse(mapElement.Attribute("tileheight").Value));
+            using( var stream = TitleContainer.OpenStream(tmxFile) )
+            {   
+                XDocument doc = XDocument.Load(stream);
 
-            map = new Map(name, size, tileSize);
-            #endregion Create Map
+                #region Create Map
+                XElement mapElement = doc.Element("map");
+                string name = Path.GetFileName(tmxFile).Replace(".tmx", "");
+                Point size = new Point(int.Parse(mapElement.Attribute("width").Value), int.Parse(mapElement.Attribute("height").Value));
+                Point tileSize = new Point(int.Parse(mapElement.Attribute("tilewidth").Value), int.Parse(mapElement.Attribute("tileheight").Value));
 
-            #region Tilesets
-            foreach (XElement set in mapElement.Elements("tileset"))
-            {
-                Tileset tileset;
-                int firstgid = int.Parse(set.Attribute("firstgid").Value.Replace("../", ""));
+                map = new Map(name, size, tileSize);
+                #endregion Create Map
 
-                if (set.Attribute("source") == null)
+                #region Tilesets
+                foreach (XElement set in mapElement.Elements("tileset"))
                 {
-                    string tilename = set.Attribute("name").Value;
-                    Point tilesSize = new Point(int.Parse(set.Attribute("tilewidth").Value), int.Parse(set.Attribute("tileheight").Value));
-                    XElement image = set.Element("image");
-                    string imageSource = image.Attribute("source").Value.Replace("../", ""); //Removes relative path (since we'll use Content)
-                    Point imageSize = new Point(int.Parse(image.Attribute("width").Value), int.Parse(image.Attribute("height").Value));
+                    Tileset tileset;
+                    int firstgid = int.Parse(set.Attribute("firstgid").Value.Replace("../", ""));
 
-                    tileset = new Tileset(firstgid, tilename, tilesSize, imageSource, imageSize);
-
-                    #region Tiles
-                    foreach (XElement element in set.Elements("tile"))
+                    if (set.Attribute("source") == null)
                     {
-                        int tileid = int.Parse(element.Attribute("id").Value);
-                        string[] terrain = element.Attribute("terrain").Value.Split(',');
+                        string tilename = set.Attribute("name").Value;
+                        Point tilesSize = new Point(int.Parse(set.Attribute("tilewidth").Value), int.Parse(set.Attribute("tileheight").Value));
+                        XElement image = set.Element("image");
+                        string imageSource = image.Attribute("source").Value.Replace("../", ""); //Removes relative path (since we'll use Content)
+                        Point imageSize = new Point(int.Parse(image.Attribute("width").Value), int.Parse(image.Attribute("height").Value));
 
-                        tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperLeft, int.Parse(terrain[0]));
-                        tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperRight, int.Parse(terrain[1]));
-                        tileset.Tiles[tileid].SetCollision(CollisionPosition.DownLeft, int.Parse(terrain[2]));
-                        tileset.Tiles[tileid].SetCollision(CollisionPosition.DownRight, int.Parse(terrain[3]));
+                        tileset = new Tileset(firstgid, tilename, tilesSize, imageSource, imageSize);
+
+                        #region Tiles
+                        foreach (XElement element in set.Elements("tile"))
+                        {
+                            int tileid = int.Parse(element.Attribute("id").Value);
+                            string[] terrain = element.Attribute("terrain").Value.Split(',');
+
+                            tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperLeft, int.Parse(terrain[0]));
+                            tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperRight, int.Parse(terrain[1]));
+                            tileset.Tiles[tileid].SetCollision(CollisionPosition.DownLeft, int.Parse(terrain[2]));
+                            tileset.Tiles[tileid].SetCollision(CollisionPosition.DownRight, int.Parse(terrain[3]));
+                        }
+                        #endregion Tiles
                     }
-                    #endregion Tiles
+                    else
+                    {
+                        tileset = LoadTileset(firstgid, "Content/" + set.Attribute("source").Value.Replace("../", ""));
+                    }
+
+                    map.Tilesets.Add(tileset);
                 }
-                else
+                #endregion Tilesets
+
+                #region Layers
+                foreach (XElement lay in mapElement.Elements("layer"))
                 {
-                    tileset = LoadTileset(firstgid, "Content/" + set.Attribute("source").Value.Replace("../", ""));
+                    string layerName = lay.Attribute("name").Value;
+                    Point layersize = new Point(int.Parse(lay.Attribute("width").Value), int.Parse(lay.Attribute("height").Value));
+                    string csvdata = lay.Element("data").Value;
+
+                    Layer layer = new Layer(layerName, layersize, csvdata);
+                    map.Layers.Add(layer);
                 }
+                #endregion Layers
 
-                map.Tilesets.Add(tileset);
+                #region Objects
+                var enemyFactory = new Dictionary<string, Func<Entity>>
+                {
+                    { "Crab", () => new Crab() },
+                    { "Slime", () => new Slime() },
+                    { "Bat", () => new Bat() },
+                    { "Zombie", () => new Zombie() },
+                    { "Skeleton", () => new Skeleton() },
+                    { "Goon", () => new Goon() },
+                };
+                var entityFactory = new Dictionary<string, Func<string, Entity>>
+                {
+                    { "Player", n => new Player() },
+                    { "Item", n => new Item() },
+                    { "Entrance", n => new Entrance(int.Parse(n)) },
+                    { "SavePoint", n => new SavePoint() },
+                    { "Enemy", n => enemyFactory.ContainsKey(n)? enemyFactory[n]() : new Enemy1() },
+                };
+
+                entities = mapElement.Elements("objectgroup")
+                                         .Elements("object")
+                                         .Select(n => CreateEntity(entityFactory, id, n)).ToList();
+                #endregion Objects
             }
-            #endregion Tilesets
-
-            #region Layers
-            foreach (XElement lay in mapElement.Elements("layer"))
-            {
-                string layerName = lay.Attribute("name").Value;
-                Point layersize = new Point(int.Parse(lay.Attribute("width").Value), int.Parse(lay.Attribute("height").Value));
-                string csvdata = lay.Element("data").Value;
-
-                Layer layer = new Layer(layerName, layersize, csvdata);
-                map.Layers.Add(layer);
-            }
-            #endregion Layers
-
-            #region Objects
-            var enemyFactory = new Dictionary<string, Func<Entity>>
-            {
-                { "Crab", () => new Crab() },
-                { "Slime", () => new Slime() },
-                { "Bat", () => new Bat() },
-                { "Zombie", () => new Zombie() },
-                { "Skeleton", () => new Skeleton() },
-                { "Goon", () => new Goon() },
-            };
-            var entityFactory = new Dictionary<string, Func<string, Entity>>
-            {
-                { "Player", n => new Player() },
-                { "Item", n => new Item() },
-                { "Entrance", n => new Entrance(int.Parse(n)) },
-                { "SavePoint", n => new SavePoint() },
-                { "Enemy", n => enemyFactory.ContainsKey(n)? enemyFactory[n]() : new Enemy1() },
-            };
-
-            var entities = mapElement.Elements("objectgroup")
-                                     .Elements("object")
-                                     .Select(n => CreateEntity(entityFactory, id, n));
-            #endregion Objects
 
             return new Level(id, map, entities);
         }
@@ -162,28 +172,33 @@ namespace QuestForTheCrown2.Levels.Mapping
 
         private static Tileset LoadTileset(int firstgid, string tsxFile)
         {
-            XDocument doc = XDocument.Load(tsxFile);
-            XElement set = doc.Element("tileset");
+            Tileset tileset;
 
-            string tilename = set.Attribute("name").Value;
-            Point tilesSize = new Point(int.Parse(set.Attribute("tilewidth").Value), int.Parse(set.Attribute("tileheight").Value));
-            XElement image = set.Element("image");
-            string imageSource = image.Attribute("source").Value.Replace("../", ""); //Removes relative path (since we'll use Content)
-            Point imageSize = new Point(int.Parse(image.Attribute("width").Value), int.Parse(image.Attribute("height").Value));
-            Tileset tileset = new Tileset(firstgid, tilename, tilesSize, imageSource, imageSize);
-
-            #region Tiles
-            foreach (XElement element in set.Elements("tile"))
+            using (var stream = TitleContainer.OpenStream(tsxFile))
             {
-                int tileid = int.Parse(element.Attribute("id").Value);
-                string[] terrain = element.Attribute("terrain").Value.Split(',');
+                XDocument doc = XDocument.Load(stream);
+                XElement set = doc.Element("tileset");
 
-                tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperLeft, int.Parse(terrain[0]));
-                tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperRight, int.Parse(terrain[1]));
-                tileset.Tiles[tileid].SetCollision(CollisionPosition.DownLeft, int.Parse(terrain[2]));
-                tileset.Tiles[tileid].SetCollision(CollisionPosition.DownRight, int.Parse(terrain[3]));
+                string tilename = set.Attribute("name").Value;
+                Point tilesSize = new Point(int.Parse(set.Attribute("tilewidth").Value), int.Parse(set.Attribute("tileheight").Value));
+                XElement image = set.Element("image");
+                string imageSource = image.Attribute("source").Value.Replace("../", ""); //Removes relative path (since we'll use Content)
+                Point imageSize = new Point(int.Parse(image.Attribute("width").Value), int.Parse(image.Attribute("height").Value));
+                tileset = new Tileset(firstgid, tilename, tilesSize, imageSource, imageSize);
+
+                #region Tiles
+                foreach (XElement element in set.Elements("tile"))
+                {
+                    int tileid = int.Parse(element.Attribute("id").Value);
+                    string[] terrain = element.Attribute("terrain").Value.Split(',');
+
+                    tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperLeft, int.Parse(terrain[0]));
+                    tileset.Tiles[tileid].SetCollision(CollisionPosition.UpperRight, int.Parse(terrain[1]));
+                    tileset.Tiles[tileid].SetCollision(CollisionPosition.DownLeft, int.Parse(terrain[2]));
+                    tileset.Tiles[tileid].SetCollision(CollisionPosition.DownRight, int.Parse(terrain[3]));
+                }
+                #endregion Tiles
             }
-            #endregion Tiles
 
             return tileset;
         }
