@@ -16,7 +16,7 @@ namespace QuestForTheCrown2.Entities.Weapons
         bool _oldAttackButton;
 
         public FireWand()
-            : base(@"sprites\Objects\Sword.png", null)
+            : base(@"sprites\Objects\fireball.png", null)
         {
         }
 

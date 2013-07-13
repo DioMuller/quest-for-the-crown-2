@@ -15,22 +15,57 @@ namespace QuestForTheCrown2.Base
     [Serializable]
     public class PlayerState
     {
+        /// <summary>
+        /// Current Level Number.
+        /// </summary>
         public int CurrentLevel { get; set; }
+
+        /// <summary>
+        /// Player Position
+        /// </summary>
         public Vector2 Position { get; set; }
+        /// <summary>
+        /// Containers
+        /// </summary>
         public Dictionary<string, Container> Containers { get; set; }
+
+        /// <summary>
+        /// Player Weapons
+        /// </summary>
         public List<string> Weapons { get; set; }
     }
 
     [Serializable]
     public class GameState
     {
+        /// <summary>
+        /// Creation Date
+        /// </summary>
         public DateTime CreationDate { get; set; }
+
+        /// <summary>
+        /// Last Play Date
+        /// </summary>
         public DateTime LastPlayDate { get; set; }
 
+        /// <summary>
+        /// Current player state.
+        /// </summary>
         public PlayerState Player { get; set; }
+        
+        /// <summary>
+        /// Completed dungeons. 
+        /// </summary>
         public List<string> DungeonsComplete { get; set; }
+
+        /// <summary>
+        /// Weapons allowed.
+        /// </summary>
         public List<string> AllowWeapon { get; set; }
 
+        /// <summary>
+        /// Creates Game State.
+        /// </summary>
         public GameState()
         {
             CreationDate = DateTime.Now;
@@ -41,16 +76,32 @@ namespace QuestForTheCrown2.Base
 
     public static class GameStateManager
     {
+        /// <summary>
+        /// Creates Game State Manager and loads data.
+        /// </summary>
         static GameStateManager()
         {
             LoadData();
         }
 
+        /// <summary>
+        /// Save file.
+        /// </summary>
         private const string SaveFile = "SavedGames.xml";
 
+        /// <summary>
+        /// Current state index.
+        /// </summary>
         private static int _currentState = -1;
 
+        /// <summary>
+        /// All saved states.
+        /// </summary>
         public static List<GameState> AllStates { get; private set; }
+
+        /// <summary>
+        /// Gets current state instance.
+        /// </summary>
         public static GameState CurrentState
         {
             get
@@ -60,6 +111,9 @@ namespace QuestForTheCrown2.Base
             }
         }
 
+        /// <summary>
+        /// Loads game data.
+        /// </summary>
         public static void LoadData()
         {
             try { AllStates = Serialization.Load<List<GameState>>(SaveFile); }
@@ -69,16 +123,26 @@ namespace QuestForTheCrown2.Base
                 AllStates = new List<GameState>();
         }
 
+        /// <summary>
+        /// Save game data.
+        /// </summary>
         public static void SaveData()
         {
             AllStates.Save(SaveFile);
         }
 
+        /// <summary>
+        /// Deletes save data.
+        /// </summary>
         public static void DeleteAllSaves()
         {
             AllStates = new List<GameState>();
         }
 
+        /// <summary>
+        /// Selects Save Data
+        /// </summary>
+        /// <param name="state">Data instance</param>
         public static void SelectSaveData(GameState state)
         {
             if (AllStates.Contains(state))
@@ -91,6 +155,10 @@ namespace QuestForTheCrown2.Base
             state.LastPlayDate = DateTime.Now;
         }
 
+        /// <summary>
+        /// Selects Save Data by index.
+        /// </summary>
+        /// <param name="id">Data ID</param>
         public static void SelectSaveData(int id)
         {
             _currentState = id;
@@ -100,6 +168,11 @@ namespace QuestForTheCrown2.Base
             state.LastPlayDate = DateTime.Now;
         }
 
+        /// <summary>
+        /// Gets player state.
+        /// </summary>
+        /// <param name="player">Player entity</param>
+        /// <returns>The player state.</returns>
         public static PlayerState GetPlayerState(Entity player)
         {
             return new PlayerState
@@ -111,6 +184,10 @@ namespace QuestForTheCrown2.Base
                         };
         }
 
+        /// <summary>
+        /// Loads player state
+        /// </summary>
+        /// <param name="player">Player to be loaded.</param>
         public static void LoadPlayerState(Entity player)
         {
             var weaponFactory = new Dictionary<string, Func<Weapon>>
@@ -133,6 +210,12 @@ namespace QuestForTheCrown2.Base
                 }).ToList();
         }
 
+        /// <summary>
+        /// Creates a weapon using a factory.
+        /// </summary>
+        /// <param name="entityFactory">Entity factory.</param>
+        /// <param name="type">Entity type (string)</param>
+        /// <returns></returns>
         static Weapon CreateWeapon(Dictionary<string, Func<Weapon>> entityFactory, string type)
         {
             if (!entityFactory.ContainsKey(type))

@@ -15,7 +15,7 @@ namespace QuestForTheCrown2.GUI.Components
     {
         private Rectangle _position;
 
-        private Texture2D _background;
+        private Texture2D _magic;
         private Texture2D _fullHealth;
         private Texture2D _emptyHealth;
         private Texture2D _partHealth;
@@ -23,7 +23,7 @@ namespace QuestForTheCrown2.GUI.Components
 
         public GameGUI()
         {
-            _background = GameContent.LoadContent<Texture2D>("gui/gui_background.png");
+            _magic = GameContent.LoadContent<Texture2D>("gui/gui_background.png");
             _fullHealth = GameContent.LoadContent<Texture2D>("gui/health_full.png");
             _emptyHealth = GameContent.LoadContent<Texture2D>("gui/health_empty.png");
             _partHealth = GameContent.LoadContent<Texture2D>("gui/health_part.png");
@@ -43,14 +43,19 @@ namespace QuestForTheCrown2.GUI.Components
 
                 int maxhealth = list[i].Health.Maximum ?? list[i].Health;
                 int health = list[i].Health;
-                int difference = Convert.ToInt32(_font.MeasureString("Player " + (i + 1)).X) + 35;
+
+                int maxmagic = list[i].Magic.Maximum ?? list[i].Magic;
+                int magic = list[i].Magic;
+
+                int original_difference = Convert.ToInt32(_font.MeasureString("Player " + (i + 1)).X) + 35;
+                int difference = original_difference;
 
                 spritebatch.DrawString(_font, "Player " + (i + 1), new Vector2(20 + (i * width), 20), Color.White);
 
                 #region Draw Health
                 while (maxhealth > 0)
                 {
-                    Rectangle rect = new Rectangle(difference, 25, 20, 20);
+                    Rectangle rect = new Rectangle(difference, 25, 10, 10);
 
                     if (health >= 4)
                     {
@@ -59,17 +64,28 @@ namespace QuestForTheCrown2.GUI.Components
                     else
                     {
                         //TODO: Find a more elegant way to do this.
-                        spritebatch.Draw(_emptyHealth, rect, Color.White);
-                        if (health > 0) spritebatch.Draw(_partHealth, new Rectangle(rect.X, rect.Y, 10, 10), Color.White);
-                        if (health > 1) spritebatch.Draw(_partHealth, new Rectangle(rect.X + 10, rect.Y, 10, 10), null, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
-                        if (health > 2) spritebatch.Draw(_partHealth, new Rectangle(rect.X, rect.Y + 10, 10, 10), null, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipVertically, 0f);
+                        spritebatch.Draw(_emptyHealth, rect, Color.Black);
+                        if (health > 0) spritebatch.Draw(_partHealth, new Rectangle(rect.X, rect.Y, 5, 5), Color.White);
+                        if (health > 1) spritebatch.Draw(_partHealth, new Rectangle(rect.X + 5, rect.Y, 5, 5), null, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                        if (health > 2) spritebatch.Draw(_partHealth, new Rectangle(rect.X, rect.Y + 5, 5, 5), null, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipVertically, 0f);
                     }
 
-                    difference += 30;
+                    difference += 15;
                     maxhealth -= 4;
                     health -= 4;
                 }
                 #endregion Draw Health
+
+                #region Draw Magic
+                difference = original_difference;
+
+                Rectangle rect_full = new Rectangle(difference, 40, 120, 10);
+                Rectangle rect_life = new Rectangle(difference, 40, Convert.ToInt32(120 * ((float)magic / (float)maxmagic)), 10);
+
+                spritebatch.Draw(_magic, rect_full, Color.Black);
+                spritebatch.Draw(_magic, rect_life, Color.CornflowerBlue);
+
+                #endregion Draw Magic
             }
         }
     }

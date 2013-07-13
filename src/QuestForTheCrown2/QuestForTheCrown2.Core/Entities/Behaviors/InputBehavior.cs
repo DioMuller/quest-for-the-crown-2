@@ -45,7 +45,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         public override void Update(GameTime gameTime, Level level)
         {
             Walk(gameTime, level, _input.Movement);
-            Attack(gameTime, level, _input.Attack, _input.AttackDirection);
+            Attack(gameTime, level, _input.AttackButton, _input.AttackDirection);
         }
 
         /// <summary>

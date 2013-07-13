@@ -82,6 +82,7 @@ namespace QuestForTheCrown2.Base
                         using (StreamReader sr = new StreamReader(store.OpenFile(OptionsFile, FileMode.Open)))
                         {
                             content = sr.ReadToEnd();
+                            sr.Close();
                         }
 
                         XDocument doc = XDocument.Parse(content);
@@ -97,7 +98,7 @@ namespace QuestForTheCrown2.Base
                     }
                     catch
                     {
-                        store.CreateFile(OptionsFile);
+                        store.CreateFile(OptionsFile).Close();
                         CurrentOptions = new Options();
                     }
                 }
