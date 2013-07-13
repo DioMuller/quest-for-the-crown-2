@@ -142,7 +142,7 @@ namespace QuestForTheCrown2
                     _mainMenu.Update(gameTime);
                     break;
                 case GameState.NewGame:
-                    if (_overworld == null)
+                    if (_overworld == null || _overworld.Parent == null)
                         break;
 
                     var player = _overworld.Players.First();

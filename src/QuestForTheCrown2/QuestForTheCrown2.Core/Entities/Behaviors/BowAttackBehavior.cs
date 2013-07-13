@@ -46,6 +46,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
+            Entity.ChangeWeapon(_bow, level);
+
             if (_followBehavior.CurrentTarget.Distance <= _followBehavior.Distance && !level.ContainsEntity(_bow.LastShotArrow))
             {
                 if (_lastAttackTime + TimeSpan.FromSeconds(0.5) < gameTime.TotalGameTime)

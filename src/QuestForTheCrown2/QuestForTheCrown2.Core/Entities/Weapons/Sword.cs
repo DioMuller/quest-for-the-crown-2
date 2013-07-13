@@ -101,7 +101,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             {
                 if (ent is Arrow && ((Arrow)ent).HitEntity == null)
                 {
-                    ent.CurrentDirection = CurrentDirection.Rotate(-_swingedAngle / 4);
+                    ent.CurrentDirection = Parent.CurrentDirection.Rotate(-_swingedAngle / 4);
                     ent.Parent = Parent;
                 }
                 else if (ent != this && ent != Parent && ent.Health != null)

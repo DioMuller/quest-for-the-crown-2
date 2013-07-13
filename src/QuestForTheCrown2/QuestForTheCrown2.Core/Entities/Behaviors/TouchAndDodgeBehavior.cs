@@ -66,6 +66,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="map">Current entity map.</param>
         public override void Update(GameTime gameTime, Level level)
         {
+            Entity.ChangeWeapon(null, level);
+
             const float safeXMult = 3;
 
             if (_dodging && gameTime.TotalGameTime > _startDodge + TimeSpan.FromSeconds(4))

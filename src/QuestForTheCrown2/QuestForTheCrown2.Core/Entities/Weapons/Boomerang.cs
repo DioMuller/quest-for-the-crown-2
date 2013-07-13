@@ -88,5 +88,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                     ent.Hit(this, level, _direction);
             }
         }
+
+        public override void Unequiped(Level level) { }
     }
 }

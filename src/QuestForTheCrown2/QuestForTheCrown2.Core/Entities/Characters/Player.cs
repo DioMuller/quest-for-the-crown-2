@@ -57,6 +57,8 @@ namespace QuestForTheCrown2.Entities.Characters
                 new InputBehavior(InputType.Keyboard)
             );
             AddWeapon(new FireWand());
+            AddWeapon(new Bow());
+            AddWeapon(new Sword());
             Arrows = new Container(5);
             Magic = new Container(10);
         }

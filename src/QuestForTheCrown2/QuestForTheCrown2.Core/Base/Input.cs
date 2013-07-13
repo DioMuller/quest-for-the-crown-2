@@ -22,6 +22,10 @@ namespace QuestForTheCrown2.Base
     /// </summary>
     public class Input
     {
+        #region Attributes
+        public bool _nextWeaponState, _previousWeaponState;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Input type.
@@ -61,7 +65,6 @@ namespace QuestForTheCrown2.Base
                 }
             }
         }
-
 
         /// <summary>
         /// Attack direction.
@@ -184,16 +187,29 @@ namespace QuestForTheCrown2.Base
         {
             get
             {
+                bool nextState;
                 switch (Type)
                 {
                     case InputType.Controller:
-                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.RightShoulder) || GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.DPadRight);
+                        nextState = GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.RightShoulder) || GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.DPadRight);
+                        break;
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
-                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.E);
+                        nextState = Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.E);
+                        break;
                     default:
-                        return false;
+                        nextState = false;
+                        break;
                 }
+
+                if (nextState && !_nextWeaponState)
+                {
+                    _nextWeaponState = nextState;
+                    return true;
+                }
+
+                _nextWeaponState = nextState;
+                return false;
             }
         }
 
@@ -204,16 +220,30 @@ namespace QuestForTheCrown2.Base
         {
             get
             {
+                bool nextState;
+
                 switch (Type)
                 {
                     case InputType.Controller:
-                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.LeftShoulder) || GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.DPadLeft);
+                        nextState = GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.LeftShoulder) || GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.DPadLeft);
+                        break;
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
-                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Q);
+                        nextState = Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Q);
+                        break;
                     default:
-                        return false;
+                        nextState = false;
+                        break;
                 }
+
+                if (nextState && !_previousWeaponState)
+                {
+                    _previousWeaponState = nextState;
+                    return true;
+                }
+
+                _previousWeaponState = nextState;
+                return false;
             }
         }
 

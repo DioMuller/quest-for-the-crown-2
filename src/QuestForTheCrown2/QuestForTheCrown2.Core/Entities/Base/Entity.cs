@@ -19,6 +19,7 @@ namespace QuestForTheCrown2.Entities.Base
         readonly int _framesPerLine;
         Animation _lastAnimation;
         TimeSpan _lastFrameStartTime;
+        Weapon _currentWeapon;
         #endregion
 
         #region Properties
@@ -64,6 +65,14 @@ namespace QuestForTheCrown2.Entities.Base
         /// A list of all weapons available to this entity.
         /// </summary>
         public List<Weapon> Weapons { get; set; }
+
+        /// <summary>
+        /// Reference to the current entity's weapon.
+        /// </summary>
+        public Weapon CurrentWeapon
+        {
+            get { return _currentWeapon; }
+        }
 
         /// <summary>
         /// Status of the entity's ammo, health and magic.
@@ -293,6 +302,19 @@ namespace QuestForTheCrown2.Entities.Base
 
             if (updateDirection)
                 CurrentDirection = direction;
+        }
+
+        public virtual void ChangeWeapon(Weapon nextWeapon, Level level)
+        {
+            if (nextWeapon == _currentWeapon)
+                return;
+
+            var oldWeapon = _currentWeapon;
+            if (oldWeapon != null)
+                oldWeapon.Unequiped(level);
+            _currentWeapon = nextWeapon;
+            if (_currentWeapon != null)
+                _currentWeapon.Equiped(level);
         }
 
         #region Containers
