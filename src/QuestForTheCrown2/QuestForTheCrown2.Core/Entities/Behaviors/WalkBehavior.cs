@@ -34,8 +34,11 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="gameTime">Current game time.</param>
         /// <param name="map">Current entity map.</param>
         /// <param name="direction">Desired walk direction.</param>
-        protected bool Walk(GameTime gameTime, Level level, Vector2 direction)
+        protected bool Walk(GameTime gameTime, Level level, Vector2 direction, Func<Entity, bool> collisionCheck = null)
         {
+            if (collisionCheck == null)
+                collisionCheck = e => e != Entity && !e.OverlapEntities;
+
             Entity.Look(direction, updateDirection: true);
             UpdateAnimation(direction);
 
@@ -54,7 +57,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                     width: Entity.Size.X - Entity.Padding.X - Entity.Padding.Width,
                     height: Entity.Size.Y - Entity.Padding.Y - Entity.Padding.Height);
 
-            if (!level.Map.Collides(newRect) && !(level.CollidesWith(newRect).Any((e) => e != Entity && !e.OverlapEntities)))
+            if (!level.Map.Collides(newRect) && !(level.CollidesWith(newRect).Any(collisionCheck)))
             {
                 Entity.Position = new Vector2(newX, newY);
                 return true;

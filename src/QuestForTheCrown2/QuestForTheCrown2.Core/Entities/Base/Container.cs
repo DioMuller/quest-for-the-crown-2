@@ -108,6 +108,8 @@ namespace QuestForTheCrown2.Entities.Base
 
         public static implicit operator int(Container container)
         {
+            if (container == null)
+                return 0;
             return container.Quantity;
         }
 

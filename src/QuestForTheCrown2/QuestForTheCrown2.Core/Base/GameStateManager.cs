@@ -180,7 +180,7 @@ namespace QuestForTheCrown2.Base
                             CurrentLevel = player.CurrentLevel,
                             Position = player.Position,
                             Containers = player.Containers,
-                            Weapons = player.Weapons.Select(w => w.GetType().Name).ToList()
+                            Weapons = (player.Weapons?? Enumerable.Empty<Weapon>()).Select(w => w.GetType().Name).ToList()
                         };
         }
 

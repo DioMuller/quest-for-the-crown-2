@@ -61,6 +61,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="direction">The attack direction.</param>
         void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
+            if (Entity.Weapons == null)
+                return;
+
             if (_currentWeapon < Entity.Weapons.Count)
                 Entity.Weapons[_currentWeapon].Attack(gameTime, level, attackButton, direction);
         }
@@ -72,6 +75,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="count">Number of weapons to advance.</param>
         void AdvanceWeapons(Level level, int count)
         {
+            if (Entity.Weapons == null)
+                return;
+
             if (Entity.Weapons.Count == 0)
                 Entity.ChangeWeapon(null, level);
             else

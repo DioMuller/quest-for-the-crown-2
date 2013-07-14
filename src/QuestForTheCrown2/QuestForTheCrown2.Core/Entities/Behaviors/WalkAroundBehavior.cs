@@ -14,17 +14,19 @@ namespace QuestForTheCrown2.Entities.Behaviors
         Random _random;
         bool _walking;
 
+        public float SpeedMultiplier { get; set; }
         Vector2 _currentWalkDirection;
         TimeSpan _startWalkTime;
         TimeSpan _maxStoppedTime;
         TimeSpan _lastStopTime;
-        TimeSpan _maxWalkTime;
+        public TimeSpan MaxWalkingTime { get; set; }
 
         public TimeSpan MaxStoppedTime { get; set; }
 
         public WalkAroundBehavior()
         {
             MaxStoppedTime = TimeSpan.MaxValue;
+            SpeedMultiplier = 0.3f;
         }
 
         #region Behavior
@@ -33,8 +35,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
             if (_random == null)
             {
                 _random = new Random((int)(unchecked(Environment.TickCount + Entity.Position.X * Entity.Position.Y)));
-                _maxStoppedTime = TimeSpan.FromSeconds(Math.Min(2 +_random.NextDouble() * 2, MaxStoppedTime.TotalSeconds));
-                _maxWalkTime = TimeSpan.FromSeconds(4 + _random.NextDouble() * 4);
+                _maxStoppedTime = TimeSpan.FromSeconds(Math.Min(2 + _random.NextDouble() * 2, MaxStoppedTime.TotalSeconds));
+                MaxWalkingTime = TimeSpan.FromSeconds(4 + _random.NextDouble() * 4);
             }
 
             return true;
@@ -44,7 +46,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         {
             if (_walking)
             {
-                if (gameTime.TotalGameTime > _startWalkTime + _maxWalkTime ||
+                if (gameTime.TotalGameTime > _startWalkTime + MaxWalkingTime ||
                     !Walk(gameTime, level, _currentWalkDirection))
                 {
                     _walking = false;
@@ -59,14 +61,12 @@ namespace QuestForTheCrown2.Entities.Behaviors
                     _walking = true;
                     _startWalkTime = gameTime.TotalGameTime;
 
-                    float speedMultiplier = 0.3f;
-
                     switch (_random.Next(4))
                     {
-                        case 0: _currentWalkDirection = new Vector2(-speedMultiplier, 0); break;
-                        case 1: _currentWalkDirection = new Vector2(0, -speedMultiplier); break;
-                        case 2: _currentWalkDirection = new Vector2(speedMultiplier, 0); break;
-                        case 3: _currentWalkDirection = new Vector2(0, speedMultiplier); break;
+                        case 0: _currentWalkDirection = new Vector2(-SpeedMultiplier, 0); break;
+                        case 1: _currentWalkDirection = new Vector2(0, -SpeedMultiplier); break;
+                        case 2: _currentWalkDirection = new Vector2(SpeedMultiplier, 0); break;
+                        case 3: _currentWalkDirection = new Vector2(0, SpeedMultiplier); break;
                     }
                 }
             }

@@ -261,6 +261,16 @@ namespace QuestForTheCrown2.Levels
         }
 
         /// <summary>
+        /// Find all entities of the specified type.
+        /// </summary>
+        /// <typeparam name="T">Type of the entity being search</typeparam>
+        /// <returns>All entities matching the specified type.</returns>
+        public IEnumerable<T> GetEntities<T>() where T : Entity
+        {
+            return _entities.OfType<T>();
+        }
+
+        /// <summary>
         /// Finds the entity of the desired category that is closer to an specified entity.
         /// </summary>
         /// <param name="relativeTo">Find the entity which is closer to the specified entity.</param>
