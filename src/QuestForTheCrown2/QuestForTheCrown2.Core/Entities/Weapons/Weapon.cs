@@ -31,16 +31,18 @@ namespace QuestForTheCrown2.Entities.Weapons
             if (Parent == null)
             {
                 // Check if weapon is not allowed
-                if (!GameStateManager.CurrentState.AllowWeapon.Contains(GetType().ToString()))
+                if (!GameStateManager.CurrentState.AllowWeapon.Contains(GetType().Name))
                     level.RemoveEntity(this);
                 else
                 {
                     Parent = level.CollidesWith(CollisionRect).FirstOrDefault(e => e.Category == "Player");
                     if (Parent != null)
                     {
+                        GameStateManager.CurrentState.Player.Weapons.Add(GetType().Name);
+
                         Parent.AddWeapon(this);
                         level.RemoveEntity(this);
-                        OverlapEntities = false;
+                        OverlapEntities = true;
                     }
                     return;
                 }

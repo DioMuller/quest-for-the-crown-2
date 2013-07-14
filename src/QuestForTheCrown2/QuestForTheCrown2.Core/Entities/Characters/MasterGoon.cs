@@ -12,12 +12,12 @@ using QuestForTheCrown2.Entities.Weapons;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
-    class Goon : Entity
+    class MasterGoon : Entity
     {
-        const string spriteSheetPath = @"sprites\Characters\goon.png";
+        const string spriteSheetPath = @"sprites\Characters\master-goon.png";
 
-        public Goon()
-            : base(spriteSheetPath, new Point(64, 64))
+        public MasterGoon()
+            : base(spriteSheetPath, new Point(96, 96))
         {
             Category = "Enemy";
 
@@ -34,19 +34,21 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Padding = new Rectangle(28, 36, 28, 2);
 
-            Speed = new Vector2(32 * 3);
+            Speed = new Vector2(32 * 3.5f);
 
-            Health = new Container(4);
+            Health = new Container(8);
 
             Look(new Vector2(0, 1), true);
 
             AddBehavior(
                 new HitOnTouchBehavior(e => e.Category == "Player"),
-                new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 },
+                new AvoidBehavior("Player", 32 * 4),
                 new BowAttackBehavior("Player", shootDistance: 32 * 30, maxDistance: 32 * 32),
                 new WalkAroundBehavior()
             );
             AddWeapon(new Bow());
+
+            GetBehavior<DropWeaponsBehavior>().AutomaticAllowWeapons = true;
 
             Arrows = new Container(20);
         }

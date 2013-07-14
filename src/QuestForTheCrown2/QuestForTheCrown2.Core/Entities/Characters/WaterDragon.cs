@@ -7,17 +7,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Levels.Mapping;
-using QuestForTheCrown2.Entities.Weapons;
 using QuestForTheCrown2.Entities.Behaviors;
+using QuestForTheCrown2.Base;
+using QuestForTheCrown2.Entities.Weapons;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
-    class Skeleton : Entity
+    class WaterDragon : Entity
     {
-        const string spriteSheetPath = @"sprites\Characters\skeleton.png";
+        const string spriteSheetPath = @"sprites\Characters\water-dragon.png";
+        Vector2 _baseSpeed;
 
-        public Skeleton()
-            : base(spriteSheetPath, new Point(32, 64))
+        public WaterDragon()
+            : base(spriteSheetPath, new Point(149, 129))
         {
             Category = "Enemy";
 
@@ -32,29 +34,41 @@ namespace QuestForTheCrown2.Entities.Characters
             SpriteSheet.AddAnimation("walking", "right", line: 2, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("walking", "up", line: 3, frameDuration: walkFrameDuration);
 
-            Padding = new Rectangle(4, 38, 4, 2);
+            Padding = new Rectangle(23, 50, 23, 20);
 
-            Speed = new Vector2(32 * 3);
+            _baseSpeed = new Vector2(32 * 4);
+            Speed = new Vector2(32 * 4);
 
-            Health = new Container(5);
+            Health = new Container(10);
+            Magic = new Container(1);
 
-            CurrentDirection = new Vector2(0, 1);
+            Health.ValueChanged += Health_ValueChanged;
+            Magic.ValueChanged += Magic_ValueChanged;
+
+            Look(new Vector2(0, 1), true);
 
             AddBehavior(
                 new HitOnTouchBehavior(e => e.Category == "Player"),
-                new SwordAttackBehavior("Player") { MaxDistance = 300 },
-                new FollowBehavior("Player", 5) { MaxDistance = float.MaxValue }//,
-                //new WalkAroundBehavior { MaxStoppedTime = TimeSpan.FromSeconds(2) }
+                new FireWandAttackBehavior("Player", 32 * 5, 32 * 10),
+                new WalkAroundBehavior { MaxStoppedTime = TimeSpan.Zero, SpeedMultiplier = 1 }
             );
-            AddWeapon(new Sword());
+            AddWeapon(new FireWand { MaxFireBallFlyTime = TimeSpan.FromSeconds(2) });
         }
 
-        public override void Hit(Entity attacker, Levels.Level level, Vector2 direction)
+        void Magic_ValueChanged(object sender, EventArgs e)
         {
-            if (attacker is FireBall)
-                Health.Quantity -= 2;
+            if (Magic.Quantity <= 0)
+                Magic.Quantity = 1;
+        }
 
-            base.Hit(attacker, level, direction);
+        void Health_ValueChanged(object sender, EventArgs e)
+        {
+            Speed = _baseSpeed * (2 - (float)Health.Quantity / Health.Maximum.Value);
+        }
+
+        public override void Update(GameTime gameTime, Levels.Level level)
+        {
+            base.Update(gameTime, level);
         }
     }
 }

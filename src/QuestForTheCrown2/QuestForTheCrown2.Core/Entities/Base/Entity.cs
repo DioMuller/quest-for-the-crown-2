@@ -431,7 +431,7 @@ namespace QuestForTheCrown2.Entities.Base
             if (!IsBlinking)
             {
                 SoundManager.PlaySound("hit");
-                Health--;
+                Health.Quantity--;
             }
 
             var oldPos = Position;
