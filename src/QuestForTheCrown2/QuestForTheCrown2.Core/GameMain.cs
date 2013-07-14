@@ -33,7 +33,8 @@ namespace QuestForTheCrown2
         GameOver,
         Quiting,
         NewGame,
-        LoadingGame
+        LoadingGame,
+        Saving
     }
 
     /// <summary>
@@ -50,6 +51,7 @@ namespace QuestForTheCrown2
         GameOverScreen _gameOver;
         OptionsScreen _options;
         LoadScreen _loadscreen;
+        SaveScreen _savescreen;
 
         Levels.LevelCollection _overworld;
 
@@ -112,6 +114,9 @@ namespace QuestForTheCrown2
             _gameOver = new GameOverScreen(this);
             _options = new OptionsScreen(this);
             _loadscreen = new LoadScreen(this);
+            _savescreen = new SaveScreen(this);
+
+            GameStateManager.Parent = this;
 
             System.Threading.ThreadPool.QueueUserWorkItem(LoadContentAsync);
         }
@@ -187,6 +192,9 @@ namespace QuestForTheCrown2
                 case GameState.Quiting:
                     Exit();
                     break;
+                case GameState.Saving:
+                    _savescreen.Update(gameTime);
+                    break;
             }
 
 
@@ -226,6 +234,9 @@ namespace QuestForTheCrown2
                 case GameState.GameOver:
                     _gameOver.Draw(gameTime, _spriteBatch);
                     break;
+                case GameState.Saving:
+                    _savescreen.Draw(gameTime, _spriteBatch);
+                    break;
             }
 
             _spriteBatch.End();
@@ -241,10 +252,10 @@ namespace QuestForTheCrown2
         {
             _currentState = state;
 
-            if (state == GameState.Playing)
+            if (state == GameState.LoadingGame)
             {
-                _overworld = MapLoader.LoadLevels("Content/maps/QuestForTheCrown.maps");
-                _overworld.Parent = this;
+                _overworld = null;
+                System.Threading.ThreadPool.QueueUserWorkItem(LoadContentAsync);
             }
         }
     }

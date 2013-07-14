@@ -62,6 +62,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             if (!level.ContainsEntity(this))
             {
+                SoundManager.PlaySound("sword");
                 if (_desiredAngle > 0)
                     _swingedAngle = MathHelper.ToRadians(90);
                 else

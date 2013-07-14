@@ -104,6 +104,7 @@
     <Compile Include="GUI\Components\ComponentList.cs" />
     <Compile Include="GUI\Components\GameGUI.cs" />
     <Compile Include="GUI\Components\SelectionBox.cs" />
+    <Compile Include="GUI\Screens\SaveScreen.cs" />
     <Compile Include="GUI\Screens\LoadScreen.cs" />
     <Compile Include="GUI\Screens\CreditsScreen.cs" />
     <Compile Include="GUI\Screens\GameOverScreen.cs" />

@@ -429,7 +429,10 @@ namespace QuestForTheCrown2.Entities.Base
                 return;
 
             if (!IsBlinking)
+            {
+                SoundManager.PlaySound("hit");
                 Health--;
+            }
 
             var oldPos = Position;
             Position += direction;

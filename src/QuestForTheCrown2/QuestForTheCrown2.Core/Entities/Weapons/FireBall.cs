@@ -38,6 +38,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             if (_hitEntity != null)
             {
+                SoundManager.PlaySound("onfire");
                 if (gameTime.TotalGameTime > _entHitTime + _maxHitTime)
                 {
                     level.RemoveEntity(this);
