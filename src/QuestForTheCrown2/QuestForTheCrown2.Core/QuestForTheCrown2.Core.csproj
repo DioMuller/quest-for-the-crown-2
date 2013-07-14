@@ -7,7 +7,7 @@
     <ProjectGuid>{37C64438-5894-4E90-A147-2CCAF99FF76A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QuestForTheCrown2.Core</RootNamespace>
+    <RootNamespace>QuestForTheCrown2</RootNamespace>
     <AssemblyName>QuestForTheCrown2.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -69,6 +69,8 @@
     <Compile Include="Entities\Base\Frame.cs" />
     <Compile Include="Entities\Behaviors\BlinkBehavior.cs" />
     <Compile Include="Entities\Behaviors\BowAttackBehavior.cs" />
+    <Compile Include="Entities\Behaviors\DropWeaponsBehavior.cs" />
+    <Compile Include="Entities\Behaviors\DieBehavior.cs" />
     <Compile Include="Entities\Behaviors\FollowBehavior.cs" />
     <Compile Include="Entities\Behaviors\HitOnTouchBehavior.cs" />
     <Compile Include="Entities\Behaviors\InputBehavior.cs" />
