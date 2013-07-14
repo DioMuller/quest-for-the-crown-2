@@ -130,6 +130,9 @@
     <Content Include="Content\gui\gui_background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\gui\gui_shadow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\gui\health_empty.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
