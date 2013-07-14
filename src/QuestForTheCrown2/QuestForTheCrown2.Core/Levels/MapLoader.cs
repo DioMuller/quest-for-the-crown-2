@@ -142,12 +142,19 @@ namespace QuestForTheCrown2.Levels.Mapping
                     { "Goon", () => new Goon() },
                     { "MasterGoon", () => new MasterGoon() },
                 };
+                var itemFactory = new Dictionary<string, Func<Entity>>
+                {
+                    { "Sword", () => new Sword() },
+                };
+
                 var entityFactory = new Dictionary<string, Func<string, Entity>>
                 {
+                    { "Sword", n => new Sword() },
                     { "Player", n => new Player() },
-                    { "Item", n => new Item() },
                     { "Entrance", n => new Entrance(int.Parse(n)) },
                     { "SavePoint", n => new SavePoint() },
+
+                    { "Item", n => itemFactory.ContainsKey(n)? itemFactory[n]() : new Item() },
                     { "Enemy", n => enemyFactory.ContainsKey(n)? enemyFactory[n]() : new Slime() },
                 };
 
