@@ -98,7 +98,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 {
                     if (ent.Arrows != null && ent.Arrows.Quantity < ent.Arrows.Maximum)
                     {
-                        ent.Arrows += PickupCount;
+                        ent.Arrows.Quantity += PickupCount;
                         level.RemoveEntity(this);
                     }
                     return;

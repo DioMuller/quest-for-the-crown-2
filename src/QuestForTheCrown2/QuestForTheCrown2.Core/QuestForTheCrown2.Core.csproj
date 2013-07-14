@@ -80,6 +80,7 @@
     <Compile Include="Entities\Behaviors\WalkBehavior.cs" />
     <Compile Include="Entities\Characters\Bat.cs" />
     <Compile Include="Entities\Behaviors\ChainBehavior.cs" />
+    <Compile Include="Entities\Characters\WaterDragon.cs" />
     <Compile Include="Entities\Characters\Crab.cs" />
     <Compile Include="Entities\Characters\Enemy1.cs" />
     <Compile Include="Entities\Characters\Goon.cs" />

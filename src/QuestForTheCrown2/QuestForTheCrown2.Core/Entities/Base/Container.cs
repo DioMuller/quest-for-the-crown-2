@@ -8,37 +8,62 @@ namespace QuestForTheCrown2.Entities.Base
     [Serializable]
     public class Container
     {
+        private int _quantity;
+        private int? _maximum;
+
+        public event EventHandler ValueChanged;
+
         public Container()
         {
         }
 
         public Container(int quantity)
         {
-            Quantity = quantity;
-            Maximum = quantity;
+            _quantity = quantity;
+            _maximum = quantity;
         }
 
         public Container(int quantity, int? maximum)
         {
-            Quantity = quantity;
-            Maximum = maximum;
+            _quantity = quantity;
+            _maximum = maximum;
         }
 
-        public int? Maximum { get; set; }
-        public int Quantity { get; set; }
 
-        public static Container operator --(Container a)
+
+        public int? Maximum
         {
-            if (a == null)
-                return null;
-            return a - 1;
+            get { return _maximum; }
+            set
+            {
+                if (_maximum == value)
+                    return;
+                _maximum = value;
+
+                if (_maximum != null && _quantity > _maximum.Value)
+                    _quantity = _maximum.Value;
+
+                FireValueChanged();
+            }
         }
 
-        public static Container operator ++(Container a)
+        public int Quantity
         {
-            if (a == null)
-                return null;
-            return a + 1;
+            get { return _quantity; }
+            set
+            {
+                if (_quantity == value)
+                    return;
+                _quantity = _maximum == null ? value : (int)Math.Min(value, _maximum.Value);
+                FireValueChanged();
+            }
+        }
+
+        void FireValueChanged()
+        {
+            var handler = ValueChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         public static bool operator <=(Container a, int quantity)
@@ -46,7 +71,7 @@ namespace QuestForTheCrown2.Entities.Base
             if (a == null)
                 a = new Container(0);
 
-            return a.Quantity <= quantity;
+            return a._quantity <= quantity;
         }
 
         public static bool operator >=(Container a, int quantity)
@@ -54,7 +79,7 @@ namespace QuestForTheCrown2.Entities.Base
             if (a == null)
                 a = new Container(0);
 
-            return a.Quantity >= quantity;
+            return a._quantity >= quantity;
         }
 
         public static bool operator <(Container a, int quantity)
@@ -62,38 +87,24 @@ namespace QuestForTheCrown2.Entities.Base
             if (a == null)
                 a = new Container(0);
 
-            return a.Quantity < quantity;
+            return a._quantity < quantity;
         }
 
         public static bool operator >(Container a, int quantity)
         {
             if (a == null)
                 a = new Container(0);
-            return a.Quantity > quantity;
-        }
-
-        public static Container operator -(Container a, int quantity)
-        {
-            if (a.Maximum != null)
-                return new Container(Math.Min(a.Quantity - quantity, a.Maximum.Value), a.Maximum);
-            return new Container(a.Quantity + quantity, a.Maximum);
-        }
-
-        public static Container operator +(Container a, int quantity)
-        {
-            if (a.Maximum != null)
-                return new Container(Math.Min(a.Quantity + quantity, a.Maximum.Value), a.Maximum);
-            return new Container(a.Quantity + quantity, a.Maximum);
+            return a._quantity > quantity;
         }
 
         public static bool operator ==(Container a, int quantity)
         {
-            return a.Quantity == quantity;
+            return a._quantity == quantity;
         }
 
         public static bool operator !=(Container a, int quantity)
         {
-            return a.Quantity != quantity;
+            return a._quantity != quantity;
         }
 
         public override bool Equals(object obj)
@@ -103,21 +114,21 @@ namespace QuestForTheCrown2.Entities.Base
 
         public override int GetHashCode()
         {
-            return Quantity;
+            return _quantity;
         }
 
         public static implicit operator int(Container container)
         {
             if (container == null)
                 return 0;
-            return container.Quantity;
+            return container._quantity;
         }
 
         public static implicit operator int?(Container container)
         {
             if (container == null)
                 return null;
-            return container.Quantity;
+            return container._quantity;
         }
     }
 }

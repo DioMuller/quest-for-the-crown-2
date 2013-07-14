@@ -59,7 +59,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             if (attackButton && !_currentAttackButton && Parent.Arrows > 0)
             {
-                Parent.Arrows--;
+                Parent.Arrows.Quantity--;
                 SoundManager.PlaySound("bow");
                 LastShotArrow = new Arrow(direction.Normalized() * -1) { Position = Parent.CenterPosition, Parent = Parent };
                 level.AddEntity(LastShotArrow);

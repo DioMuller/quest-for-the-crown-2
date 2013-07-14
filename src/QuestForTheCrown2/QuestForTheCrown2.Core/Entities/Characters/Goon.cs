@@ -54,7 +54,7 @@ namespace QuestForTheCrown2.Entities.Characters
         public override void Hit(Entity attacker, Levels.Level level, Vector2 direction)
         {
             if (attacker is Arrow)
-                Health -= 2;
+                Health.Quantity -= 2;
 
             base.Hit(attacker, level, direction);
         }

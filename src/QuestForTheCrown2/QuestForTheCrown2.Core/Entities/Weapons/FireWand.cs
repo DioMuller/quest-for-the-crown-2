@@ -41,7 +41,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             if (attackButton && !_oldAttackButton && Parent.Magic > 0)
             {
-                Parent.Magic--;
+                Parent.Magic.Quantity--;
                 SoundManager.PlaySound("fireball");
                 level.AddEntity(new FireBall(direction) { Position = Parent.CenterPosition, Speed = new Vector2(7 * 32), Parent = Parent });
             }

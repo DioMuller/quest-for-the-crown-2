@@ -47,7 +47,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
             if (_walking)
             {
                 if (gameTime.TotalGameTime > _startWalkTime + MaxWalkingTime ||
-                    !Walk(gameTime, level, _currentWalkDirection))
+                    !Walk(gameTime, level, _currentWalkDirection * SpeedMultiplier))
                 {
                     _walking = false;
                     _lastStopTime = gameTime.TotalGameTime;
@@ -63,10 +63,10 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
                     switch (_random.Next(4))
                     {
-                        case 0: _currentWalkDirection = new Vector2(-SpeedMultiplier, 0); break;
-                        case 1: _currentWalkDirection = new Vector2(0, -SpeedMultiplier); break;
-                        case 2: _currentWalkDirection = new Vector2(SpeedMultiplier, 0); break;
-                        case 3: _currentWalkDirection = new Vector2(0, SpeedMultiplier); break;
+                        case 0: _currentWalkDirection = new Vector2(-1, 0); break;
+                        case 1: _currentWalkDirection = new Vector2(0, -1); break;
+                        case 2: _currentWalkDirection = new Vector2(1, 0); break;
+                        case 3: _currentWalkDirection = new Vector2(0, 1); break;
                     }
                 }
             }
