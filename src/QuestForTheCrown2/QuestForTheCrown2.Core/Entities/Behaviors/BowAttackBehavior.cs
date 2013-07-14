@@ -50,18 +50,15 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
             var passedTime = gameTime.TotalGameTime - _lastAttackTime;
 
-            if (_followBehavior.CurrentTarget.Distance <= _followBehavior.Distance && (!level.ContainsEntity(_bow.LastShotArrow) || _bow.LastShotArrow == null || _bow.LastShotArrow.Parent == null || passedTime.TotalSeconds > 3))
+            if (_followBehavior.CurrentTarget.Distance <= _followBehavior.Distance && (!level.ContainsEntity(_bow.LastShotArrow) || _bow.LastShotArrow == null || _bow.LastShotArrow.Parent == null || passedTime.TotalSeconds > 2))
             {
-                if (passedTime.TotalSeconds > 0.5)
-                {
-                    Entity.Look(_followBehavior.CurrentTarget.Position, true);
+                Entity.Look(_followBehavior.CurrentTarget.Position, true);
 
-                    bool fireArrow = _lastAttackTime + TimeBetweenAttacks < gameTime.TotalGameTime;
-                    _bow.Attack(gameTime, level, fireArrow, _followBehavior.CurrentTarget.Position * (OptionsManager.CurrentOptions.InvertAim? -1:1));
+                bool fireArrow = _lastAttackTime + TimeBetweenAttacks < gameTime.TotalGameTime;
+                _bow.Attack(gameTime, level, fireArrow, _followBehavior.CurrentTarget.Position * (OptionsManager.CurrentOptions.InvertAim ? -1 : 1));
 
-                    if (fireArrow)
-                        _lastAttackTime = gameTime.TotalGameTime;
-                }
+                if (fireArrow)
+                    _lastAttackTime = gameTime.TotalGameTime;
             }
             else
             {
