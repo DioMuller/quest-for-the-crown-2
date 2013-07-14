@@ -13,11 +13,11 @@ namespace QuestForTheCrown2.Entities.Objects
     public class SavePoint : Entity
     {
         public SavePoint()
-            : base(@"sprites/Objects/Empty.png", new Point(32, 32))
+            : base(@"sprites/Objects/SavePoint.png", new Point(32, 32))
         {
             OverlapEntities = true;
             Health = null;
-            SpriteSheet.AddAnimation("stopped", "down", line: 0, count: 1, frameDuration: TimeSpan.FromDays(1)); 
+            SpriteSheet.AddAnimation("stopped", "down", line: 0, frameDuration: TimeSpan.FromMilliseconds(33)); 
         }
     }
 }
