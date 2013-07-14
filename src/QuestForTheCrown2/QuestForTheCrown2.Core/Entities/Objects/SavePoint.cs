@@ -17,7 +17,7 @@ namespace QuestForTheCrown2.Entities.Objects
         {
             OverlapEntities = true;
             Health = null;
-            SpriteSheet.AddAnimation("stopped", "down", line: 0, frameDuration: TimeSpan.FromMilliseconds(33)); 
+            SpriteSheet.AddAnimation("stopped", "down", line: 0, frameDuration: TimeSpan.FromMilliseconds(500)); 
         }
     }
 }

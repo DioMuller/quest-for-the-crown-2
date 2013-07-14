@@ -43,7 +43,7 @@ namespace QuestForTheCrown2.GUI.Components
             for (int i = 0; i < list.Count; i++)
             {
                 //TODO: Change position depending on player.
-                Rectangle bg_rect = new Rectangle(0,0, 320, 80);
+                Rectangle bg_rect = new Rectangle(0,0, 360, 80);
 
                 int maxhealth = list[i].Health.Maximum ?? list[i].Health;
                 int health = list[i].Health;

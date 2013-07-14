@@ -167,7 +167,7 @@ namespace QuestForTheCrown2.Levels
         /// <returns>The level the entity is in.</returns>
         internal Level GetLevelByEntity(Entity entity)
         {
-            return _levels[entity.CurrentLevel - 1];
+            return _levels.Where(l => l.Id == entity.CurrentLevel).First();
         }
 
         #region Public Methods
