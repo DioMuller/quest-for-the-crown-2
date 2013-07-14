@@ -16,6 +16,7 @@ namespace QuestForTheCrown2.Entities.Characters
     class WaterDragon : Entity
     {
         const string spriteSheetPath = @"sprites\Characters\water-dragon.png";
+        Vector2 _baseSpeed;
 
         public WaterDragon()
             : base(spriteSheetPath, new Point(149, 129))
@@ -35,6 +36,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Padding = new Rectangle(23, 50, 23, 20);
 
+            _baseSpeed = new Vector2(32 * 4);
             Speed = new Vector2(32 * 4);
 
             Health = new Container(10);
@@ -47,9 +49,10 @@ namespace QuestForTheCrown2.Entities.Characters
 
             AddBehavior(
                 new HitOnTouchBehavior(e => e.Category == "Player"),
-                new WalkAroundBehavior { MaxStoppedTime = TimeSpan.Zero }
+                new FireWandAttackBehavior("Player", 32 * 5, 32 * 10),
+                new WalkAroundBehavior { MaxStoppedTime = TimeSpan.Zero, SpeedMultiplier = 1 }
             );
-            AddWeapon(new FireWand());
+            AddWeapon(new FireWand { MaxFireBallFlyTime = TimeSpan.FromSeconds(2) });
         }
 
         void Magic_ValueChanged(object sender, EventArgs e)
@@ -60,7 +63,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
         void Health_ValueChanged(object sender, EventArgs e)
         {
-            GetBehavior<WalkAroundBehavior>().SpeedMultiplier = 2 - (float)Health.Quantity / Health.Maximum.Value;
+            Speed = _baseSpeed * (2 - (float)Health.Quantity / Health.Maximum.Value);
         }
 
         public override void Update(GameTime gameTime, Levels.Level level)

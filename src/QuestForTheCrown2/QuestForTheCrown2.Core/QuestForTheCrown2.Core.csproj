@@ -69,6 +69,7 @@
     <Compile Include="Entities\Base\Frame.cs" />
     <Compile Include="Entities\Behaviors\BlinkBehavior.cs" />
     <Compile Include="Entities\Behaviors\BowAttackBehavior.cs" />
+    <Compile Include="Entities\Behaviors\FireWandAttackBehavior.cs" />
     <Compile Include="Entities\Behaviors\DropWeaponsBehavior.cs" />
     <Compile Include="Entities\Behaviors\DieBehavior.cs" />
     <Compile Include="Entities\Behaviors\FollowBehavior.cs" />

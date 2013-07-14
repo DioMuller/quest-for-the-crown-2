@@ -16,9 +16,12 @@ namespace QuestForTheCrown2.Entities.Weapons
         TimeSpan _entHitTime;
         TimeSpan _timeFromCreation;
 
+        public TimeSpan MaxFlyTime { get; set; }
+
         public FireBall(Vector2 direction)
             : base(@"sprites\Objects\FireBall.png", null)
         {
+            MaxFlyTime = TimeSpan.FromSeconds(1);
             _direction = direction;
             OverlapEntities = true;
             Angle = (float)Math.Atan2(-direction.X, direction.Y);
@@ -68,7 +71,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 }
             }
 
-            if (_timeFromCreation > TimeSpan.FromSeconds(1.0))
+            if (_timeFromCreation > MaxFlyTime)
             {
                 level.RemoveEntity(this);
             }
