@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using QuestForTheCrown2.Base;
 
 namespace QuestForTheCrown2.Entities.Weapons
 {
@@ -30,6 +31,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             if (!level.ContainsEntity(this) && attackButton)
             {
+                SoundManager.PlaySound("boomerang");
                 _direction = direction;
                 _startTime = gameTime.TotalGameTime;
                 Position = Parent.CenterPosition + _direction;
