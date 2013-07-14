@@ -32,9 +32,10 @@ namespace QuestForTheCrown2.Entities.Weapons
             {
                 // Check if weapon is not allowed
                 if (!GameStateManager.CurrentState.AllowWeapon.Contains(GetType().Name))
-                    level.RemoveEntity(this);
+                    IsInvisible = true;
                 else
                 {
+                    IsInvisible = false;
                     Parent = level.CollidesWith(CollisionRect).FirstOrDefault(e => e.Category == "Player");
                     if (Parent != null)
                     {
