@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Levels.Mapping;
 using QuestForTheCrown2.Levels;
+using QuestForTheCrown2.Entities.Objects;
 
 namespace QuestForTheCrown2.Entities.Behaviors
 {
@@ -53,6 +55,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
             Walk(gameTime, level, _input.Movement);
             Attack(gameTime, level, _input.AttackButton, _input.AttackDirection);
+            if( _input.ConfirmButton) CheckEvent(level);
         }
 
         /// <summary>
@@ -78,6 +81,18 @@ namespace QuestForTheCrown2.Entities.Behaviors
             {
                 _currentWeapon = (_currentWeapon + count + Entity.Weapons.Count) % Entity.Weapons.Count;
                 Entity.ChangeWeapon(Entity.Weapons[_currentWeapon], level);
+            }
+        }
+
+        /// <summary>
+        /// Checks if the player is on an event.
+        /// </summary>
+        /// <param name="level"></param>
+        void CheckEvent(Level level)
+        {
+            if( level.CollidesWith( Entity.CollisionRect, true ).Any(e => e is SavePoint) )
+            {
+                GameStateManager.CallSaveScreen();
             }
         }
     }

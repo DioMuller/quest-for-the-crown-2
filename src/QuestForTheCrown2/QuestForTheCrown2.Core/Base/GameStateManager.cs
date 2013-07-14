@@ -76,6 +76,8 @@ namespace QuestForTheCrown2.Base
 
     public static class GameStateManager
     {
+        public static GameMain Parent { private get; set; }
+
         /// <summary>
         /// Creates Game State Manager and loads data.
         /// </summary>
@@ -222,6 +224,14 @@ namespace QuestForTheCrown2.Base
                 return null;
 
             return entityFactory[type]();
+        }
+
+        public static void CallSaveScreen()
+        {
+            if( Parent != null )
+            {
+                Parent.ChangeState(QuestForTheCrown2.GameState.Saving);
+            }
         }
     }
 }
