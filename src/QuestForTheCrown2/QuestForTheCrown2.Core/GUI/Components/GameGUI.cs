@@ -15,6 +15,7 @@ namespace QuestForTheCrown2.GUI.Components
     {
         private Rectangle _position;
 
+        private Texture2D _shadow;
         private Texture2D _magic;
         private Texture2D _fullHealth;
         private Texture2D _emptyHealth;
@@ -23,6 +24,7 @@ namespace QuestForTheCrown2.GUI.Components
 
         public GameGUI()
         {
+            _shadow = GameContent.LoadContent<Texture2D>("gui/gui_shadow.png");
             _magic = GameContent.LoadContent<Texture2D>("gui/gui_background.png");
             _fullHealth = GameContent.LoadContent<Texture2D>("gui/health_full.png");
             _emptyHealth = GameContent.LoadContent<Texture2D>("gui/health_empty.png");
@@ -40,6 +42,8 @@ namespace QuestForTheCrown2.GUI.Components
 
             for (int i = 0; i < list.Count; i++)
             {
+                //TODO: Change position depending on player.
+                Rectangle bg_rect = new Rectangle(0,0, 320, 80);
 
                 int maxhealth = list[i].Health.Maximum ?? list[i].Health;
                 int health = list[i].Health;
@@ -50,6 +54,7 @@ namespace QuestForTheCrown2.GUI.Components
                 int original_difference = Convert.ToInt32(_font.MeasureString("Player " + (i + 1)).X) + 35;
                 int difference = original_difference;
 
+                spritebatch.Draw(_shadow, bg_rect, Color.White);
                 spritebatch.DrawString(_font, "Player " + (i + 1), new Vector2(20 + (i * width), 20), Color.White);
 
                 #region Draw Health
@@ -86,6 +91,22 @@ namespace QuestForTheCrown2.GUI.Components
                 spritebatch.Draw(_magic, rect_life, Color.CornflowerBlue);
 
                 #endregion Draw Magic
+
+                #region Draw Weapon
+                difference = original_difference + 130;
+                Rectangle weapon_rect = new Rectangle( difference, 25, 30, 30);
+
+                spritebatch.Draw(_magic, weapon_rect, Color.Black);
+                if( list[i].CurrentWeapon != null )
+                {
+                    spritebatch.Draw(list[i].CurrentWeapon.CurrentFrame.Texture, weapon_rect, list[i].CurrentWeapon.CurrentFrame.Rectangle, Color.White);
+
+                    if( list[i].CurrentWeapon is Bow )
+                    {
+                        spritebatch.DrawString(_font, list[i].Arrows.Quantity.ToString(), new Vector2(difference + 40, 20), Color.White);
+                    }
+                }
+                #endregion Draw Weapon
             }
         }
     }
