@@ -33,6 +33,14 @@ namespace QuestForTheCrown2.Base
         /// Player Weapons
         /// </summary>
         public List<string> Weapons { get; set; }
+
+        /// <summary>
+        /// Player's health.
+        /// </summary>
+        public Container Health
+        {
+            get { return Containers.GetOrDefault("Health"); }
+        }
     }
 
     [Serializable]

@@ -130,5 +130,7 @@ namespace QuestForTheCrown2.Entities.Base
                 return null;
             return container._quantity;
         }
+
+        public bool IsFull { get { return _maximum != null && _quantity >= _maximum; } }
     }
 }

@@ -71,7 +71,7 @@
     <Compile Include="Entities\Behaviors\BowAttackBehavior.cs" />
     <Compile Include="Entities\Behaviors\AvoidBehavior.cs" />
     <Compile Include="Entities\Behaviors\FireWandAttackBehavior.cs" />
-    <Compile Include="Entities\Behaviors\DropWeaponsBehavior.cs" />
+    <Compile Include="Entities\Behaviors\DropItemsBehavior.cs" />
     <Compile Include="Entities\Behaviors\DieBehavior.cs" />
     <Compile Include="Entities\Behaviors\FollowBehavior.cs" />
     <Compile Include="Entities\Behaviors\HitOnTouchBehavior.cs" />
@@ -93,6 +93,7 @@
     <Compile Include="Entities\Characters\SlimeWorm.cs" />
     <Compile Include="Entities\Characters\Zombie.cs" />
     <Compile Include="Entities\Objects\Entrance.cs" />
+    <Compile Include="Entities\Objects\Health.cs" />
     <Compile Include="Entities\Objects\Item.cs" />
     <Compile Include="Entities\Objects\SavePoint.cs" />
     <Compile Include="Entities\Weapons\Arrow.cs" />

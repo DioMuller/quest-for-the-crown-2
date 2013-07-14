@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Base;
+using QuestForTheCrown2.Entities.Objects;
 using QuestForTheCrown2.Entities.Weapons;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace QuestForTheCrown2.Entities.Behaviors
 {
-    class DropWeaponsBehavior : DieBehavior
+    class DropItemsBehavior : DieBehavior
     {
         Dictionary<string, Func<Entity>> CreateAmmo = new Dictionary<string, Func<Entity>>
         {
@@ -21,6 +22,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
             base.Update(gameTime, level);
+            bool itemsDropped = false;
 
             if (Entity.Weapons != null)
             {
@@ -39,14 +41,18 @@ namespace QuestForTheCrown2.Entities.Behaviors
                         var dropPosition = Entity.CenterPosition + dropDistance;
                         if (!currentWeapons.Contains(weaponName))
                         {
+                            itemsDropped = true;
+
                             weapon.Parent = null;
                             weapon.Position = dropPosition;
                             level.AddEntity(weapon);
                         }
                         else if (CreateAmmo.ContainsKey(weaponName))
                         {
-                            if (Random.NextDouble() < 0.1)
+                            if (Random.NextDouble() < 0.1 && !GameStateManager.CurrentState.Player.Health.IsFull)
                             {
+                                itemsDropped = true;
+
                                 var ammo = CreateAmmo[weaponName]();
                                 ammo.Position = dropPosition;
                                 level.AddEntity(ammo);
@@ -54,6 +60,16 @@ namespace QuestForTheCrown2.Entities.Behaviors
                         }
                     }
                 }
+            }
+
+            if (!itemsDropped && Random.NextDouble() < 0.1)
+            {
+                var dropDistance = VectorHelper.AngleToV2((float)(Random.NextDouble() * Math.PI - Math.PI / 2), 32);
+                var dropPosition = Entity.CenterPosition + dropDistance;
+
+                var health = new Health();
+                health.Position = dropPosition;
+                level.AddEntity(health);
             }
         }
     }

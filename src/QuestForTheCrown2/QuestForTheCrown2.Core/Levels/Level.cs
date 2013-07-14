@@ -176,7 +176,7 @@ namespace QuestForTheCrown2.Levels
         public void RemoveEntity(Entity entity)
         {
             _oldEntities.Enqueue(entity);
-            if (entity.Category != null)
+            if (entity.Category != null && _entitiesByCategory.ContainsKey(entity.Category))
                 _entitiesByCategory[entity.Category].Remove(entity);
 
             RemoveEntities(_entities.Where(e => e.Parent == entity));

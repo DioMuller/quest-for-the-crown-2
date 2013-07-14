@@ -48,7 +48,7 @@ namespace QuestForTheCrown2.Entities.Characters
             );
             AddWeapon(new Bow());
 
-            GetBehavior<DropWeaponsBehavior>().AutomaticAllowWeapons = true;
+            GetBehavior<DropItemsBehavior>().AutomaticAllowWeapons = true;
 
             Arrows = new Container(20);
         }

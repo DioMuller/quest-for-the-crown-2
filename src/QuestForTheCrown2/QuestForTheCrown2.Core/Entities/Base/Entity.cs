@@ -45,9 +45,9 @@ namespace QuestForTheCrown2.Entities.Base
             set
             {
                 if (Behaviors == null || GetBehavior<BlinkBehavior>() == null)
-                    AddBehavior(new BlinkBehavior(TimeSpan.FromSeconds(0.5)), new DropWeaponsBehavior());
-                if (GetBehavior<DropWeaponsBehavior>() == null)
-                    AddBehavior(new DropWeaponsBehavior());
+                    AddBehavior(new BlinkBehavior(TimeSpan.FromSeconds(0.5)), new DropItemsBehavior());
+                if (GetBehavior<DropItemsBehavior>() == null)
+                    AddBehavior(new DropItemsBehavior());
 
                 Containers["Health"] = value;
             }
