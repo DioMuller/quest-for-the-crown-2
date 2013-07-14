@@ -59,7 +59,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             Angle += _spinSpeed;
 
-            if (level.Map.Collides(CollisionRect))
+            if (level.Map.Collides(CollisionRect, false, true))
             {
                 if (flyingBack)
                 {

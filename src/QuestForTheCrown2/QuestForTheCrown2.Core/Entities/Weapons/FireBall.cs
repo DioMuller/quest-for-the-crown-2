@@ -30,7 +30,7 @@ namespace QuestForTheCrown2.Entities.Weapons
         {
             _timeFromCreation += gameTime.ElapsedGameTime;
 
-            if (level.Map.Collides(CollisionRect))
+            if (level.Map.Collides(CollisionRect, false, true))
             {
                 level.RemoveEntity(this);
                 return;

@@ -18,6 +18,11 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// </summary>
         private int[,] _collisionMap;
 
+        /// <summary>
+        /// Collision map.
+        /// </summary>
+        private int[,] _projectileCollision;
+
         private Dictionary<int, Tile> _tileDict = null;
         #endregion Attributes
 
@@ -62,6 +67,7 @@ namespace QuestForTheCrown2.Levels.Mapping
             PixelSize = new Point(TileSize.X * Size.X, TileSize.Y * size.Y);
 
             _collisionMap = new int[Size.X * 2, Size.Y * 2];
+            _projectileCollision = new int[Size.X * 2, Size.Y * 2];
 
             Tilesets = new List<Tileset>();
             Layers = new List<Layer>();
@@ -76,7 +82,7 @@ namespace QuestForTheCrown2.Levels.Mapping
         /// </summary>
         /// <param name="rect">Collision rectangle.</param>
         /// <returns>Is colliding?</returns>
-        public bool Collides(Rectangle rect, bool allowOutside = false)
+        public bool Collides(Rectangle rect, bool allowOutside = false, bool isProjectile = false)
         {
             if (!allowOutside && IsOutsideBorders(rect)) return true;
 
@@ -96,8 +102,13 @@ namespace QuestForTheCrown2.Levels.Mapping
             {
                 for (int y = min_y; y < max_y && y < Size.Y * 2; y++)
                 {
-                    if (_collisionMap[x, y] > 0)
-                        return true;
+                    if( isProjectile )
+                    {
+                        if( _projectileCollision[x,y] > 0 ) return true;
+                        else return false;
+                    }
+
+                    if(_collisionMap[x, y] > 0) return true;
                 }
             }
 
@@ -194,6 +205,14 @@ namespace QuestForTheCrown2.Levels.Mapping
                             _collisionMap[x + 1, y] = Math.Max(tile.GetCollision(CollisionPosition.UpperRight), _collisionMap[x + 1, y]); ;
                             _collisionMap[x, y + 1] = Math.Max(tile.GetCollision(CollisionPosition.DownLeft), _collisionMap[x, y + 1]); ;
                             _collisionMap[x + 1, y + 1] = Math.Max(tile.GetCollision(CollisionPosition.DownRight), _collisionMap[x + 1, y + 1]);
+
+                            if( layer.Name != "AllowProjectile" )
+                            {
+                                _projectileCollision[x, y] = Math.Max(tile.GetCollision(CollisionPosition.UpperLeft), _collisionMap[x, y]); ;
+                                _projectileCollision[x + 1, y] = Math.Max(tile.GetCollision(CollisionPosition.UpperRight), _collisionMap[x + 1, y]); ;
+                                _projectileCollision[x, y + 1] = Math.Max(tile.GetCollision(CollisionPosition.DownLeft), _collisionMap[x, y + 1]); ;
+                                _projectileCollision[x + 1, y + 1] = Math.Max(tile.GetCollision(CollisionPosition.DownRight), _collisionMap[x + 1, y + 1]);
+                            }
                         }
                     }
                 }

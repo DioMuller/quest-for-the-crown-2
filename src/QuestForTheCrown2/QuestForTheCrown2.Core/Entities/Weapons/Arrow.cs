@@ -67,7 +67,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             _timeFromCreation += gameTime.ElapsedGameTime;
 
-            if (level.Map.Collides(CollisionRect) && CurrentDirection != Vector2.Zero)
+            if (level.Map.Collides(CollisionRect, false, true) && CurrentDirection != Vector2.Zero)
             {
                 if (level.Map.IsOutsideBorders(CollisionRect))
                     level.RemoveEntity(this);
@@ -126,7 +126,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             CurrentDirection = Vector2.Zero;
             var oldPos = Position;
             Position += new Vector2(0, 10);
-            if (level.Map.Collides(CollisionRect))
+            if (level.Map.Collides(CollisionRect, false, true))
                 Position = oldPos;
 
             if (removeFromLevel)
