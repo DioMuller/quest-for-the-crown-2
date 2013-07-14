@@ -134,6 +134,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                 {
                     { "Crab", () => new Crab() },
                     { "Slime", () => new Slime() },
+                    { "SlimeWorm", () => new SlimeWorm() },
                     { "Bat", () => new Bat() },
                     { "Zombie", () => new Zombie() },
                     { "Skelleton", () => new Skeleton() },
