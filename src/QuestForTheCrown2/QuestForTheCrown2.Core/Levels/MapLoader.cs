@@ -135,10 +135,12 @@ namespace QuestForTheCrown2.Levels.Mapping
                     { "Crab", () => new Crab() },
                     { "Slime", () => new Slime() },
                     { "SlimeWorm", () => new SlimeWorm() },
+                    { "WaterDragon", () => new WaterDragon() },
                     { "Bat", () => new Bat() },
                     { "Zombie", () => new Zombie() },
                     { "Skelleton", () => new Skeleton() },
                     { "Goon", () => new Goon() },
+                    { "MasterGoon", () => new MasterGoon() },
                 };
                 var entityFactory = new Dictionary<string, Func<string, Entity>>
                 {

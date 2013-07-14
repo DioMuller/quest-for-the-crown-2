@@ -44,7 +44,7 @@ namespace QuestForTheCrown2.Entities.Characters
             SpriteSheet.AddAnimation("walking", "down", line: 2, frameDuration: walkFrameDuration);
             SpriteSheet.AddAnimation("walking", "right", line: 3, frameDuration: walkFrameDuration);
 
-            Padding = new Rectangle(22, 30, 22, 2);
+            Padding = new Rectangle(22, 32, 22, 2);
 
             Speed = new Vector2(32 * 5);
 
@@ -57,7 +57,6 @@ namespace QuestForTheCrown2.Entities.Characters
                 new InputBehavior(InputType.Controller),
                 new InputBehavior(InputType.Keyboard)
             );
-            AddWeapon(new Sword(), new Boomerang(), new Bow(), new FireWand());
             Arrows = new Container(50);
             Magic = new Container(10);
         }
