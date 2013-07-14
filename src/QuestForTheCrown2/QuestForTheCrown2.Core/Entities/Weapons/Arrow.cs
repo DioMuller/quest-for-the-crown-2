@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Base;
+using QuestForTheCrown2.Levels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,25 +17,34 @@ namespace QuestForTheCrown2.Entities.Weapons
         TimeSpan _entHitTime;
         TimeSpan _timeFromCreation;
 
-        double _spriteAngle = (Math.PI / 8) * 6;
+        public int PickupCount { get; set; }
 
-        public Arrow(Vector2 direction)
+        double _spriteAngle = (Math.PI / 8) * 6;
+        Random _random;
+
+        public Arrow()
             : base(@"sprites\Objects\Arrow.png", null)
         {
-            direction.Normalize();
-            CurrentDirection = direction;
+            PickupCount = 1;
+            _random = new Random(Environment.TickCount);
             OverlapEntities = true;
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
             _timeFromCreation = TimeSpan.Zero;
-
             Speed = new Vector2(32 * 10);
+        }
+
+        public Arrow(Vector2 direction)
+            : this()
+        {
+            direction.Normalize();
+            CurrentDirection = direction.Normalized();
         }
 
         public override Rectangle CollisionRect
         {
             get
             {
-                var location = Position + CollisionDirection;
+                var location = Position + CollisionDirection / 2;
                 return new Rectangle((int)(location.X - 4), (int)(location.Y - 4), 8, 8);
             }
         }
@@ -52,36 +62,48 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Update(GameTime gameTime, Levels.Level level)
         {
-            Angle = (float)(Math.Atan2(-CurrentDirection.X, CurrentDirection.Y) + _spriteAngle);
+            if (CurrentDirection != Vector2.Zero)
+                Angle = (float)(Math.Atan2(-CurrentDirection.X, CurrentDirection.Y) + _spriteAngle);
 
             _timeFromCreation += gameTime.ElapsedGameTime;
 
-            if (level.Map.Collides(CollisionRect))
+            if (level.Map.Collides(CollisionRect) && CurrentDirection != Vector2.Zero)
             {
-                level.RemoveEntity(this);
+                if (level.Map.IsOutsideBorders(CollisionRect))
+                    level.RemoveEntity(this);
+                else
+                    Dettach(level, removeFromLevel: Parent == null || Parent.Category != "Player");
                 return;
             }
 
             if (HitEntity != null)
             {
                 if (gameTime.TotalGameTime > _entHitTime + _maxHitTime || !level.ContainsEntity(HitEntity))
-                {
-                    level.RemoveEntity(this);
-                }
+                    Dettach(level, HitEntity.Arrows == null || HitEntity.Health <= 0);
                 else
-                {
-                    OverlapEntities = !OverlapEntities;
                     Position = HitEntity.CenterPosition - _hitLocation;
-                }
 
                 return;
             }
 
-            var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-            Position += CurrentDirection * (float)timeFactor * Speed;
+            if (Parent != null)
+            {
+                var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+                Position += CurrentDirection * (float)timeFactor * Speed;
+            }
 
             foreach (var ent in level.CollidesWith(CollisionRect).Distinct())
             {
+                if (Parent == null)
+                {
+                    if (ent.Arrows != null && ent.Arrows.Quantity < ent.Arrows.Maximum)
+                    {
+                        ent.Arrows += PickupCount;
+                        level.RemoveEntity(this);
+                    }
+                    return;
+                }
+
                 if (ent != this && ent != Parent && ent.Health != null)
                 {
                     _entHitTime = gameTime.TotalGameTime;
@@ -91,16 +113,24 @@ namespace QuestForTheCrown2.Entities.Weapons
                     direction = new Vector2(-direction.Y, direction.X);
 
                     ent.Hit(this, level, direction);
-                    OverlapEntities = false;
-                    _hitLocation = ent.CenterPosition - Position - CurrentDirection * new Vector2(8);
+                    _hitLocation = ent.CenterPosition - Position - CurrentDirection;
                     return;
                 }
             }
+        }
 
-            if (_timeFromCreation > TimeSpan.FromSeconds(3.0))
-            {
+        private void Dettach(Level level, bool removeFromLevel)
+        {
+            HitEntity = null;
+            Parent = null;
+            CurrentDirection = Vector2.Zero;
+            var oldPos = Position;
+            Position += new Vector2(0, 10);
+            if (level.Map.Collides(CollisionRect))
+                Position = oldPos;
+
+            if (removeFromLevel)
                 level.RemoveEntity(this);
-            }
         }
     }
 }

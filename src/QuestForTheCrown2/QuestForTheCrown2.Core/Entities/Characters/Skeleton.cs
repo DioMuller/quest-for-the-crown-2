@@ -41,7 +41,6 @@ namespace QuestForTheCrown2.Entities.Characters
             CurrentDirection = new Vector2(0, 1);
 
             AddBehavior(
-                new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
                 new HitOnTouchBehavior(e => e.Category == "Player"),
                 new SwordAttackBehavior("Player") { MaxDistance = 300 },
                 new FollowBehavior("Player", 5) { MaxDistance = float.MaxValue }//,

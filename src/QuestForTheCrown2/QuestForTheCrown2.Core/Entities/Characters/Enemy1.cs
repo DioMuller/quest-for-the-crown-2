@@ -42,7 +42,6 @@ namespace QuestForTheCrown2.Entities.Characters
 
             AddBehavior(
                 new HitOnTouchBehavior(e => e.Category == "Player"),
-                new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
                 new SwordAttackBehavior("Player") { MaxDistance = 300 },
                 new WalkAroundBehavior()
             );

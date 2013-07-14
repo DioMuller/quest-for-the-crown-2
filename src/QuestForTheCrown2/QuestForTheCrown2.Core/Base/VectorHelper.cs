@@ -27,5 +27,14 @@ namespace QuestForTheCrown2.Base
         {
             return (float)Math.Atan2(-vector.X, vector.Y);
         }
+
+        public static Vector2 Normalized(this Vector2 vector)
+        {
+            if (vector == Vector2.Zero)
+                return vector;
+
+            var ratio = 1 / vector.Length();
+            return new Vector2(vector.X * ratio, vector.Y * ratio);
+        }
     }
 }

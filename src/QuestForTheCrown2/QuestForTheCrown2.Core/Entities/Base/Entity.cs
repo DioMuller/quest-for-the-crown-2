@@ -32,10 +32,25 @@ namespace QuestForTheCrown2.Entities.Base
         public string Category { get; set; }
 
         #region Containers
+
+        public bool IsDead
+        {
+            get { return Health != null && Health <= 0; }
+            set { Health = new Container(0, 0); }
+        }
+
         public Container Health
         {
             get { return Containers.GetOrDefault("Health"); }
-            set { Containers["Health"] = value; }
+            set
+            {
+                if (Behaviors == null || GetBehavior<BlinkBehavior>() == null)
+                    AddBehavior(new BlinkBehavior(TimeSpan.FromSeconds(0.5)), new DropWeaponsBehavior());
+                if (GetBehavior<DropWeaponsBehavior>() == null)
+                    AddBehavior(new DropWeaponsBehavior());
+
+                Containers["Health"] = value;
+            }
         }
 
         public Container Magic
@@ -416,15 +431,10 @@ namespace QuestForTheCrown2.Entities.Base
             if (!IsBlinking)
                 Health--;
 
-            if (Health <= 0)
-                level.RemoveEntity(this);
-            else
-            {
-                var oldPos = Position;
-                Position += direction;
-                if (level.CollidesWith(CollisionRect).Any(e => e != this) || level.Map.Collides(CollisionRect))
-                    Position = oldPos;
-            }
+            var oldPos = Position;
+            Position += direction;
+            if (level.CollidesWith(CollisionRect).Any(e => e != this) || level.Map.Collides(CollisionRect))
+                Position = oldPos;
         }
         #endregion
 
