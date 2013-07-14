@@ -15,6 +15,11 @@
 	<level id="26" neighbors="0,27,0,2" path="Content/maps/Overworld/Overworld11.tmx" music="Heroic Age"/>
 	<level id="27" neighbors="0,0,28,26" path="Content/maps/Overworld/Overworld12.tmx" music="Heroic Age"/>
 	<level id="28" neighbors="27,0,0,0" path="Content/maps/Overworld/Overworld13.tmx" music="Heroic Age"/>
+	<!-- Hero Shrine -->
+	<level id="29" neighbors="0,30,0,-1" path="Content/maps/HeroShrine/HeroShrine01.tmx" music="Five Armies"/>
+	<level id="30" neighbors="0,0,31,29" path="Content/maps/HeroShrine/HeroShrine02.tmx" music="Five Armies"/>
+	<level id="31" neighbors="30,32,0,0" path="Content/maps/HeroShrine/HeroShrine03.tmx" music="Five Armies"/>
+	<level id="32" neighbors="0,0,0,31" path="Content/maps/HeroShrine/HeroShrine04.tmx" music="Suvaco do Cristo"/>
 	<!-- Beach Cave -->
 	<level id="10" neighbors="0,11,0,-1" path="Content/maps/BeachCave/BeachCave01.tmx" music="Five Armies"/>
   <level id="11" neighbors="0,12,13,10" path="Content/maps/BeachCave/BeachCave02.tmx" music="Five Armies"/>

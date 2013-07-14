@@ -83,5 +83,7 @@
 28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28
 </data>
  </layer>
- <objectgroup name="Objects" width="60" height="34"/>
+ <objectgroup name="Objects" width="60" height="34">
+  <object name="Save" type="SavePoint" x="945" y="473" width="32" height="32"/>
+ </objectgroup>
 </map>

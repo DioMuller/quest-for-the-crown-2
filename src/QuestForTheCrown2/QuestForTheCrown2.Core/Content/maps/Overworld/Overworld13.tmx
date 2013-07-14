@@ -85,5 +85,6 @@
  </layer>
  <objectgroup name="Objects" width="60" height="34">
   <object name="33" type="Entrance" x="1183" y="98" width="32" height="32"/>
+  <object name="Save" type="SavePoint" x="1168" y="442" width="32" height="32"/>
  </objectgroup>
 </map>

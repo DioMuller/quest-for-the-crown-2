@@ -357,6 +357,18 @@
     <Content Include="Content\maps\Overworld\Overworld13.tmx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\maps\HeroShrine\HeroShrine01.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\HeroShrine\HeroShrine02.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\HeroShrine\HeroShrine03.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\maps\HeroShrine\HeroShrine04.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\maps\QuestForTheCrown.maps">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -411,8 +423,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\maps\Haunted Woods\" />
-    <Folder Include="Content\maps\Hero Shrine\" />
+    <Folder Include="Content\maps\HauntedWoods\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
