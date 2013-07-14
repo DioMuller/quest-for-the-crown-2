@@ -40,7 +40,6 @@ namespace QuestForTheCrown2.Entities.Characters
             Look(new Vector2(0, 1), true);
 
             AddBehavior(
-                new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
                 new HitOnTouchBehavior(e => e.Category == "Player"),
                 new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 },
                 new WalkAroundBehavior { MaxStoppedTime = TimeSpan.Zero }

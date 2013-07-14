@@ -29,11 +29,15 @@ namespace QuestForTheCrown2.Entities.Base
 
         public static Container operator --(Container a)
         {
+            if (a == null)
+                return null;
             return a - 1;
         }
 
         public static Container operator ++(Container a)
         {
+            if (a == null)
+                return null;
             return a + 1;
         }
 

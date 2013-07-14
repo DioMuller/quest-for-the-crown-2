@@ -48,9 +48,11 @@ namespace QuestForTheCrown2.Entities.Behaviors
         {
             Entity.ChangeWeapon(_bow, level);
 
-            if (_followBehavior.CurrentTarget.Distance <= _followBehavior.Distance && !level.ContainsEntity(_bow.LastShotArrow))
+            var passedTime = gameTime.TotalGameTime - _lastAttackTime;
+
+            if (_followBehavior.CurrentTarget.Distance <= _followBehavior.Distance && (!level.ContainsEntity(_bow.LastShotArrow) || _bow.LastShotArrow == null || _bow.LastShotArrow.Parent == null || passedTime.TotalSeconds > 3))
             {
-                if (_lastAttackTime + TimeSpan.FromSeconds(0.5) < gameTime.TotalGameTime)
+                if (passedTime.TotalSeconds > 0.5)
                 {
                     Entity.Look(_followBehavior.CurrentTarget.Position, true);
 

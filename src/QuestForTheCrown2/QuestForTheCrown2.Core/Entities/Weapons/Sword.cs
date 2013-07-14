@@ -30,8 +30,6 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
-            CurrentDirection = direction;
-
             if (!attackButton && direction.Length() > 0.8)
                 attackButton = true;
             else if (direction.Length() < 0.4)
@@ -39,6 +37,8 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             if (_currentAttackDirection == direction && attackButton == _currentAttackButton)
                 return;
+
+            CurrentDirection = direction;
 
             _currentAttackDirection = direction;
             _currentAttackButton = attackButton;
@@ -101,7 +101,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             {
                 if (ent is Arrow && ((Arrow)ent).HitEntity == null)
                 {
-                    ent.CurrentDirection = Parent.CurrentDirection.Rotate(-_swingedAngle / 4);
+                    ent.CurrentDirection = CurrentDirection.Rotate(-_swingedAngle / 4).Normalized();
                     ent.Parent = Parent;
                 }
                 else if (ent != this && ent != Parent && ent.Health != null)

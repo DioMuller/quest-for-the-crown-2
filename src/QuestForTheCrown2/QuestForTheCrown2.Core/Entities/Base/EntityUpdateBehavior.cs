@@ -14,6 +14,17 @@ namespace QuestForTheCrown2.Entities.Base
     /// </summary>
     public abstract class EntityUpdateBehavior
     {
+        Random _random;
+        protected Random Random
+        {
+            get
+            {
+                if(_random == null)
+                    _random = new Random(Environment.TickCount + (Entity == null? 0 : (int)(Entity.Position.X * Entity.Position.Y)));
+                return _random;
+            }
+        }
+
         /// <summary>
         /// The group in which this update operates.
         /// Only one update per group is executed (except for an empty group).

@@ -37,7 +37,6 @@ namespace QuestForTheCrown2.Entities.Characters
             CurrentDirection = new Vector2(0, 1);
 
             AddBehavior(
-                //new BlinkBehavior(TimeSpan.FromSeconds(0.5)),
                 new HitOnTouchBehavior(e => e.Category == "Player"),
                 new TouchAndDodgeBehavior("Player", 32 * 2)
             );

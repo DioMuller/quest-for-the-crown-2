@@ -5,6 +5,7 @@ using QuestForTheCrown2.Levels.Mapping;
 using System;
 using System.Linq;
 using QuestForTheCrown2.Entities.Characters;
+using QuestForTheCrown2.Entities.Weapons;
 
 namespace QuestForTheCrown2.Entities.Behaviors
 {
@@ -41,10 +42,12 @@ namespace QuestForTheCrown2.Entities.Behaviors
             if (Entity.CurrentAnimation == "stopped")
                 return true;
 
+            var numArrows = level.FindEntities(e => e is Arrow && ((Arrow)e).HitEntity == Entity).Count() + 1;
+
             var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
 
-            float newX = (float)(Entity.Position.X + direction.X * Entity.Speed.X * timeFactor);
-            float newY = (float)(Entity.Position.Y + direction.Y * Entity.Speed.Y * timeFactor);
+            float newX = (float)(Entity.Position.X + direction.X * Entity.Speed.X / numArrows * timeFactor);
+            float newY = (float)(Entity.Position.Y + direction.Y * Entity.Speed.Y / numArrows * timeFactor);
             Rectangle newRect = new Rectangle(
                     x: (int)newX + Entity.Padding.X,
                     y: (int)newY + Entity.Padding.Y,

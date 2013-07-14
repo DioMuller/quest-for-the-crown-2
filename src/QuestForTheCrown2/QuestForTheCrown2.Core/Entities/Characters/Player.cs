@@ -51,15 +51,14 @@ namespace QuestForTheCrown2.Entities.Characters
             Health = new Container(8);
             Look(new Vector2(0, 1), true);
 
+            GetBehavior<BlinkBehavior>().BlinkDuration = TimeSpan.FromSeconds(1);
+
             AddBehavior(
-                new BlinkBehavior(TimeSpan.FromSeconds(1)),
                 new InputBehavior(InputType.Controller),
                 new InputBehavior(InputType.Keyboard)
             );
-            AddWeapon(new FireWand());
-            AddWeapon(new Bow());
-            AddWeapon(new Sword());
-            Arrows = new Container(5);
+            AddWeapon(new Sword(), new Boomerang(), new Bow(), new FireWand());
+            Arrows = new Container(50);
             Magic = new Container(10);
         }
         #endregion Constructor
