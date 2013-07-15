@@ -154,10 +154,11 @@ namespace QuestForTheCrown2
                         break;
 
                     var player = _overworld.Players.First();
+                    player.AddWeapon(new FireWand());
                     //GameStateManager.DeleteAllSaves();
                     GameStateManager.SelectSaveData(new Base.GameState
                     {
-                        AllowWeapon = new List<string> { "Sword" },
+                        AllowWeapon = new List<string> { "Sword", "FireWand" },
                         DungeonsComplete = new List<string>(),
                         Player = GameStateManager.GetPlayerState(player)
                     });

@@ -20,6 +20,8 @@ namespace QuestForTheCrown2.Entities.Base
         Animation _lastAnimation;
         TimeSpan _lastFrameStartTime;
         Weapon _currentWeapon;
+
+        int _timeSinceLastMpRegen;
         #endregion
 
         #region Properties
@@ -415,6 +417,19 @@ namespace QuestForTheCrown2.Entities.Base
             {
                 _currentFrameIndex = (_currentFrameIndex + 1) % curAnimation.FrameIndexes.Length;
                 _lastFrameStartTime = gameTime.TotalGameTime;
+            }
+
+            if( Magic != null )
+            {
+                if( _timeSinceLastMpRegen > 1000 )
+                {
+                    if( !Magic.IsFull ) Magic.Quantity++;
+                    _timeSinceLastMpRegen = 0;
+                }
+                else
+                {
+                    _timeSinceLastMpRegen += gameTime.ElapsedGameTime.Milliseconds;
+                }
             }
         }
 
