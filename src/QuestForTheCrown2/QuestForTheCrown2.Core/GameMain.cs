@@ -118,7 +118,7 @@ namespace QuestForTheCrown2
 
             GameStateManager.Parent = this;
 
-            System.Threading.ThreadPool.QueueUserWorkItem(LoadContentAsync);
+            //System.Threading.ThreadPool.QueueUserWorkItem(LoadContentAsync);
         }
 
         private void LoadContentAsync(object asyncState)
@@ -154,14 +154,16 @@ namespace QuestForTheCrown2
                         break;
 
                     var player = _overworld.Players.First();
+                    player.AddWeapon(new FireWand());
                     //GameStateManager.DeleteAllSaves();
                     GameStateManager.SelectSaveData(new Base.GameState
                     {
-                        AllowWeapon = new List<string> { "Sword" },
+                        AllowWeapon = new List<string> { "Sword", "FireWand" },
                         DungeonsComplete = new List<string>(),
                         Player = GameStateManager.GetPlayerState(player)
                     });
                     GameStateManager.SaveData();
+
                     ChangeState(GameState.Playing);
                     break;
                 case GameState.Playing:
@@ -252,7 +254,7 @@ namespace QuestForTheCrown2
         {
             _currentState = state;
 
-            if (state == GameState.LoadingGame)
+            if (state == GameState.NewGame || state == GameState.LoadingGame)
             {
                 _overworld = null;
                 System.Threading.ThreadPool.QueueUserWorkItem(LoadContentAsync);
