@@ -59,9 +59,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="map">Current entity map.</param>
         public override void Update(GameTime gameTime, Level level)
         {
-            var direction = new Vector2(
-                CurrentTarget.Entity.CenterPosition.X - Entity.CenterPosition.X,
-                CurrentTarget.Entity.CenterPosition.Y - Entity.CenterPosition.Y);
+            var direction = CurrentTarget.Entity.CenterPosition - Entity.CenterPosition;
 
             var route = direction;
             var length = route.Length();

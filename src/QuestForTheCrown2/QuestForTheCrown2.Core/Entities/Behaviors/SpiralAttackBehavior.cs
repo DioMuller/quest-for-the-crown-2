@@ -55,7 +55,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                 _forcedDirection = !_forcedDirection;
             }
 
-            var targetLocation = _currentTarget.Entity.CenterPosition;
+            var targetLocation = Entity.PreviewEnemyLocation(gameTime, level, _currentTarget.Entity, Entity.Speed);
             var entLocation = Entity.CenterPosition;
             var directRoute = _currentTarget.Position;
 
@@ -86,13 +86,12 @@ namespace QuestForTheCrown2.Entities.Behaviors
                 {
                     _safeDistanceRange = 32;
 
-                    var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-                    _currentDistance -= 15 * (float)timeFactor;
-
-                    var targetRoute = (directRoute * -1).Rotate(MathHelper.ToRadians(1));
-                    var walkRoute = targetLocation + targetRoute - entLocation;
-                    walkRoute = walkRoute.Rotate(0.1f * (_forcedDirection ? 1 : -1));
+                    var targetRoute = (directRoute * -1).Rotate(MathHelper.ToRadians(1) * (_forcedDirection ? -1 : 1));
+                    var walkRoute = (targetRoute + _currentTarget.Entity.CenterPosition) - entLocation;
+                    walkRoute = walkRoute.Rotate(-0.2f * (_forcedDirection ? -1 : 1));
                     normalized = walkRoute.Normalized();
+
+                    _currentDistance = (_currentTarget.Entity.CenterPosition - (entLocation + walkRoute)).Length();
 
                     if (!Walk(gameTime, level, normalized * -1, e => e.GetType() != Entity.GetType()))
                     {

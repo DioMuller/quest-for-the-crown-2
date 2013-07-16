@@ -46,7 +46,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Padding = new Rectangle(22, 32, 22, 2);
 
-            Speed = new Vector2(32 * 5);
+            Speed = 32 * 5;
 
             Health = new Container(8);
             Look(new Vector2(0, 1), true);

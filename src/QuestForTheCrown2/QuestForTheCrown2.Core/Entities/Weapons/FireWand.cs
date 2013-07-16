@@ -49,7 +49,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 level.AddEntity(new FireBall(direction)
                 {
                     Position = Parent.CenterPosition,
-                    Speed = new Vector2(7 * 32),
+                    Speed = 7 * 32,
                     Parent = Parent,
                     MaxFlyTime = MaxFireBallFlyTime
                 });

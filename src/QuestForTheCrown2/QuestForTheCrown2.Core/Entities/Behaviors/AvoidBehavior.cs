@@ -2,6 +2,8 @@
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Levels;
 using QuestForTheCrown2.Levels.Mapping;
+using System;
+using System.Linq;
 
 namespace QuestForTheCrown2.Entities.Behaviors
 {
@@ -10,6 +12,10 @@ namespace QuestForTheCrown2.Entities.Behaviors
     /// </summary>
     class AvoidBehavior : WalkBehavior
     {
+        #region Attributes
+        Func<Entity, bool> _avoidCheck;
+        #endregion
+
         #region Properties
         public EntityRelativePosition CurrentTarget { get; private set; }
 
@@ -17,10 +23,6 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// A desired distance to keep from the entity.
         /// </summary>
         public float Distance { get; set; }
-        /// <summary>
-        /// The entity category to be followed.
-        /// </summary>
-        public string TargetCategory { get; set; }
         #endregion
 
         #region Constructors
@@ -29,9 +31,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         /// <param name="following">The entity to follow.</param>
         /// <param name="distance">The desired distance to keep.</param>
-        public AvoidBehavior(string targetCategory, float distance = 32 * 2)
+        public AvoidBehavior(Func<Entity, bool> avoidCheck, float distance = 32 * 2)
         {
-            TargetCategory = targetCategory;
+            _avoidCheck = avoidCheck;
             Distance = distance;
         }
         #endregion
@@ -42,7 +44,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         public override bool IsActive(GameTime gameTime, Level level)
         {
-            CurrentTarget = level.EntityCloserTo(Entity, TargetCategory);
+            CurrentTarget = level.GetEntities(_avoidCheck).CloserTo(Entity);
             if (CurrentTarget != null && CurrentTarget.Distance < Distance)
                 return true;
 
