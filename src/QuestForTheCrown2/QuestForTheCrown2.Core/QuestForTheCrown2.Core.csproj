@@ -76,6 +76,7 @@
     <Compile Include="Entities\Behaviors\FollowBehavior.cs" />
     <Compile Include="Entities\Behaviors\HitOnTouchBehavior.cs" />
     <Compile Include="Entities\Behaviors\InputBehavior.cs" />
+    <Compile Include="Entities\Behaviors\SpiralAttackBehavior.cs" />
     <Compile Include="Entities\Behaviors\SwordAttackBehavior.cs" />
     <Compile Include="Entities\Behaviors\TouchAndDodgeBehavior.cs" />
     <Compile Include="Entities\Behaviors\WalkAroundBehavior.cs" />

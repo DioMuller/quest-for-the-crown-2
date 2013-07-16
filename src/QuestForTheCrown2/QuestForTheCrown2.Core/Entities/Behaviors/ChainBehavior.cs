@@ -9,8 +9,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
 {
     class ChainBehavior<T> : WalkBehavior where T : Entity
     {
-        EntityRelativePosition _following;
-        Entity _followedBy;
+        public Entity Following { get; private set; }
+        public Entity FollowedBy { get; private set; }
 
         /// <summary>
         /// A desired distance to keep from the entity.
@@ -24,55 +24,49 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
-            if (_following != null)
+            if (Following != null)
             {
                 if(MaxDistance != null)
                 {
-                    var distance = new Vector2(_following.Entity.CenterPosition.X - Entity.CenterPosition.X, _following.Entity.CenterPosition.Y - Entity.CenterPosition.Y).Length();
+                    var distance = new Vector2(Following.CenterPosition.X - Entity.CenterPosition.X, Following.CenterPosition.Y - Entity.CenterPosition.Y).Length();
                     if (distance > MaxDistance)
                     {
-                        _following.Entity.GetBehavior<ChainBehavior<T>>()._followedBy = null;
-                        _following = null;
+                        Following.GetBehavior<ChainBehavior<T>>().FollowedBy = null;
+                        Following = null;
                     }
                 }
 
-                if (_following != null && (_following.Entity.IsDead || !level.ContainsEntity(_following.Entity)))
+                if (Following != null && (Following.IsDead || !level.ContainsEntity(Following)))
                 {
-                    _following.Entity.GetBehavior<ChainBehavior<T>>()._followedBy = null;
-                    _following = null;
+                    Following.GetBehavior<ChainBehavior<T>>().FollowedBy = null;
+                    Following = null;
                 }
             }
 
-            if (_following == null)
+            if (Following == null)
             {
-                _following = (from ent in level.GetEntities<T>()
+                Following = (from ent in level.GetEntities<T>()
                               where ent != Entity && !ent.IsDead && level.ContainsEntity(ent)
                               let beh = ent.GetBehavior<ChainBehavior<T>>()
-                              where beh != null && beh._followedBy == null && !beh.IsFollowing(Entity)
+                              where beh != null && beh.FollowedBy == null && !beh.IsFollowingEntity(Entity)
                               let pos = new Vector2(Entity.CenterPosition.X - ent.CenterPosition.X,
                                                   Entity.CenterPosition.Y - ent.CenterPosition.Y)
                               let distance = pos.Length()
                               where MaxDistance == null || distance < MaxDistance
                               orderby distance
-                              select new EntityRelativePosition
-                              {
-                                  RelativeTo = Entity,
-                                  Entity = ent,
-                                  Position = pos,
-                                  Distance = distance
-                              }).FirstOrDefault();
-                if (_following != null)
-                    _following.Entity.GetBehavior<ChainBehavior<T>>()._followedBy = Entity;
+                              select ent).FirstOrDefault();
+                if (Following != null)
+                    Following.GetBehavior<ChainBehavior<T>>().FollowedBy = Entity;
             }
 
-            return _following != null;
+            return Following != null;
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
             var direction = new Vector2(
-                _following.Entity.CenterPosition.X - Entity.CenterPosition.X,
-                _following.Entity.CenterPosition.Y - Entity.CenterPosition.Y);
+                Following.CenterPosition.X - Entity.CenterPosition.X,
+                Following.CenterPosition.Y - Entity.CenterPosition.Y);
 
             var route = direction;
             var length = route.Length();
@@ -97,7 +91,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                     if (beh == null)
                         return true;
 
-                    return IsFollowing(e);
+                    return IsFollowingEntity(e);
                 });
         }
 
@@ -106,14 +100,14 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public bool IsFollowing(Base.Entity entity)
+        public bool IsFollowingEntity(Base.Entity entity)
         {
             var beh = this;
 
-            while (beh != null && beh._following != null && beh._following.Entity != entity)
-                beh = beh._following.Entity.GetBehavior<ChainBehavior<T>>();
+            while (beh != null && beh.Following != null && beh.Following != entity)
+                beh = beh.Following.GetBehavior<ChainBehavior<T>>();
 
-            return beh != null && beh._following != null && beh._following.Entity == entity;
+            return beh != null && beh.Following != null && beh.Following == entity;
         }
     }
 }
