@@ -40,14 +40,14 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Padding = new Rectangle(6, 11, 6, 6);
 
-            Speed = new Vector2(32);
+            Speed = new Vector2(32 * 3);
 
             Health = new Container(1);
             Look(new Vector2(0, 1), true);
 
             AddBehavior(
                 new HitOnTouchBehavior(e => e.Category == "Player"),
-                new FollowBehavior("Player", 5) { MaxDistance = 32 * 2 },
+                new FollowBehavior("Player", 5) { MaxDistance = 32 * 4 },
                 new WalkAroundBehavior()
             );
         }
