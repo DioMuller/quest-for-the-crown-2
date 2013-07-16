@@ -39,7 +39,7 @@ namespace QuestForTheCrown2.GUI.Screens
         /// <summary>
         /// Font used.
         /// </summary>
-        public SpriteFont _font { get; set; }
+        private SpriteFont _font;
         #endregion Attributes
 
         #region Constructor

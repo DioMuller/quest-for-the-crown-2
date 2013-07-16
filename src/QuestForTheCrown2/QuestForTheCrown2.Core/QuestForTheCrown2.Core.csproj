@@ -108,8 +108,9 @@
     <Compile Include="GUI\Components\Base\Component.cs" />
     <Compile Include="GUI\Components\Button.cs" />
     <Compile Include="GUI\Components\ComponentList.cs" />
-    <Compile Include="GUI\Components\GameGUI.cs" />
+    <Compile Include="GUI\GameGUI\GameGUI.cs" />
     <Compile Include="GUI\Components\SelectionBox.cs" />
+    <Compile Include="GUI\GameGUI\TitleCard.cs" />
     <Compile Include="GUI\Screens\SaveScreen.cs" />
     <Compile Include="GUI\Screens\LoadScreen.cs" />
     <Compile Include="GUI\Screens\CreditsScreen.cs" />
@@ -183,6 +184,7 @@
     <Content Include="Content\images\title.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\licenses\fonts.txt" />
     <Content Include="Content\licenses\music.txt" />
     <Content Include="Content\sound\boomerang.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -290,11 +292,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\tiles\overworld_03.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\fonts\DefaultFont.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -432,6 +429,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\maps\HauntedWoods\HauntedWoods12.tmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\fonts\DefaultFont.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\fonts\TitleFont.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Content\maps\QuestForTheCrown.maps">
