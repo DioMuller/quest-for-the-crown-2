@@ -128,7 +128,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// Indicates the current entity animation.
         /// Examples are: "walking", "stopped" and "running".
         /// </summary>
-        public string CurrentAnimation { get; set; }
+        public virtual string CurrentAnimation { get; set; }
 
         /// <summary>
         /// Indicates the current animation view.

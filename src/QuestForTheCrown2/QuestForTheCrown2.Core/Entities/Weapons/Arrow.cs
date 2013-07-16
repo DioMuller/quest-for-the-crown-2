@@ -123,9 +123,10 @@ namespace QuestForTheCrown2.Entities.Weapons
         {
             HitEntity = null;
             Parent = null;
-            CurrentDirection = Vector2.Zero;
             var oldPos = Position;
-            Position += new Vector2(0, 10);
+            Position -= new Vector2(CurrentDirection.X > 0 ? 8 : 0, CurrentDirection.Y > 0 ? 8 : 0);
+            CurrentDirection = Vector2.Zero;
+
             if (level.Map.Collides(CollisionRect, false, true))
                 Position = oldPos;
 

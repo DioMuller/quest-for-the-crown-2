@@ -30,6 +30,10 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
+            base.Update(gameTime, level);
+            if (Parent == null)
+                return;
+
             if (!attackButton && direction.Length() > 0.8)
                 attackButton = true;
             else if (direction.Length() < 0.4)
