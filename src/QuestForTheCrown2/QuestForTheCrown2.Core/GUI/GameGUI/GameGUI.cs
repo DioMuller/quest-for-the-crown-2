@@ -9,7 +9,7 @@ using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Characters;
 using QuestForTheCrown2.Entities.Weapons;
 
-namespace QuestForTheCrown2.GUI.Components
+namespace QuestForTheCrown2.GUI.GameGUI
 {
     class GameGUI
     {

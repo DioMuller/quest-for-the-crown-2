@@ -7,6 +7,7 @@ using System.Text;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Characters;
 using QuestForTheCrown2.GUI.Components;
+using QuestForTheCrown2.GUI.GameGUI;
 
 namespace QuestForTheCrown2.Levels
 {
@@ -40,6 +41,11 @@ namespace QuestForTheCrown2.Levels
         /// Game GUI.
         /// </summary>
         GameGUI _gui;
+
+        /// <summary>
+        /// Title Card.
+        /// </summary>
+        TitleCard _card;
         #endregion Attributes
 
         #region Properties
@@ -80,6 +86,7 @@ namespace QuestForTheCrown2.Levels
             _storedWaypoints = new List<Waypoint>();
 
             _gui = new GameGUI();
+            _card = new TitleCard();
         }
         #endregion Constructor
 
@@ -126,6 +133,8 @@ namespace QuestForTheCrown2.Levels
 
             Level newLevel = GetLevelByEntity(entity);
             newLevel.AddEntity(entity);
+
+            _card.CurrentTitle = newLevel.Title;
 
             //TODO: Load this from an XML file, maybe?
             entity.Position = new Vector2(newLevel.Map.PixelSize.X / 2 - 20, newLevel.Map.PixelSize.Y - entity.Size.Y - 1);
@@ -191,7 +200,6 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds)
         {
-            //TODO: Change to viewport so the GUI won't get in the way?
             foreach (Level lv in CurrentLevels)
             {
                 var player = lv.Players.FirstOrDefault();
@@ -213,6 +221,8 @@ namespace QuestForTheCrown2.Levels
             Rectangle GUIRect = new Rectangle(clientBounds.X, clientBounds.Y, clientBounds.Width, guiSize);
             _gui.Draw(spriteBatch, GUIRect, Players);
             #endregion GUI Drawing
+
+            _card.Draw(gameTime, spriteBatch, clientBounds); //Title Card
         }
         #endregion Public Methods
 
@@ -312,6 +322,8 @@ namespace QuestForTheCrown2.Levels
             {
                 newLevel.AddEntity(player);
                 lv.RemoveEntity(player);
+
+                _card.CurrentTitle = newLevel.Title;
 
                 player.CurrentLevel = player.TransitioningToLevel;
                 player.TransitioningToLevel = 0;

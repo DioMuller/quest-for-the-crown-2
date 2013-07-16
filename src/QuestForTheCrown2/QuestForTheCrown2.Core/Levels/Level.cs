@@ -52,6 +52,8 @@ namespace QuestForTheCrown2.Levels
         internal LevelCollection Parent { get; set; }
 
         public string BGM { get; set; }
+
+        public string Title { get; set; }
         #endregion Properties
 
         #region Constructor

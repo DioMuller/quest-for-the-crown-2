@@ -40,6 +40,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                     int[] neighbors = (from string element in el.Attribute("neighbors").Value.Split(',') select int.Parse(element)).ToArray<int>();
                     Level level = LoadMap(id, el.Attribute("path").Value);
                     level.BGM = el.Attribute("music").Value;
+                    level.Title = el.Attribute("title").Value;
 
                     for (int i = 0; i < 4; i++)
                     {

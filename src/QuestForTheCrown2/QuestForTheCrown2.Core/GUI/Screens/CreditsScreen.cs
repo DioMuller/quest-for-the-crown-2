@@ -10,7 +10,7 @@ namespace QuestForTheCrown2.GUI.Screens
 {
     class CreditsScreen
     {
-            #region Attributes
+        #region Attributes
         /// <summary>
         /// Logo texture.
         /// </summary>
@@ -45,7 +45,7 @@ namespace QuestForTheCrown2.GUI.Screens
         /// <summary>
         /// Font used.
         /// </summary>
-        public SpriteFont _font { get; set; }
+        private SpriteFont _font;
         #endregion Attributes
 
         #region Constructor
@@ -67,9 +67,9 @@ namespace QuestForTheCrown2.GUI.Screens
             _credits = new List<string>();
             _credits.Add("Programmers:");
             _credits.Add("    Diogo Muller de Miranda");
-            _credits.Add("    João Vitor Pietsiaki Moraes");
+            _credits.Add("    Joao Vitor Pietsiaki Moraes");
             _credits.Add("");
-            _credits.Add("Feito para a matéria de Técnicas de Implementação de Jogos");
+            _credits.Add("Feito para a matéria de Técnicas de Implementacao de Jogos");
             _credits.Add("Professor: Fabio Binder");
             _credits.Add("");
             _credits.Add("Art:");
