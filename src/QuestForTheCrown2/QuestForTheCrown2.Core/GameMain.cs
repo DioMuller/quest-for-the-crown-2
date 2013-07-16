@@ -53,6 +53,8 @@ namespace QuestForTheCrown2
         LoadScreen _loadscreen;
         SaveScreen _savescreen;
 
+        int _inputDelay;
+
         Levels.LevelCollection _overworld;
 
         Base.Input input = new Base.Input();

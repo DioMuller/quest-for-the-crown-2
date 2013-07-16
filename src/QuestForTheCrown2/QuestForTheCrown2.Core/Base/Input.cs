@@ -24,6 +24,8 @@ namespace QuestForTheCrown2.Base
     {
         #region Attributes
         public bool _nextWeaponState, _previousWeaponState;
+        public bool _confirmButtonState, _cancelButtonState, _attackButtonState;
+        public bool _pauseButtonState;
         #endregion
 
         #region Properties
@@ -102,16 +104,29 @@ namespace QuestForTheCrown2.Base
         {
             get
             {
+                bool nextState;
+
                 switch (Type)
                 {
                     case InputType.Controller:
-                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.Start);
+                        nextState = GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.Start);
+                        break;
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
-                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.F1);
+                        nextState = Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.F1);
+                        break;
                     default:
                         return false;
                 }
+
+                if (nextState && !_pauseButtonState)
+                {
+                    _pauseButtonState = nextState;
+                    return true;
+                }
+
+                _pauseButtonState = nextState;
+                return false;
             }
         }
 
@@ -122,16 +137,29 @@ namespace QuestForTheCrown2.Base
         {
             get
             {
+                bool nextState;
+
                 switch (Type)
                 {
                     case InputType.Controller:
-                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.A);
+                        nextState = GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.A);
+                        break;
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
-                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Enter);
+                        nextState = Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Enter);
+                        break;
                     default:
                         return false;
                 }
+
+                if (nextState && !_confirmButtonState)
+                {
+                    _confirmButtonState = nextState;
+                    return true;
+                }
+
+                _confirmButtonState = nextState;
+                return false;
             }
         }
 
@@ -142,16 +170,29 @@ namespace QuestForTheCrown2.Base
         {
             get
             {
+                bool nextState;
+
                 switch (Type)
                 {
                     case InputType.Controller:
-                        return GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.B);
+                        nextState = GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.B);
+                        break;
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
-                        return Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Escape);
+                        nextState = Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Escape);
+                        break;
                     default:
                         return false;
                 }
+
+                if (nextState && !_cancelButtonState)
+                {
+                    _cancelButtonState = nextState;
+                    return true;
+                }
+
+                _cancelButtonState = nextState;
+                return false;
             }
         }
 
@@ -162,21 +203,34 @@ namespace QuestForTheCrown2.Base
         {
             get
             {
+                bool nextState;
+
                 switch (Type)
                 {
                     case InputType.Controller:
                         var gpState = GamePad.GetState((PlayerIndex)Index);
-                        return gpState.IsButtonDown(Buttons.X)
+                        nextState = gpState.IsButtonDown(Buttons.X)
                             || gpState.Triggers.Right > 0.7;
+                        break;
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
                         var kbState = Keyboard.GetState((PlayerIndex)Index);
-                        return kbState.IsKeyDown(Keys.LeftControl)
+                        nextState = kbState.IsKeyDown(Keys.LeftControl)
                             || kbState.IsKeyDown(Keys.RightControl)
                             || kbState.IsKeyDown(Keys.Space);
+                        break;
                     default:
                         return false;
                 }
+
+                if (nextState && !_attackButtonState)
+                {
+                    _attackButtonState = nextState;
+                    return true;
+                }
+
+                _attackButtonState = nextState;
+                return false;
             }
         }
 
@@ -272,7 +326,7 @@ namespace QuestForTheCrown2.Base
         /// <summary>
         /// Initializes input with controller, if possible. If not, initializes with the keyboard.
         /// </summary>
-        public Input(int delay = 0)
+        public Input()
         {
             if (GamePad.GetState(PlayerIndex.One).IsConnected)
             {
@@ -284,6 +338,11 @@ namespace QuestForTheCrown2.Base
             }
 
             this.Index = 0;
+
+            _confirmButtonState = true;
+            _cancelButtonState = true;
+            _attackButtonState = true;
+            _pauseButtonState = true;
         }
 
         /// <summary>
@@ -305,6 +364,11 @@ namespace QuestForTheCrown2.Base
         {
             Type = inputType;
             Index = index;
+
+            _confirmButtonState = true;
+            _cancelButtonState = true;
+            _attackButtonState = true;
+            _pauseButtonState = true;
         }
         #endregion Costructor
     }
