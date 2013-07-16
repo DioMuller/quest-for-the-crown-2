@@ -15,6 +15,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         public HitOnTouchBehavior(Func<Entity, bool> canHit = null)
         {
             _canHit = canHit;
+            ExtraHitAreaSize = 8;
         }
 
         public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
@@ -26,14 +27,16 @@ namespace QuestForTheCrown2.Entities.Behaviors
         {
             var col = Entity.CollisionRect;
             var ent = level.CollidesWith(new Rectangle(
-                                            x: col.X - 4,
-                                            y: col.Y - 4,
-                                            width: col.Width + 8,
-                                            height: col.Height + 8))
-                            .FirstOrDefault(e => e != Entity);
+                                            x: col.X - ExtraHitAreaSize / 2,
+                                            y: col.Y - ExtraHitAreaSize / 2,
+                                            width: col.Width + ExtraHitAreaSize,
+                                            height: col.Height + ExtraHitAreaSize))
+                            .FirstOrDefault(e => e != Entity && (_canHit == null || _canHit(e)));
 
-            if (ent != null && (_canHit == null || _canHit(ent)))
+            if (ent != null)
                 ent.Hit(Entity, level, Entity.CurrentDirection);
         }
+
+        public int ExtraHitAreaSize { get; set; }
     }
 }
