@@ -22,6 +22,9 @@ namespace QuestForTheCrown2.Entities.Base
         Weapon _currentWeapon;
 
         int _timeSinceLastMpRegen;
+        TimeSpan _lastSavedPositionTime;
+        Vector2? _lastSavedPosition;
+        int _lastSavesPositionLevel;
         #endregion
 
         #region Properties
@@ -144,7 +147,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// <summary>
         /// Entity speed, in pixels per second.
         /// </summary>
-        public Vector2 Speed { get; set; }
+        public float Speed { get; set; }
         public Vector2 CurrentDirection { get; set; }
 
         /// <summary>
@@ -230,13 +233,17 @@ namespace QuestForTheCrown2.Entities.Base
         #endregion
         #endregion
 
+        #region Events
+        public event EventHandler AnimationEnded;
+        #endregion
+
         #region Constructors
         public Entity(string spriteSheetPath, Point? frameSize)
         {
             SpriteSheet = new SpriteSheet(GameContent.LoadContent<Texture2D>(spriteSheetPath), frameSize);
             _framesPerLine = SpriteSheet.Texture.Width / SpriteSheet.FrameSize.X;
 
-            Speed = new Vector2(SpriteSheet.FrameSize.X, SpriteSheet.FrameSize.X);
+            Speed = SpriteSheet.FrameSize.X;
             Containers = new Dictionary<string, Container>();
         }
         #endregion
@@ -334,6 +341,39 @@ namespace QuestForTheCrown2.Entities.Base
                 _currentWeapon.Equiped(level);
         }
 
+        public virtual Vector2 PreviewLocation(GameTime gameTime, Level level, TimeSpan time)
+        {
+            if (_lastSavedPosition == null || _lastSavesPositionLevel != level.Id)
+                return CenterPosition;
+
+            var distanceWalked = CenterPosition - _lastSavedPosition.Value;
+            var timePassed = gameTime.TotalGameTime - _lastSavedPositionTime;
+
+            if (timePassed == TimeSpan.Zero)
+                return CenterPosition;
+
+            var ratio = time.TotalSeconds / timePassed.TotalSeconds;
+            return CenterPosition + distanceWalked * (float)ratio;
+        }
+
+        public virtual Vector2 PreviewEnemyLocation(GameTime gameTime, Level level, Entity enemy, float? speed = null)
+        {
+            Vector2 relativePosition = enemy.CenterPosition - CenterPosition;
+            var dist = relativePosition.Length();
+
+            for (int i = 0; i < 2; i++)
+            {
+                if (double.IsNaN(dist))
+                    return enemy.CenterPosition;
+
+                var enemyPos = enemy.PreviewLocation(gameTime, level, TimeSpan.FromSeconds(dist / (speed ?? Speed)));
+                relativePosition = enemyPos - CenterPosition;
+                dist = relativePosition.Length();
+            }
+
+            return relativePosition;
+        }
+
         #region Containers
         public int? ContainerMaximum(string containerName)
         {
@@ -380,6 +420,10 @@ namespace QuestForTheCrown2.Entities.Base
         #region Update
         public virtual void Update(GameTime gameTime, Level level)
         {
+            _lastSavedPosition = CenterPosition;
+            _lastSavedPositionTime = gameTime.TotalGameTime;
+            _lastSavesPositionLevel = level.Id;
+
             if (Behaviors != null)
             {
                 var activeBehaviors = new List<EntityUpdateBehavior>();
@@ -415,15 +459,21 @@ namespace QuestForTheCrown2.Entities.Base
             }
             else if (gameTime.TotalGameTime > _lastFrameStartTime + curAnimation.FrameDuration)
             {
-                _currentFrameIndex = (_currentFrameIndex + 1) % curAnimation.FrameIndexes.Length;
+                _currentFrameIndex++;
+                if (_currentFrameIndex >= curAnimation.FrameIndexes.Length)
+                {
+                    if (AnimationEnded != null)
+                        AnimationEnded(this, EventArgs.Empty);
+                    _currentFrameIndex = curAnimation.ResetToFrame;
+                }
                 _lastFrameStartTime = gameTime.TotalGameTime;
             }
 
-            if( Magic != null )
+            if (Magic != null)
             {
-                if( _timeSinceLastMpRegen > 1000 )
+                if (_timeSinceLastMpRegen > 1000)
                 {
-                    if( !Magic.IsFull ) Magic.Quantity++;
+                    if (!Magic.IsFull) Magic.Quantity++;
                     _timeSinceLastMpRegen = 0;
                 }
                 else

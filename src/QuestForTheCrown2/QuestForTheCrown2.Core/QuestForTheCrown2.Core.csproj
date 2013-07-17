@@ -66,6 +66,7 @@
     <Compile Include="Entities\Base\Entity.cs" />
     <Compile Include="Entities\Base\EntityRelativePosition.cs" />
     <Compile Include="Entities\Base\EntityUpdateBehavior.cs" />
+    <Compile Include="Entities\Base\Extensions.cs" />
     <Compile Include="Entities\Base\Frame.cs" />
     <Compile Include="Entities\Behaviors\BlinkBehavior.cs" />
     <Compile Include="Entities\Behaviors\BowAttackBehavior.cs" />
@@ -83,6 +84,8 @@
     <Compile Include="Entities\Behaviors\WalkBehavior.cs" />
     <Compile Include="Entities\Characters\Bat.cs" />
     <Compile Include="Entities\Behaviors\ChainBehavior.cs" />
+    <Compile Include="Entities\Objects\Bush.cs" />
+    <Compile Include="Entities\Objects\Destructible.cs" />
     <Compile Include="Entities\Characters\MasterGoon.cs" />
     <Compile Include="Entities\Characters\WaterDragon.cs" />
     <Compile Include="Entities\Characters\Crab.cs" />
@@ -259,6 +262,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sprites\Objects\bow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sprites\Objects\bush.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sprites\Objects\Empty.png">

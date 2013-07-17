@@ -34,7 +34,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Padding = new Rectangle(28, 36, 28, 2);
 
-            Speed = new Vector2(32 * 3.5f);
+            Speed = 32 * 3.5f;
 
             Health = new Container(8);
 
@@ -42,7 +42,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
             AddBehavior(
                 new HitOnTouchBehavior(e => e.Category == "Player"),
-                new AvoidBehavior("Player", 32 * 4),
+                new AvoidBehavior(e => e.Category == "Player", 32 * 4),
                 new BowAttackBehavior("Player", shootDistance: 32 * 30, maxDistance: 32 * 32),
                 new WalkAroundBehavior()
             );

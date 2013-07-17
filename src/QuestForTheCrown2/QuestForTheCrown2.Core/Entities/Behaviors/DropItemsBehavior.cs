@@ -12,6 +12,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
 {
     class DropItemsBehavior : DieBehavior
     {
+        bool _itemsDropped = false;
         Dictionary<string, Func<Entity>> CreateAmmo = new Dictionary<string, Func<Entity>>
         {
             { "Bow", () => new Arrow { PickupCount = 10 } }
@@ -22,6 +23,11 @@ namespace QuestForTheCrown2.Entities.Behaviors
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
             base.Update(gameTime, level);
+
+            if (_itemsDropped)
+                return;
+            _itemsDropped = true;
+
             bool itemsDropped = false;
 
             if (Entity.Weapons != null)

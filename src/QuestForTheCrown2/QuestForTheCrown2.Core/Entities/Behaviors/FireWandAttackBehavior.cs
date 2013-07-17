@@ -32,7 +32,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
-            if (Entity == null)
+            if (Entity.IsDead)
                 return false;
 
             _fireWand = Entity.Weapons.OfType<FireWand>().FirstOrDefault();

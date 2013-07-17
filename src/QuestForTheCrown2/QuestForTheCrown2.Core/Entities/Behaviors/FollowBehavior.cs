@@ -44,6 +44,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         public override bool IsActive(GameTime gameTime, Level level)
         {
+            if (Entity.IsDead)
+                return false;
+
             CurrentTarget = level.EntityCloserTo(Entity, TargetCategory);
             if (CurrentTarget != null && (MaxDistance == null || CurrentTarget.Distance < MaxDistance))
                 return true;
@@ -59,9 +62,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// <param name="map">Current entity map.</param>
         public override void Update(GameTime gameTime, Level level)
         {
-            var direction = new Vector2(
-                CurrentTarget.Entity.CenterPosition.X - Entity.CenterPosition.X,
-                CurrentTarget.Entity.CenterPosition.Y - Entity.CenterPosition.Y);
+            var direction = CurrentTarget.Entity.CenterPosition - Entity.CenterPosition;
 
             var route = direction;
             var length = route.Length();

@@ -15,6 +15,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
         bool _dodging = true;
         double _safeDistanceRange = 5;
         float _currentDistance;
+        bool _forceRotate;
+        bool _forcedDirection;
+        int? _oldHealth;
         #endregion
 
         #region Properties
@@ -32,6 +35,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
+            if (Entity.IsDead)
+                return false;
+
             _currentTarget = level.EntityCloserTo(Entity, TargetCategory);
             if (_currentTarget != null && (MaxDistance == null || _currentTarget.Distance < MaxDistance))
                 return true;
@@ -44,7 +50,15 @@ namespace QuestForTheCrown2.Entities.Behaviors
         {
             Entity.ChangeWeapon(null, level);
 
-            var targetLocation = _currentTarget.Entity.CenterPosition;
+            if (_oldHealth != null && _oldHealth > Entity.Health.Quantity)
+            {
+                _dodging = true;
+                _forceRotate = false;
+                _currentDistance *= 1.5f;
+                _forcedDirection = !_forcedDirection;
+            }
+
+            var targetLocation = Entity.PreviewEnemyLocation(gameTime, level, _currentTarget.Entity, Entity.Speed);
             var entLocation = Entity.CenterPosition;
             var directRoute = _currentTarget.Position;
 
@@ -58,14 +72,14 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
             if (_dodging)
             {
-                if (directRoute.Length() > _currentDistance + _safeDistanceRange)
+                if (!_forceRotate && directRoute.Length() > _currentDistance + _safeDistanceRange)
                 {
                     if (!Walk(gameTime, level, normalized, e => e.GetType() != Entity.GetType()))
                         _dodging = false;
                     _safeDistanceRange = 5;
                 }
 
-                else if (directRoute.Length() < _currentDistance - _safeDistanceRange)
+                else if (!_forceRotate && directRoute.Length() < _currentDistance - _safeDistanceRange)
                 {
                     if (!Walk(gameTime, level, normalized * -1, e => e.GetType() != Entity.GetType()))
                         _dodging = false;
@@ -75,24 +89,30 @@ namespace QuestForTheCrown2.Entities.Behaviors
                 {
                     _safeDistanceRange = 32;
 
-                    var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-                    _currentDistance -= 15 * (float)timeFactor;
-
-                    var targetRoute = directRoute * -1;
-                    var rotated = targetRoute.Rotate((float)(Math.PI / 64));
-                    var walkRoute = targetLocation + rotated - entLocation;
-                    walkRoute = walkRoute.Rotate(-0.1f);
+                    var targetRoute = (directRoute * -1).Rotate(MathHelper.ToRadians(1) * (_forcedDirection ? -1 : 1));
+                    var walkRoute = (targetRoute + _currentTarget.Entity.CenterPosition) - entLocation;
+                    walkRoute = walkRoute.Rotate(-0.2f * (_forcedDirection ? -1 : 1));
                     normalized = walkRoute.Normalized();
 
+                    _currentDistance = (_currentTarget.Entity.CenterPosition - (entLocation + walkRoute)).Length();
+
                     if (!Walk(gameTime, level, normalized * -1, e => e.GetType() != Entity.GetType()))
+                    {
                         _dodging = false;
+                        _forceRotate = true;
+                        _forcedDirection = !_forcedDirection;
+                    }
                 }
             }
             else if (!Walk(gameTime, level, normalized, e => e.GetType() != Entity.GetType()))
             {
                 _dodging = true;
+                _forceRotate = true;
+                _forcedDirection = !_forcedDirection;
                 _currentDistance = Distance;
             }
+
+            _oldHealth = Entity.Health.Quantity;
         }
     }
 }

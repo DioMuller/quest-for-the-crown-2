@@ -71,7 +71,7 @@ namespace QuestForTheCrown2
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
             // 30 FPS
-            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0/30.0);
+            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0/60.0);
             // Extend battery life under lock.
             InactiveSleepTime = TimeSpan.FromSeconds(1);
  
@@ -163,7 +163,8 @@ namespace QuestForTheCrown2
                         DungeonsComplete = new List<string>(),
                         Player = GameStateManager.GetPlayerState(player)
                     });
-                    GameStateManager.SaveData();
+                    //player.AddWeapon(new Sword(), new Bow(), new Boomerang(), new FireWand());
+                    //GameStateManager.SaveData();
 
                     ChangeState(GameState.Playing);
                     break;

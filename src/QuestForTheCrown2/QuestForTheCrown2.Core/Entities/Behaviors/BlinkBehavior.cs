@@ -67,7 +67,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
-            return Entity.Health != null;
+            return !Entity.IsDead && Entity.Health != null;
         }
     }
 }

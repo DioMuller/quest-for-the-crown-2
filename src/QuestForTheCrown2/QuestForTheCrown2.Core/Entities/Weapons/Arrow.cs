@@ -11,6 +11,8 @@ namespace QuestForTheCrown2.Entities.Weapons
 {
     class Arrow : Entity
     {
+        public const int FlyghtSpeed = 32 * 10;
+
         Vector2 _hitLocation;
         public Entity HitEntity { get; set; }
         TimeSpan _maxHitTime = TimeSpan.FromSeconds(5);
@@ -30,7 +32,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             OverlapEntities = true;
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
             _timeFromCreation = TimeSpan.Zero;
-            Speed = new Vector2(32 * 10);
+            Speed = FlyghtSpeed;
         }
 
         public Arrow(Vector2 direction)

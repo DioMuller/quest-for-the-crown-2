@@ -29,7 +29,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
-            if (Entity == null)
+            if (Entity.IsDead)
                 return false;
 
             _bow = Entity.Weapons.OfType<Bow>().FirstOrDefault();
@@ -52,10 +52,12 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
             if (_followBehavior.CurrentTarget.Distance <= _followBehavior.Distance && (!level.ContainsEntity(_bow.LastShotArrow) || _bow.LastShotArrow == null || _bow.LastShotArrow.Parent == null || passedTime.TotalSeconds > 2))
             {
-                Entity.Look(_followBehavior.CurrentTarget.Position, true);
+                var enemyPosition = Entity.PreviewEnemyLocation(gameTime, level, _followBehavior.CurrentTarget.Entity, Arrow.FlyghtSpeed);
+
+                Entity.Look(enemyPosition, true);
 
                 bool fireArrow = _lastAttackTime + TimeBetweenAttacks < gameTime.TotalGameTime;
-                _bow.Attack(gameTime, level, fireArrow, _followBehavior.CurrentTarget.Position * (OptionsManager.CurrentOptions.InvertAim ? -1 : 1));
+                _bow.Attack(gameTime, level, fireArrow, enemyPosition * (OptionsManager.CurrentOptions.InvertAim ? -1 : 1));
 
                 if (fireArrow)
                     _lastAttackTime = gameTime.TotalGameTime;

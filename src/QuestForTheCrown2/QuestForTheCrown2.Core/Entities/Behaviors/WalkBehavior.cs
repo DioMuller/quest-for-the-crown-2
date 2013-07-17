@@ -49,8 +49,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
             var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
 
-            float newX = (float)(Entity.Position.X + direction.X * Entity.Speed.X / numArrows * timeFactor);
-            float newY = (float)(Entity.Position.Y + direction.Y * Entity.Speed.Y / numArrows * timeFactor);
+            float newX = (float)(Entity.Position.X + direction.X * Entity.Speed / numArrows * timeFactor);
+            float newY = (float)(Entity.Position.Y + direction.Y * Entity.Speed / numArrows * timeFactor);
             Rectangle newRect = new Rectangle(
                     x: (int)newX + Entity.Padding.X,
                     y: (int)newY + Entity.Padding.Y,

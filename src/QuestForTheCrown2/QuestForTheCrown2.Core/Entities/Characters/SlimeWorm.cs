@@ -74,7 +74,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
             //Padding = new Rectangle(6, 11, 6, 6);
 
-            Speed = new Vector2(32 * 6);
+            Speed = 32 * 6;
 
             _frontHealth = new Container(8);
             _normalHealth = new Container(2);
@@ -82,9 +82,18 @@ namespace QuestForTheCrown2.Entities.Characters
             Health = _normalHealth;
             Look(new Vector2(0, 1), true);
 
+            var chainBehavior = new ChainBehavior<SlimeWorm> { MaxDistance = 32 * 7 };
+
             AddBehavior(
                 new HitOnTouchBehavior(e => e.Category == "Player"),
-                new ChainBehavior<SlimeWorm> { MaxDistance = 32 * 7 },
+                chainBehavior,
+                new AvoidBehavior(e =>
+                    {
+                        if (e == this || chainBehavior.Following != e)
+                            return false;
+                        var beh = e.GetBehavior<ChainBehavior<SlimeWorm>>();
+                        return beh != null && beh.Following == null;
+                    }),
                 new SpiralAttackBehavior("Player", 32 * 8) { MaxDistance = 32 * 12 },
                 new WalkAroundBehavior { MaxStoppedTime = TimeSpan.Zero, MaxWalkingTime = TimeSpan.MaxValue, SpeedMultiplier = 1 }
             );

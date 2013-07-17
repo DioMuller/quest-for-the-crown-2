@@ -16,7 +16,7 @@ namespace QuestForTheCrown2.Entities.Characters
     class WaterDragon : Entity
     {
         const string spriteSheetPath = @"sprites\Characters\water-dragon.png";
-        Vector2 _baseSpeed;
+        float _baseSpeed;
 
         public WaterDragon()
             : base(spriteSheetPath, new Point(149, 129))
@@ -36,8 +36,8 @@ namespace QuestForTheCrown2.Entities.Characters
 
             Padding = new Rectangle(23, 50, 23, 20);
 
-            _baseSpeed = new Vector2(32 * 4);
-            Speed = new Vector2(32 * 4);
+            _baseSpeed = 32 * 4;
+            Speed = 32 * 4;
 
             Health = new Container(10);
             Magic = new Container(1);

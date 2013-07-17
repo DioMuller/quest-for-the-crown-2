@@ -36,6 +36,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         public override bool IsActive(GameTime gameTime, Level level)
         {
+            if (Entity.IsDead)
+                return false;
+
             return _input.IsConnected;
         }
 

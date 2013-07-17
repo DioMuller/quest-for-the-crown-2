@@ -32,6 +32,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
         #region Behavior
         public override bool IsActive(GameTime gameTime, Level level)
         {
+            if (Entity.IsDead)
+                return false;
+
             if (_random == null)
             {
                 _random = new Random((int)(unchecked(Environment.TickCount + Entity.Position.X * Entity.Position.Y)));
