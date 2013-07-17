@@ -50,8 +50,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
             if (_oldHealth != null && _oldHealth > Entity.Health.Quantity)
             {
                 _dodging = true;
-                _forceRotate = true;
-                _currentDistance = Distance;
+                _forceRotate = false;
+                _currentDistance *= 1.5f;
                 _forcedDirection = !_forcedDirection;
             }
 
@@ -96,7 +96,8 @@ namespace QuestForTheCrown2.Entities.Behaviors
                     if (!Walk(gameTime, level, normalized * -1, e => e.GetType() != Entity.GetType()))
                     {
                         _dodging = false;
-                        _forceRotate = false;
+                        _forceRotate = true;
+                        _forcedDirection = !_forcedDirection;
                     }
                 }
             }
@@ -105,6 +106,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                 _dodging = true;
                 _forceRotate = true;
                 _forcedDirection = !_forcedDirection;
+                _currentDistance = Distance;
             }
 
             _oldHealth = Entity.Health.Quantity;
