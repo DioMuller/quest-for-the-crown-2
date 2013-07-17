@@ -38,6 +38,9 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
+            if (Parent == null)
+                return;
+
             if (!attackButton && direction == Vector2.Zero)
             {
                 _currentAttackButton = attackButton;
@@ -70,6 +73,10 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Update(GameTime gameTime, Level level)
         {
+            base.Update(gameTime, level);
+            if (Parent == null)
+                return;
+
             if (Parent != null && Parent.Arrows > 0 && CanShoot(gameTime))
                 CurrentAnimation = "loaded";
             else

@@ -158,7 +158,6 @@ namespace QuestForTheCrown2.Levels.Mapping
 
                 var entityFactory = new Dictionary<string, Func<string, Entity>>
                 {
-                    { "Sword", n => new Sword() },
                     { "Player", n => new Player() },
                     { "Entrance", n => new Entrance(int.Parse(n)) },
                     { "SavePoint", n => new SavePoint() },
