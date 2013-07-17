@@ -20,7 +20,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             : base(@"sprites\Objects\Boomerang.png", null)
         {
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
-            Speed = new Vector2(32 * 8);
+            Speed = 32 * 8;
             //Padding = new Rectangle(4, 4, 4, 4);
         }
 

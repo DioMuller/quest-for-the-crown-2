@@ -280,20 +280,12 @@ namespace QuestForTheCrown2.Levels
         /// <returns></returns>
         public EntityRelativePosition EntityCloserTo(Entity relativeTo, params string[] category)
         {
-            if (relativeTo == null)
-                throw new ArgumentNullException("relativeTo");
+            return GetEntities(category).CloserTo(relativeTo);
+        }
 
-            return (from e in GetEntities(category)
-                    let position = new Vector2(e.CenterPosition.X - relativeTo.CenterPosition.X, e.CenterPosition.Y - relativeTo.CenterPosition.Y)
-                    let distance = position.Length()
-                    orderby distance
-                    select new EntityRelativePosition
-                     {
-                         Entity = e,
-                         RelativeTo = relativeTo,
-                         Position = position,
-                         Distance = distance
-                     }).FirstOrDefault();
+        public IEnumerable<Entity> GetEntities(Func<Entity, bool> predicate)
+        {
+            return _entities.Where(predicate);
         }
     }
 }
