@@ -33,6 +33,23 @@ namespace QuestForTheCrown2.GUI.Components
         /// Current selected option.
         /// </summary>
         private int _selectedOption;
+        /// <summary>
+        /// Total number of components
+        /// </summary>
+        private int _componentNumber;
+        /// <summary>
+        /// Number of components on screen (floored)
+        /// </summary>
+        private int _componentsOnScreen;
+        /// <summary>
+        /// Current initial component.
+        /// </summary>
+        private int _currentStart;
+
+        /// <summary>
+        /// Scroll direction arrow.
+        /// </summary>
+        private Texture2D _arrow;
         #endregion Attributes
 
         #region Delegates
@@ -57,6 +74,8 @@ namespace QuestForTheCrown2.GUI.Components
                 RecalculateSizes();
             }
         }
+
+        public int? ComponentHeight { get; set; }
         #endregion Properties
 
         #region Constructor
@@ -67,8 +86,11 @@ namespace QuestForTheCrown2.GUI.Components
         {
             _components = new List<Component>();
             _input = new Input();
+            ComponentHeight = null;
 
             _timeout = 0;
+
+            _arrow = GameContent.LoadContent<Texture2D>("images/arrow.png");
         }
         #endregion Constructor
 
@@ -126,9 +148,12 @@ namespace QuestForTheCrown2.GUI.Components
         /// <param name="spriteBatch">Sprite batch for drawing.</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            foreach( Component cp in _components )
+            if( _currentStart != 0 ) spriteBatch.Draw(_arrow, new Rectangle(Position.Center.X, Position.Y + 16, 32, 32), null, Color.White, (float)Math.PI/2, new Vector2(16,16), SpriteEffects.None, 0f);
+            if (_currentStart + _componentsOnScreen != _componentNumber) spriteBatch.Draw(_arrow, new Rectangle(Position.Center.X, Position.Y + Position.Height - 32, 32, 32), null, Color.White, (float)(-Math.PI/2), new Vector2(16, 16), SpriteEffects.None, 0f);
+
+            for (int i = _currentStart; i < (_currentStart + _componentsOnScreen); i++ )
             {
-                cp.Draw(spriteBatch);
+                _components[i].Draw(spriteBatch);
             }
         }
 
@@ -156,12 +181,27 @@ namespace QuestForTheCrown2.GUI.Components
         {
             if (_components.Count > 0)
             {
-                int y = (_position.Height - _position.Y) / _components.Count;
+                int y = ComponentHeight != null ? ComponentHeight.GetValueOrDefault() : (_position.Height - _position.Y) / _components.Count;
+                int diff = ComponentHeight != null ? 32 : 0;
 
-                for (int i = 0; i < _components.Count; i++)
+                //_selectedOption = 0;
+                _componentNumber = _components.Count;
+                _componentsOnScreen = y != 0 ? Math.Min( ((this.Position.Height - (2*diff))/ y), _componentNumber) : 0;
+                //_currentStart = 0;
+
+
+
+                for (int i = _currentStart; i < (_currentStart + _componentsOnScreen); i++)
                 {
-                    _components[i].Position = new Rectangle(_position.X, _position.Y + (i * y), _position.Width, y);
+                    _components[i].Position = new Rectangle(_position.X, diff + _position.Y + ((i - _currentStart) * y), _position.Width, y);
                 }
+            }
+            else
+            {
+                _selectedOption = 0;
+                _componentNumber = 0;
+                _componentsOnScreen = 0;
+                _currentStart = 0;
             }
         }
 
@@ -176,6 +216,12 @@ namespace QuestForTheCrown2.GUI.Components
                 _selectedOption--;
                 _components[_selectedOption].Selected = true;
             }
+
+            if (_selectedOption <= _currentStart)
+            {
+                _currentStart = _selectedOption;
+                RecalculateSizes();
+            }
         }
 
         /// <summary>
@@ -188,6 +234,12 @@ namespace QuestForTheCrown2.GUI.Components
                 _components[_selectedOption].Selected = false;
                 _selectedOption++;
                 _components[_selectedOption].Selected = true;
+            }
+
+            if (_selectedOption >= (_currentStart + _componentsOnScreen) )
+            {
+                _currentStart = _selectedOption - _componentsOnScreen +1;
+                RecalculateSizes();
             }
         }
 

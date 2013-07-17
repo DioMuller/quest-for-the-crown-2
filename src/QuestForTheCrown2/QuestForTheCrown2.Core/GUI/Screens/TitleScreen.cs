@@ -45,6 +45,8 @@ namespace QuestForTheCrown2.GUI.Screens
 
             _list = new ComponentList();
 
+            _list.ComponentHeight = 80;
+
             _list.AddComponent(new Button("New Game", () => _parent.ChangeState(GameState.NewGame)));
             _list.AddComponent(new Button("Load Game", () => _parent.ChangeState(GameState.LoadGame)));
             _list.AddComponent(new Button("Options", () => _parent.ChangeState(GameState.Options)));
@@ -80,7 +82,7 @@ namespace QuestForTheCrown2.GUI.Screens
             if (window != _window)
             {
                 _logoPosition = new Rectangle(Convert.ToInt32(window.Center.X - (_logo.Width / 2)), Convert.ToInt32(0.2f * (window.Height - window.Y)), _logo.Width, _logo.Height);
-                _list.Position = new Rectangle(window.Center.X - 150, Convert.ToInt32(0.4f * (window.Height - window.Y)), 300, 600);
+                _list.Position = new Rectangle(window.Center.X - 150, Convert.ToInt32(0.4f * (window.Height - window.Y)), 300, 360);
 
                 _window = window;
             }

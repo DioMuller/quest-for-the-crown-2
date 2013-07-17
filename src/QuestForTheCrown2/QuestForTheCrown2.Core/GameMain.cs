@@ -70,7 +70,6 @@ namespace QuestForTheCrown2
             _graphics.IsFullScreen = true;
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
-            // 30 FPS
             TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0/60.0);
             // Extend battery life under lock.
             InactiveSleepTime = TimeSpan.FromSeconds(1);
