@@ -20,7 +20,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
-            return true;
+            return !Entity.IsDead;
         }
 
         public override void Update(GameTime gameTime, Level level)

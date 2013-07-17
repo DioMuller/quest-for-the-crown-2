@@ -233,6 +233,10 @@ namespace QuestForTheCrown2.Entities.Base
         #endregion
         #endregion
 
+        #region Events
+        public event EventHandler AnimationEnded;
+        #endregion
+
         #region Constructors
         public Entity(string spriteSheetPath, Point? frameSize)
         {
@@ -363,7 +367,7 @@ namespace QuestForTheCrown2.Entities.Base
                     return enemy.CenterPosition;
 
                 var enemyPos = enemy.PreviewLocation(gameTime, level, TimeSpan.FromSeconds(dist / (speed ?? Speed)));
-                relativePosition = enemyPos - Position;
+                relativePosition = enemyPos - CenterPosition;
                 dist = relativePosition.Length();
             }
 
@@ -455,7 +459,13 @@ namespace QuestForTheCrown2.Entities.Base
             }
             else if (gameTime.TotalGameTime > _lastFrameStartTime + curAnimation.FrameDuration)
             {
-                _currentFrameIndex = (_currentFrameIndex + 1) % curAnimation.FrameIndexes.Length;
+                _currentFrameIndex++;
+                if (_currentFrameIndex >= curAnimation.FrameIndexes.Length)
+                {
+                    if (AnimationEnded != null)
+                        AnimationEnded(this, EventArgs.Empty);
+                    _currentFrameIndex = curAnimation.ResetToFrame;
+                }
                 _lastFrameStartTime = gameTime.TotalGameTime;
             }
 

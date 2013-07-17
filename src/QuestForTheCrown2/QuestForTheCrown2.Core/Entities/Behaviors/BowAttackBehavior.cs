@@ -29,7 +29,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
-            if (Entity == null)
+            if (Entity.IsDead)
                 return false;
 
             _bow = Entity.Weapons.OfType<Bow>().FirstOrDefault();

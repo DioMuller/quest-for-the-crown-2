@@ -151,6 +151,11 @@ namespace QuestForTheCrown2.Levels.Mapping
                     { "FireWand", () => new FireWand() },
                 };
 
+                var objectFactory = new Dictionary<string, Func<Entity>>
+                {
+                    { "Bush", () => new Bush() }
+                };
+
                 var entityFactory = new Dictionary<string, Func<string, Entity>>
                 {
                     { "Sword", n => new Sword() },
@@ -160,6 +165,7 @@ namespace QuestForTheCrown2.Levels.Mapping
 
                     { "Item", n => itemFactory.ContainsKey(n)? itemFactory[n]() : new Item() },
                     { "Enemy", n => enemyFactory.ContainsKey(n)? enemyFactory[n]() : new Slime() },
+                    { "Object", n => objectFactory.ContainsKey(n)? objectFactory[n]() : new Bush() }
                 };
 
                 entities = mapElement.Elements("objectgroup")

@@ -44,6 +44,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
         /// </summary>
         public override bool IsActive(GameTime gameTime, Level level)
         {
+            if (Entity.IsDead)
+                return false;
+
             CurrentTarget = level.GetEntities(_avoidCheck).CloserTo(Entity);
             if (CurrentTarget != null && CurrentTarget.Distance < Distance)
                 return true;

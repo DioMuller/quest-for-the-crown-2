@@ -28,26 +28,26 @@ namespace QuestForTheCrown2.Entities.Base
 
             Animations = new Dictionary<string, Dictionary<string, Animation>>();
 
-            if(frameSize == null)
+            if (frameSize == null)
                 AddAnimation("default", "default", new int[] { 0 }, TimeSpan.Zero);
         }
 
-        public void AddAnimation(string name, string view, int[] frameIndexes, TimeSpan frameDuration)
+        public void AddAnimation(string name, string view, int[] frameIndexes, TimeSpan frameDuration, bool repeat = true)
         {
-            AddAnimation(name, view, new Animation(frameIndexes, frameDuration));
+            AddAnimation(name, view, new Animation(frameIndexes, frameDuration, repeat ? 0 : frameIndexes.Length - 1));
         }
 
-        public void AddAnimation(string name, string view, int line, TimeSpan frameDuration)
+        public void AddAnimation(string name, string view, int line, TimeSpan frameDuration, bool repeat = true)
         {
-            AddAnimation(name, view, line, Texture.Width / FrameSize.X, frameDuration);
+            AddAnimation(name, view, line, Texture.Width / FrameSize.X, frameDuration, repeat);
         }
 
-        public void AddAnimation(string name, string view, int line, int count, TimeSpan frameDuration)
+        public void AddAnimation(string name, string view, int line, int count, TimeSpan frameDuration, bool repeat = true)
         {
             var startIndex = (Texture.Width / FrameSize.X) * line;
             var indexes = Enumerable.Range(startIndex, count).ToArray();
 
-            AddAnimation(name, view, indexes, frameDuration);
+            AddAnimation(name, view, indexes, frameDuration, repeat);
         }
 
         public void AddAnimation(string name, string view, Animation animation)
@@ -67,11 +67,13 @@ namespace QuestForTheCrown2.Entities.Base
     {
         public int[] FrameIndexes { get; private set; }
         public TimeSpan FrameDuration { get; private set; }
+        public int ResetToFrame { get; private set; }
 
-        public Animation(int[] frameIndexes, TimeSpan frameDuration)
+        public Animation(int[] frameIndexes, TimeSpan frameDuration, int resetToFrame = 0)
         {
             FrameIndexes = frameIndexes;
             FrameDuration = frameDuration;
+            ResetToFrame = resetToFrame;
         }
     }
 }

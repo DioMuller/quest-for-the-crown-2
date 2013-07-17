@@ -161,7 +161,8 @@ namespace QuestForTheCrown2
                         DungeonsComplete = new List<string>(),
                         Player = GameStateManager.GetPlayerState(player)
                     });
-                    GameStateManager.SaveData();
+                    //player.AddWeapon(new Sword(), new Bow(), new Boomerang(), new FireWand());
+                    //GameStateManager.SaveData();
 
                     ChangeState(GameState.Playing);
                     break;

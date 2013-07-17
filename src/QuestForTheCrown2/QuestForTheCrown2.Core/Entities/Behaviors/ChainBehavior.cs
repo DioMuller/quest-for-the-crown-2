@@ -24,6 +24,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
+            if (Entity.IsDead)
+                return false;
+
             if (Following != null)
             {
                 if(MaxDistance != null)
