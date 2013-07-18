@@ -10,6 +10,8 @@ namespace QuestForTheCrown2.Entities.Weapons
 {
     class FireBall : Entity
     {
+        public const int FlyghtSpeed = 32 * 8;
+
         Vector2 _direction;
         Entity _hitEntity;
         TimeSpan _maxHitTime = TimeSpan.FromSeconds(1);
@@ -21,12 +23,13 @@ namespace QuestForTheCrown2.Entities.Weapons
         public FireBall(Vector2 direction)
             : base(@"sprites\Objects\FireBall.png", null)
         {
-            MaxFlyTime = TimeSpan.FromSeconds(1);
+            MaxFlyTime = TimeSpan.FromSeconds(0.5);
             _direction = direction;
             OverlapEntities = true;
             Angle = (float)Math.Atan2(-direction.X, direction.Y);
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
             _timeFromCreation = TimeSpan.Zero;
+            Speed = FlyghtSpeed;
         }
 
         public override void Update(GameTime gameTime, Levels.Level level)

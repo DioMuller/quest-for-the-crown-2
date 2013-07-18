@@ -136,6 +136,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                     { "Crab", () => new Crab() },
                     { "Slime", () => new Slime() },
                     { "SlimeWorm", () => new SlimeWorm() },
+                    { "FlameDragon", () => new FlameDragon() },
                     { "WaterDragon", () => new WaterDragon() },
                     { "Bat", () => new Bat() },
                     { "Zombie", () => new Zombie() },
@@ -158,7 +159,6 @@ namespace QuestForTheCrown2.Levels.Mapping
 
                 var entityFactory = new Dictionary<string, Func<string, Entity>>
                 {
-                    { "Sword", n => new Sword() },
                     { "Player", n => new Player() },
                     { "Entrance", n => new Entrance(int.Parse(n)) },
                     { "SavePoint", n => new SavePoint() },

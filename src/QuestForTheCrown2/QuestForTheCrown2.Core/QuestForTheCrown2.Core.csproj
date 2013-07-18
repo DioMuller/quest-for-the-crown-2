@@ -84,6 +84,7 @@
     <Compile Include="Entities\Behaviors\WalkBehavior.cs" />
     <Compile Include="Entities\Characters\Bat.cs" />
     <Compile Include="Entities\Behaviors\ChainBehavior.cs" />
+    <Compile Include="Entities\Characters\FlameDragon.cs" />
     <Compile Include="Entities\Objects\Bush.cs" />
     <Compile Include="Entities\Objects\Destructible.cs" />
     <Compile Include="Entities\Characters\MasterGoon.cs" />
@@ -271,6 +272,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sprites\Objects\FireBall.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sprites\Objects\FireWand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sprites\Objects\SavePoint.png">

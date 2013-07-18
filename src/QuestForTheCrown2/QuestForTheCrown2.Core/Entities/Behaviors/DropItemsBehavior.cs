@@ -43,14 +43,18 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
                     if (allowedWeapons.Contains(weaponName) || currentWeapons.Contains(weaponName))
                     {
+                        var enemyPosition = Entity.CenterPosition;
                         var dropDistance = VectorHelper.AngleToV2((float)(Random.NextDouble() * Math.PI - Math.PI / 2), 32);
-                        var dropPosition = Entity.CenterPosition + dropDistance;
+                        var dropPosition = enemyPosition + dropDistance;
+
                         if (!currentWeapons.Contains(weaponName))
                         {
                             itemsDropped = true;
-
                             weapon.Parent = null;
+
                             weapon.Position = dropPosition;
+                            if (level.Map.Collides(weapon.CollisionRect))
+                                weapon.Position = enemyPosition;
                             level.AddEntity(weapon);
                         }
                         else if (CreateAmmo.ContainsKey(weaponName))
@@ -66,6 +70,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                         }
                     }
                 }
+                Entity.Weapons = null;
             }
 
             if (!itemsDropped && Random.NextDouble() < 0.1)
