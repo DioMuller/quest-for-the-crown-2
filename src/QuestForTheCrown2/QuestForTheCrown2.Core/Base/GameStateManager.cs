@@ -41,6 +41,14 @@ namespace QuestForTheCrown2.Base
         {
             get { return Containers.GetOrDefault("Health"); }
         }
+
+        /// <summary>
+        /// Player's magic.
+        /// </summary>
+        public Container Magic
+        {
+            get { return Containers.GetOrDefault("Magic"); }
+        }
     }
 
     [Serializable]
