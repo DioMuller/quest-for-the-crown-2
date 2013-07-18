@@ -566,7 +566,14 @@ namespace QuestForTheCrown2.Entities.Base
 
             if (CurrentView == null || !bestAnimations.ContainsKey(CurrentView))
                 CurrentView = bestAnimations.First().Key;
-            bestAnimation = bestAnimations[CurrentView];
+            try
+            {
+                bestAnimation = bestAnimations[CurrentView];
+            }
+            catch
+            {
+                bestAnimation = bestAnimations["default"];
+            }
 
             return bestAnimation;
         }
