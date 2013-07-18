@@ -41,6 +41,14 @@ namespace QuestForTheCrown2.Base
         {
             get { return Containers.GetOrDefault("Health"); }
         }
+
+        /// <summary>
+        /// Player's magic.
+        /// </summary>
+        public Container Magic
+        {
+            get { return Containers.GetOrDefault("Magic"); }
+        }
     }
 
     [Serializable]
@@ -84,8 +92,14 @@ namespace QuestForTheCrown2.Base
 
     public static class GameStateManager
     {
-        public static GameMain Parent { private get; set; }
+        #region Constants
+        /// <summary>
+        /// Save file.
+        /// </summary>
+        private const string SaveFile = "SavedGames.xml";
+        #endregion Constants
 
+        #region Constructors
         /// <summary>
         /// Creates Game State Manager and loads data.
         /// </summary>
@@ -93,52 +107,44 @@ namespace QuestForTheCrown2.Base
         {
             LoadData();
         }
+        #endregion Constructors
 
         /// <summary>
-        /// Save file.
+        /// Main game instance
         /// </summary>
-        private const string SaveFile = "SavedGames.xml";
-
-        /// <summary>
-        /// Current state index.
-        /// </summary>
-        private static int _currentState = -1;
-
-        /// <summary>
-        /// All saved states.
-        /// </summary>
-        public static List<GameState> AllStates { get; private set; }
+        public static GameMain Parent { private get; set; }
 
         /// <summary>
         /// Gets current state instance.
         /// </summary>
-        public static GameState CurrentState
-        {
-            get
-            {
-                if (_currentState >= AllStates.Count) return null;
-                return AllStates[_currentState];
-            }
-        }
+        public static GameState CurrentState { get; private set; }
 
         /// <summary>
         /// Loads game data.
         /// </summary>
-        public static void LoadData()
+        public static List<GameState> LoadData()
         {
-            try { AllStates = Serialization.Load<List<GameState>>(SaveFile); }
+            List<GameState> allStates = new List<GameState>();
+
+            try { allStates = Serialization.Load<List<GameState>>(SaveFile); }
             catch { }
 
-            if (AllStates == null)
-                AllStates = new List<GameState>();
+            if (allStates == null)
+                allStates = new List<GameState>();
+
+            return allStates;
         }
 
         /// <summary>
         /// Save game data.
         /// </summary>
-        public static void SaveData()
+        public static void SaveData(int slot)
         {
-            AllStates.Save(SaveFile);
+            List<GameState> allStates = LoadData();
+
+            if( allStates.Count < slot ) allStates[slot] = CurrentState;
+
+            allStates.Save(SaveFile);
         }
 
         /// <summary>
@@ -146,7 +152,9 @@ namespace QuestForTheCrown2.Base
         /// </summary>
         public static void DeleteAllSaves()
         {
-            AllStates = new List<GameState>();
+            List<GameState> allStates = new List<GameState>();
+
+            allStates.Save(SaveFile);
         }
 
         /// <summary>
@@ -155,29 +163,11 @@ namespace QuestForTheCrown2.Base
         /// <param name="state">Data instance</param>
         public static void SelectSaveData(GameState state)
         {
-            if (AllStates.Contains(state))
-                _currentState = AllStates.IndexOf(state);
-            else
-            {
-                _currentState = AllStates.Count;
-                AllStates.Add(state);
-            }
+            CurrentState = state;
             state.LastPlayDate = DateTime.Now;
         }
 
-        /// <summary>
-        /// Selects Save Data by index.
-        /// </summary>
-        /// <param name="id">Data ID</param>
-        public static void SelectSaveData(int id)
-        {
-            _currentState = id;
-            var state = CurrentState;
-            if (state == null)
-                throw new ArgumentOutOfRangeException("Specified save state does not exists");
-            state.LastPlayDate = DateTime.Now;
-        }
-
+        #region Save Data Creation Auxiliary Methods
         /// <summary>
         /// Gets player state.
         /// </summary>
@@ -241,5 +231,6 @@ namespace QuestForTheCrown2.Base
                 Parent.ChangeState(QuestForTheCrown2.GameState.Saving);
             }
         }
+        #endregion Save Data Creation Auxiliary Methods
     }
 }

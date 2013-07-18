@@ -33,14 +33,16 @@ namespace QuestForTheCrown2.GUI.Screens
         {
             _window = Rectangle.Empty;
             _parent = parent;
+            int x = 0;
 
             _list = new ComponentList();
+            _list.ComponentHeight = 80;
 
-            foreach( Base.GameState state in GameStateManager.AllStates )
+            foreach( Base.GameState state in GameStateManager.LoadData() )
             {
                 
                 //TODO: Create specific component.
-                _list.AddComponent(new Button(state.LastPlayDate.ToString(), new SelectDelegate(() =>
+                _list.AddComponent(new SaveDataButton("saveButton" + (x++), state, new SelectDelegate(() =>
                 {
                     GameStateManager.SelectSaveData(state);
                     _parent.ChangeState(GameState.LoadingGame);
@@ -77,7 +79,7 @@ namespace QuestForTheCrown2.GUI.Screens
 
             if( window != _window )
             {
-                _list.Position = new Rectangle(30, 200, window.Width - 60, 500);
+                _list.Position = new Rectangle(30, 100, window.Width - 60, window.Height - 200);
 
                 _window = window;
             }

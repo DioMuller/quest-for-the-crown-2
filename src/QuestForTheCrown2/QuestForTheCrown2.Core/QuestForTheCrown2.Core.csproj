@@ -65,6 +65,7 @@
     <Compile Include="Entities\Base\Container.cs" />
     <Compile Include="Entities\Base\Entity.cs" />
     <Compile Include="Entities\Base\EntityRelativePosition.cs" />
+    <Compile Include="Entities\Base\EntitySavedPosition.cs" />
     <Compile Include="Entities\Base\EntityUpdateBehavior.cs" />
     <Compile Include="Entities\Base\Extensions.cs" />
     <Compile Include="Entities\Base\Frame.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="GUI\Components\Base\Component.cs" />
     <Compile Include="GUI\Components\Button.cs" />
     <Compile Include="GUI\Components\ComponentList.cs" />
+    <Compile Include="GUI\Components\SaveDataButton.cs" />
     <Compile Include="GUI\GameGUI\GameGUI.cs" />
     <Compile Include="GUI\Components\SelectionBox.cs" />
     <Compile Include="GUI\GameGUI\TitleCard.cs" />
