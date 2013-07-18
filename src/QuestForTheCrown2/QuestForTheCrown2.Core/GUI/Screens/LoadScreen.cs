@@ -36,7 +36,7 @@ namespace QuestForTheCrown2.GUI.Screens
 
             _list = new ComponentList();
 
-            foreach( Base.GameState state in GameStateManager.AllStates )
+            foreach( Base.GameState state in GameStateManager.LoadData() )
             {
                 
                 //TODO: Create specific component.

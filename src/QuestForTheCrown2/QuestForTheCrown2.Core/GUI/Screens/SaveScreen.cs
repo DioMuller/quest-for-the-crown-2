@@ -39,7 +39,7 @@ namespace QuestForTheCrown2.GUI.Screens
 
             _list.AddComponent(new Button("Save Game", new SelectDelegate(() =>
            {
-                GameStateManager.SaveData();
+                GameStateManager.SaveData(0);
                 _parent.ChangeState(GameState.Playing);
             })));
 
