@@ -25,6 +25,9 @@ namespace QuestForTheCrown2.Entities.Base
         TimeSpan _lastSavedPositionTime;
         Vector2? _lastSavedPosition;
         int _lastSavesPositionLevel;
+
+        string _currentView, _nextView;
+        int _directionFrameCount;
         #endregion
 
         #region Properties
@@ -137,7 +140,27 @@ namespace QuestForTheCrown2.Entities.Base
         /// Indicates the current animation view.
         /// Examples are: "left", "bottom", "right" and "down".
         /// </summary>
-        public string CurrentView { get; set; }
+        public string CurrentView
+        {
+            get { return _currentView; }
+            set
+            {
+                if (_currentView == null)
+                {
+                    _currentView = value;
+                    return;
+                }
+
+                if (value != _nextView)
+                {
+                    _directionFrameCount = 0;
+                    _nextView = value;
+                }
+
+                if (++_directionFrameCount > 1)
+                    _currentView = value;
+            }
+        }
 
         #endregion
 
@@ -238,13 +261,28 @@ namespace QuestForTheCrown2.Entities.Base
         #endregion
 
         #region Constructors
+        private Entity()
+        {
+            Containers = new Dictionary<string, Container>();
+        }
+
+        public Entity(string spriteSheetPath, int columns, int lines)
+            : this()
+        {
+            var texture = GameContent.LoadContent<Texture2D>(spriteSheetPath);
+            SpriteSheet = new SpriteSheet(texture, new Point(texture.Width / columns, texture.Height / lines));
+            _framesPerLine = columns;
+
+            Speed = SpriteSheet.FrameSize.X;
+        }
+
         public Entity(string spriteSheetPath, Point? frameSize)
+            : this()
         {
             SpriteSheet = new SpriteSheet(GameContent.LoadContent<Texture2D>(spriteSheetPath), frameSize);
             _framesPerLine = SpriteSheet.Texture.Width / SpriteSheet.FrameSize.X;
 
             Speed = SpriteSheet.FrameSize.X;
-            Containers = new Dictionary<string, Container>();
         }
         #endregion
 
@@ -312,7 +350,10 @@ namespace QuestForTheCrown2.Entities.Base
             if (Math.Abs(direction.X) >= Math.Abs(direction.Y))
             {
                 if (direction.X > 0)
-                    CurrentView = "right";
+                {
+                    if (++_directionFrameCount > 1)
+                        CurrentView = "right";
+                }
                 else if (direction.X < 0)
                     CurrentView = "left";
             }
@@ -420,9 +461,12 @@ namespace QuestForTheCrown2.Entities.Base
         #region Update
         public virtual void Update(GameTime gameTime, Level level)
         {
-            _lastSavedPosition = CenterPosition;
-            _lastSavedPositionTime = gameTime.TotalGameTime;
-            _lastSavesPositionLevel = level.Id;
+            if (_lastSavedPositionTime + TimeSpan.FromSeconds(0.3) < gameTime.TotalGameTime)
+            {
+                _lastSavedPosition = CenterPosition;
+                _lastSavedPositionTime = gameTime.TotalGameTime;
+                _lastSavesPositionLevel = level.Id;
+            }
 
             if (Behaviors != null)
             {

@@ -38,6 +38,9 @@ namespace QuestForTheCrown2.Entities.Behaviors
             _fireWand = Entity.Weapons.OfType<FireWand>().FirstOrDefault();
             _target = level.EntityCloserTo(Entity, _targetCategory);
 
+            if (_target == null)
+                return false;
+
             return _fireWand != null && Entity.Magic > 0 && _target.Distance <= _maxDistance;
         }
 
@@ -50,29 +53,33 @@ namespace QuestForTheCrown2.Entities.Behaviors
         {
             Entity.ChangeWeapon(_fireWand, level);
 
+            var enemyPosition = Entity.PreviewEnemyLocation(gameTime, level, _target.Entity, FireBall.FlyghtSpeed);
+
             var passedTime = gameTime.TotalGameTime - _lastAttackTime;
 
-            if (Math.Abs(_target.Position.X) < 32 || Math.Abs(_target.Position.Y) < 32)
+            if ((Math.Abs(enemyPosition.X) < 32 || Math.Abs(enemyPosition.Y) < 32) && passedTime.TotalSeconds > 2)
             {
-                if (passedTime.TotalSeconds > 3)
-                {
-                    Entity.Look(_target.Position, true);
+                Entity.Look(enemyPosition, true);
 
-                    _fireWand.Attack(gameTime, level, true, _target.Position);
-                    _fireWand.Attack(gameTime, level, false, _target.Position);
+                _fireWand.Attack(gameTime, level, true, enemyPosition);
+                _fireWand.Attack(gameTime, level, false, enemyPosition);
 
-                    _lastAttackTime = gameTime.TotalGameTime;
-                }
+                _lastAttackTime = gameTime.TotalGameTime;
             }
             else
             {
-                _fireWand.Attack(gameTime, level, false, Vector2.Zero);
-                level.RemoveEntity(_fireWand);
-
-                if (Math.Abs(_target.Position.X) < Math.Abs(_target.Position.Y))
-                    Walk(gameTime, level, new Vector2(_target.Position.X > 0 ? 1 : -1, 0));
+                if (Math.Abs(enemyPosition.X) < Math.Abs(enemyPosition.Y))
+                {
+                    if (Math.Abs(enemyPosition.X) > 5)
+                        Walk(gameTime, level, new Vector2(enemyPosition.X > 0 ? 1 : -1, 0));
+                    else StopWalking(gameTime, level);
+                }
                 else
-                    Walk(gameTime, level, new Vector2(0, _target.Position.Y > 0 ? 1 : -1));
+                {
+                    if (Math.Abs(enemyPosition.Y) > 5)
+                        Walk(gameTime, level, new Vector2(0, enemyPosition.Y > 0 ? 1 : -1));
+                    else StopWalking(gameTime, level);
+                }
             }
         }
     }

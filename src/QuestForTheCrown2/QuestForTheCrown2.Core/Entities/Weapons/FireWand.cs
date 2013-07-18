@@ -18,13 +18,18 @@ namespace QuestForTheCrown2.Entities.Weapons
         public TimeSpan MaxFireBallFlyTime { get; set; }
 
         public FireWand()
-            : base(@"sprites\Objects\FireBall.png", null)
+            : base(@"sprites\Objects\FireWand.png", null)
         {
-            MaxFireBallFlyTime = TimeSpan.FromSeconds(1);
+            OverlapEntities = true;
+            Padding = new Rectangle(15, 0, 15, 0);
+            MaxFireBallFlyTime = TimeSpan.FromSeconds(0.5);
         }
 
         public override void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
+            if (Parent == null)
+                return;
+
             direction = Parent.CurrentDirection;
 
             if (Math.Abs(direction.X) > Math.Abs(direction.Y))
@@ -49,7 +54,6 @@ namespace QuestForTheCrown2.Entities.Weapons
                 level.AddEntity(new FireBall(direction)
                 {
                     Position = Parent.CenterPosition,
-                    Speed = 7 * 32,
                     Parent = Parent,
                     MaxFlyTime = MaxFireBallFlyTime
                 });
