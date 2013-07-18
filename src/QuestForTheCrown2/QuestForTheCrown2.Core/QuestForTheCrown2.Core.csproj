@@ -65,9 +65,11 @@
     <Compile Include="Entities\Base\Container.cs" />
     <Compile Include="Entities\Base\Entity.cs" />
     <Compile Include="Entities\Base\EntityRelativePosition.cs" />
+    <Compile Include="Entities\Base\EntitySavedPosition.cs" />
     <Compile Include="Entities\Base\EntityUpdateBehavior.cs" />
     <Compile Include="Entities\Base\Extensions.cs" />
     <Compile Include="Entities\Base\Frame.cs" />
+    <Compile Include="Entities\Behaviors\AttackBehavior.cs" />
     <Compile Include="Entities\Behaviors\BlinkBehavior.cs" />
     <Compile Include="Entities\Behaviors\BowAttackBehavior.cs" />
     <Compile Include="Entities\Behaviors\AvoidBehavior.cs" />

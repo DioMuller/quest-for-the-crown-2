@@ -9,7 +9,7 @@ using System.Text;
 
 namespace QuestForTheCrown2.Entities.Behaviors
 {
-    class BowAttackBehavior : WalkBehavior
+    class BowAttackBehavior : AttackBehavior
     {
         #region Attributes
         Bow _bow;
@@ -21,43 +21,44 @@ namespace QuestForTheCrown2.Entities.Behaviors
         public TimeSpan TimeBetweenAttacks { get; set; }
         #endregion
 
+        #region Constructors
         public BowAttackBehavior(string targetCategory, float shootDistance, float maxDistance)
+            : base(targetCategory, Arrow.FlightSpeed, maxDistance: maxDistance)
         {
-            TimeBetweenAttacks = TimeSpan.FromSeconds(1);
             _followBehavior = new FollowBehavior(targetCategory, shootDistance) { MaxDistance = maxDistance };
+            TimeBetweenAttacks = TimeSpan.FromSeconds(2);
         }
+        #endregion
 
-        public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
+        public override bool IsActive(Microsoft.Xna.Framework.GameTime gameTime, QuestForTheCrown2.Levels.Level level)
         {
-            if (Entity.IsDead)
-                return false;
-
-            _bow = Entity.Weapons.OfType<Bow>().FirstOrDefault();
-            _followBehavior.Entity = Entity;
-
-            return _bow != null && Entity.Arrows > 0 &&
-                   _followBehavior.IsActive(gameTime, level);
+            if (base.IsActive(gameTime, level) && Entity.Weapons != null)
+            {
+                _bow = Entity.Weapons.OfType<Bow>().FirstOrDefault();
+                _followBehavior.Entity = Entity;
+                return _bow != null && Entity.Arrows > 0 && _followBehavior.IsActive(gameTime, level);
+            }
+            return false;
         }
 
         public override void Deactivated(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
-            _bow.Attack(gameTime, level, false, Vector2.Zero);
+            if (_bow != null)
+                _bow.Attack(gameTime, level, false, Vector2.Zero);
         }
 
-        public override void Update(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
+        public override void Update(GameTime gameTime, Levels.Level level)
         {
             Entity.ChangeWeapon(_bow, level);
 
             var passedTime = gameTime.TotalGameTime - _lastAttackTime;
 
-            if (_followBehavior.CurrentTarget.Distance <= _followBehavior.Distance && (!level.ContainsEntity(_bow.LastShotArrow) || _bow.LastShotArrow == null || _bow.LastShotArrow.Parent == null || passedTime.TotalSeconds > 2))
+            if (_followBehavior.CurrentTarget.Distance <= _followBehavior.Distance)
             {
-                var enemyPosition = Entity.PreviewEnemyLocation(gameTime, level, _followBehavior.CurrentTarget.Entity, Arrow.FlyghtSpeed);
-
-                Entity.Look(enemyPosition, true);
+                Entity.Look(CurrentTarget.Position, true);
 
                 bool fireArrow = _lastAttackTime + TimeBetweenAttacks < gameTime.TotalGameTime;
-                _bow.Attack(gameTime, level, fireArrow, enemyPosition * (OptionsManager.CurrentOptions.InvertAim ? -1 : 1));
+                _bow.Attack(gameTime, level, fireArrow, CurrentTarget.Position * (OptionsManager.CurrentOptions.InvertAim ? -1 : 1));
 
                 if (fireArrow)
                     _lastAttackTime = gameTime.TotalGameTime;

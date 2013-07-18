@@ -11,7 +11,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 {
     class Arrow : Entity
     {
-        public const int FlyghtSpeed = 32 * 10;
+        public const int FlightSpeed = 32 * 10;
 
         Vector2 _hitLocation;
         public Entity HitEntity { get; set; }
@@ -32,7 +32,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             OverlapEntities = true;
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
             _timeFromCreation = TimeSpan.Zero;
-            Speed = FlyghtSpeed;
+            Speed = FlightSpeed;
         }
 
         public Arrow(Vector2 direction)

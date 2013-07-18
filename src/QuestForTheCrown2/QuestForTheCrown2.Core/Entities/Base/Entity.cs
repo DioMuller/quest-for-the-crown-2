@@ -22,9 +22,7 @@ namespace QuestForTheCrown2.Entities.Base
         Weapon _currentWeapon;
 
         int _timeSinceLastMpRegen;
-        TimeSpan _lastSavedPositionTime;
-        Vector2? _lastSavedPosition;
-        int _lastSavesPositionLevel;
+        Queue<EntitySavedPosition> _savedPositions;
 
         string _currentView, _nextView;
         int _directionFrameCount;
@@ -264,6 +262,7 @@ namespace QuestForTheCrown2.Entities.Base
         private Entity()
         {
             Containers = new Dictionary<string, Container>();
+            _savedPositions = new Queue<EntitySavedPosition>();
         }
 
         public Entity(string spriteSheetPath, int columns, int lines)
@@ -384,11 +383,21 @@ namespace QuestForTheCrown2.Entities.Base
 
         public virtual Vector2 PreviewLocation(GameTime gameTime, Level level, TimeSpan time)
         {
-            if (_lastSavedPosition == null || _lastSavesPositionLevel != level.Id)
+            if (_savedPositions.Count < 5)
                 return CenterPosition;
 
-            var distanceWalked = CenterPosition - _lastSavedPosition.Value;
-            var timePassed = gameTime.TotalGameTime - _lastSavedPositionTime;
+            var firstPosition = _savedPositions.First().Position;
+            int firstLevel = _savedPositions.First().Level;
+            TimeSpan firstTime = _savedPositions.First().TotalGameTime;
+
+            var lastPosition = _savedPositions.Last().Position;
+            var lastTime = _savedPositions.Last().TotalGameTime;
+
+            if (firstLevel != level.Id)
+                return CenterPosition;
+
+            var distanceWalked = lastPosition - firstPosition;
+            var timePassed = lastTime - firstTime;
 
             if (timePassed == TimeSpan.Zero)
                 return CenterPosition;
@@ -397,22 +406,39 @@ namespace QuestForTheCrown2.Entities.Base
             return CenterPosition + distanceWalked * (float)ratio;
         }
 
-        public virtual Vector2 PreviewEnemyLocation(GameTime gameTime, Level level, Entity enemy, float? speed = null)
+        public virtual EntityRelativePosition PreviewEnemyLocation(GameTime gameTime, Level level, Entity enemy, float? speed = null)
         {
-            Vector2 relativePosition = enemy.CenterPosition - CenterPosition;
-            var dist = relativePosition.Length();
+            var basePosition = enemy.CenterPosition - CenterPosition;
+            var baseDist = basePosition.Length();
+
+            Vector2 relativePosition = basePosition;
+            var dist = baseDist;
 
             for (int i = 0; i < 2; i++)
             {
                 if (double.IsNaN(dist))
-                    return enemy.CenterPosition;
+                {
+                    return new EntityRelativePosition
+                    {
+                        Entity = enemy,
+                        RelativeTo = this,
+                        Distance = baseDist,
+                        Position = basePosition,
+                    };
+                }
 
                 var enemyPos = enemy.PreviewLocation(gameTime, level, TimeSpan.FromSeconds(dist / (speed ?? Speed)));
                 relativePosition = enemyPos - CenterPosition;
                 dist = relativePosition.Length();
             }
 
-            return relativePosition;
+            return new EntityRelativePosition
+            {
+                Entity = enemy,
+                RelativeTo = this,
+                Distance = dist,
+                Position = relativePosition,
+            };
         }
 
         #region Containers
@@ -461,12 +487,15 @@ namespace QuestForTheCrown2.Entities.Base
         #region Update
         public virtual void Update(GameTime gameTime, Level level)
         {
-            if (_lastSavedPositionTime + TimeSpan.FromSeconds(0.3) < gameTime.TotalGameTime)
+            _savedPositions.Enqueue(new EntitySavedPosition
             {
-                _lastSavedPosition = CenterPosition;
-                _lastSavedPositionTime = gameTime.TotalGameTime;
-                _lastSavesPositionLevel = level.Id;
-            }
+                Position = CenterPosition,
+                Level = level.Id,
+                TotalGameTime = gameTime.TotalGameTime
+            });
+
+            if (_savedPositions.Count > 5)
+                _savedPositions.Dequeue();
 
             if (Behaviors != null)
             {
@@ -557,7 +586,6 @@ namespace QuestForTheCrown2.Entities.Base
         /// <returns>The animation matching the entity's current view and animation</returns>
         Animation SelectAnimation()
         {
-            Animation bestAnimation;
             Dictionary<string, Animation> bestAnimations;
 
             if (CurrentAnimation == null || !SpriteSheet.Animations.ContainsKey(CurrentAnimation))
@@ -565,17 +593,9 @@ namespace QuestForTheCrown2.Entities.Base
             bestAnimations = SpriteSheet.Animations[CurrentAnimation];
 
             if (CurrentView == null || !bestAnimations.ContainsKey(CurrentView))
-                CurrentView = bestAnimations.First().Key;
-            try
-            {
-                bestAnimation = bestAnimations[CurrentView];
-            }
-            catch
-            {
-                bestAnimation = bestAnimations["default"];
-            }
+                return bestAnimations.First().Value;
 
-            return bestAnimation;
+            return bestAnimations[CurrentView];
         }
         /// <summary>
         /// Draws the entity
