@@ -141,8 +141,21 @@ namespace QuestForTheCrown2.Base
         public static void SaveData(int slot)
         {
             List<GameState> allStates = LoadData();
+            
+            if( slot == -1 ) allStates.Insert(0, CurrentState);
+            else if( allStates.Count > slot )
+            {
+                allStates.Insert(slot, CurrentState);
+            }
 
-            if( allStates.Count < slot ) allStates[slot] = CurrentState;
+            allStates.Save(SaveFile);
+        }
+
+        public static void SaveDataOverwriting(GameState state)
+        {
+            List<GameState> allStates = LoadData();
+            allStates.Remove( allStates.Where((s) => s.LastPlayDate == state.LastPlayDate).First());
+            allStates.Add(CurrentState);
 
             allStates.Save(SaveFile);
         }

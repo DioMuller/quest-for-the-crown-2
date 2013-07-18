@@ -64,6 +64,11 @@ namespace QuestForTheCrown2.GUI.Screens
                 OptionsManager.CurrentOptions.InvertAim = (aim == "On");
             });
 
+            _list.AddComponent(new Button("Delete All Save Data", new SelectDelegate(() =>
+            {
+                GameStateManager.DeleteAllSaves();
+            })));
+
             _list.AddComponent(new Button("Save", new SelectDelegate(() =>
             {
                 OptionsManager.SaveOptions();

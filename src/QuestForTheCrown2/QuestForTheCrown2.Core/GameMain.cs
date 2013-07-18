@@ -254,7 +254,14 @@ namespace QuestForTheCrown2
         public void ChangeState(GameState state)
         {
             _currentState = state;
-
+            if( state == GameState.Saving )
+            {
+                _savescreen = new SaveScreen(this);
+            }
+            if( state == GameState.LoadGame )
+            {
+                _loadscreen = new LoadScreen(this);
+            }
             if (state == GameState.NewGame || state == GameState.LoadingGame)
             {
                 _overworld = null;
