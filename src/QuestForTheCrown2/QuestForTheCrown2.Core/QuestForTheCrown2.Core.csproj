@@ -118,6 +118,7 @@
     <Compile Include="GUI\GameGUI\GameGUI.cs" />
     <Compile Include="GUI\Components\SelectionBox.cs" />
     <Compile Include="GUI\GameGUI\TitleCard.cs" />
+    <Compile Include="GUI\Screens\LoadingScreen.cs" />
     <Compile Include="GUI\Screens\SaveScreen.cs" />
     <Compile Include="GUI\Screens\LoadScreen.cs" />
     <Compile Include="GUI\Screens\CreditsScreen.cs" />

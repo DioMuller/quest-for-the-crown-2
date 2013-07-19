@@ -51,6 +51,7 @@ namespace QuestForTheCrown2
         GameOverScreen _gameOver;
         OptionsScreen _options;
         LoadScreen _loadscreen;
+        LoadingScreen _loadingScreen;
         SaveScreen _savescreen;
 
         int _inputDelay;
@@ -116,6 +117,7 @@ namespace QuestForTheCrown2
             _options = new OptionsScreen(this);
             _loadscreen = new LoadScreen(this);
             _savescreen = new SaveScreen(this);
+            _loadingScreen = new LoadingScreen(this);
 
             GameStateManager.Parent = this;
 
@@ -152,7 +154,10 @@ namespace QuestForTheCrown2
                     break;
                 case GameState.NewGame:
                     if (_overworld == null || _overworld.Parent == null)
+                    {
+                        _loadingScreen.Update(gameTime);
                         break;
+                    }
 
                     var player = _overworld.Players.First();
                     //GameStateManager.DeleteAllSaves();
@@ -177,10 +182,14 @@ namespace QuestForTheCrown2
                     _loadscreen.Update(gameTime);
                     break;
                 case GameState.LoadingGame:
-                    if( _overworld != null && _overworld.Parent != null )
+                    if (_overworld != null && _overworld.Parent != null)
                     {
                         GameStateManager.LoadPlayerState(_overworld.Players.First());
                         ChangeState(GameState.Playing);
+                    }
+                    else
+                    {
+                        _loadingScreen.Update(gameTime);
                     }
                     break;
                 case GameState.Options:
@@ -234,6 +243,10 @@ namespace QuestForTheCrown2
                 case GameState.Credits:
                     _credits.Draw(gameTime, _spriteBatch);
                     break;
+                case GameState.LoadingGame:
+                case GameState.NewGame:
+                    _loadingScreen.Draw(gameTime, _spriteBatch);
+                    break;
                 case GameState.GameOver:
                     _gameOver.Draw(gameTime, _spriteBatch);
                     break;
@@ -254,11 +267,11 @@ namespace QuestForTheCrown2
         public void ChangeState(GameState state)
         {
             _currentState = state;
-            if( state == GameState.Saving )
+            if (state == GameState.Saving)
             {
                 _savescreen = new SaveScreen(this);
             }
-            if( state == GameState.LoadGame )
+            if (state == GameState.LoadGame)
             {
                 _loadscreen = new LoadScreen(this);
             }
