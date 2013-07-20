@@ -14,6 +14,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
         public float? MaxDistance { get; set; }
         public string TargetCategory { get; set; }
         public Entity OverrideTarget { get; set; }
+        public Entity OverrideRelativeTo { get; set; }
         public float SpeedToEnemy { get; private set; }
 
         public EntityRelativePosition CurrentTarget { get; private set; }
@@ -34,23 +35,28 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
         public override bool IsActive(GameTime gameTime, Level level)
         {
-            if (Entity == null)
+            if (OverrideRelativeTo == null || OverrideRelativeTo.IsDead || !level.ContainsEntity(OverrideRelativeTo))
+                OverrideRelativeTo = null;
+
+            var relativeTo = OverrideRelativeTo ?? Entity;
+
+            if (relativeTo == null)
                 return false;
 
             if (OverrideTarget == null || OverrideTarget.IsDead || !level.ContainsEntity(OverrideTarget))
                 OverrideTarget = null;
 
             if (OverrideTarget != null)
-                CurrentTarget = Entity.PreviewEnemyLocation(gameTime, level, OverrideTarget, SpeedToEnemy);
+                CurrentTarget = relativeTo.PreviewEnemyLocation(gameTime, level, OverrideTarget, SpeedToEnemy);
             else
             {
                 CurrentTarget = (from ent in level.GetEntities(TargetCategory)
-                                 let position = ent.CenterPosition - Entity.CenterPosition
+                                 let position = ent.CenterPosition - relativeTo.CenterPosition
                                  let distance = position.Length()
                                  where MinDistance == null || distance > MinDistance
                                  where MaxDistance == null || distance < MaxDistance
                                  orderby distance
-                                 select Entity.PreviewEnemyLocation(gameTime, level, ent, SpeedToEnemy))
+                                 select relativeTo.PreviewEnemyLocation(gameTime, level, ent, SpeedToEnemy))
                                 .FirstOrDefault();
             }
             if (CurrentTarget == null || CurrentTarget.Entity.IsDead || !level.ContainsEntity(CurrentTarget.Entity))

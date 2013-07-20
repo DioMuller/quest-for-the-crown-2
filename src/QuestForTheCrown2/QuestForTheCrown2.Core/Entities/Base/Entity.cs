@@ -55,6 +55,8 @@ namespace QuestForTheCrown2.Entities.Base
                 if (GetBehavior<DropItemsBehavior>() == null)
                     AddBehavior(new DropItemsBehavior());
 
+                MoveOnHit = value != null;
+
                 Containers["Health"] = value;
             }
         }
@@ -76,6 +78,11 @@ namespace QuestForTheCrown2.Entities.Base
         /// Indicates if the current entity cannot be hit.
         /// </summary>
         public bool IsBlinking { get; set; }
+
+        /// <summary>
+        /// True if this entity is moved when it gets hit.
+        /// </summary>
+        public bool MoveOnHit { get; set; }
 
         /// <summary>
         /// Contains all the entities behavior, that will be used during the entity's update logic.
@@ -563,19 +570,19 @@ namespace QuestForTheCrown2.Entities.Base
         /// <param name="angle">Projectile angle</param>
         public virtual void Hit(Entity attacker, Level level, Vector2 direction)
         {
-            if (Health == null)
-                return;
-
-            if (!IsBlinking)
+            if (Health != null && !IsBlinking)
             {
                 SoundManager.PlaySound("hit");
                 Health.Quantity--;
             }
 
-            var oldPos = Position;
-            Position += direction;
-            if (level.CollidesWith(CollisionRect).Any(e => e != this) || level.Map.Collides(CollisionRect))
-                Position = oldPos;
+            if (MoveOnHit)
+            {
+                var oldPos = Position;
+                Position += direction;
+                if (level.CollidesWith(CollisionRect).Any(e => e != this) || level.Map.Collides(CollisionRect))
+                    Position = oldPos;
+            }
         }
         #endregion
 

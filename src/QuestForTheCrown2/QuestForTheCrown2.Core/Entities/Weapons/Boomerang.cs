@@ -11,6 +11,10 @@ namespace QuestForTheCrown2.Entities.Weapons
 {
     class Boomerang : Weapon
     {
+        public const int FlightSpeed = 32 * 8;
+        public event EntityEventHandler OnHit;
+
+        bool _hitParent;
         bool _flyingBack;
         Vector2 _direction;
         TimeSpan _startTime;
@@ -21,7 +25,8 @@ namespace QuestForTheCrown2.Entities.Weapons
             : base(@"sprites\Objects\Boomerang.png", null)
         {
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
-            Speed = 32 * 8;
+            Speed = FlightSpeed;
+            MoveOnHit = true;
             //Padding = new Rectangle(4, 4, 4, 4);
         }
 
@@ -36,6 +41,8 @@ namespace QuestForTheCrown2.Entities.Weapons
                     if (direction == Vector2.Zero)
                         direction = Parent.CurrentDirection;
 
+                    direction.Normalize();
+
                     _maxFlyTime = TimeSpan.FromSeconds(0.5);
 
                     SoundManager.PlaySound("boomerang");
@@ -48,15 +55,24 @@ namespace QuestForTheCrown2.Entities.Weapons
             }
             else if (Parent != null && direction != Vector2.Zero)
             {
-                if (!_flyingBack && _startTime + _maxFlyTime < gameTime.TotalGameTime && Parent.Magic > 1)
+                if (_startTime + _maxFlyTime < gameTime.TotalGameTime)
                 {
-                    _maxFlyTime = TimeSpan.FromSeconds(0.2);
-                    Parent.Magic.Quantity--;
-                    _startTime = gameTime.TotalGameTime;
+                    if (Parent.Magic > 1)
+                    {
+                        _maxFlyTime = TimeSpan.FromSeconds(0.2);
+                        Parent.Magic.Quantity--;
+                        _startTime = gameTime.TotalGameTime;
+                        _flyingBack = false;
+                    }
+                    else _flyingBack = true;
                 }
+                else _flyingBack = false;
 
-                if (_startTime + _maxFlyTime >= gameTime.TotalGameTime)
+                if (!_flyingBack)
+                {
                     _direction = direction;
+                    _direction.Normalize();
+                }
             }
         }
 
@@ -66,9 +82,10 @@ namespace QuestForTheCrown2.Entities.Weapons
             if (Parent == null)
                 return;
 
-            var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+            if(!_flyingBack)
+                _flyingBack = gameTime.TotalGameTime > _startTime + _maxFlyTime;
 
-            _flyingBack = gameTime.TotalGameTime > _startTime + _maxFlyTime;
+            var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
 
             if (_flyingBack)
             {
@@ -82,17 +99,8 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             if (level.Map.Collides(CollisionRect, false, true))
             {
-                if (_flyingBack)
-                {
-                    Parent.RemoveWeapon(this);
-                    OverlapEntities = true;
-                    return;
-                }
-                else
-                {
-                    _startTime = TimeSpan.MinValue;
-                    _flyingBack = true;
-                }
+                Hit(null, level, _direction * -1);
+                return;
             }
 
             foreach (var ent in level.CollidesWith(CollisionRect))
@@ -105,12 +113,43 @@ namespace QuestForTheCrown2.Entities.Weapons
                     if (_flyingBack)
                     {
                         level.RemoveEntity(this);
+                        if (_hitParent)
+                            Parent.Hit(this, level, _direction);
+                        _hitParent = false;
                         return;
                     }
                 }
                 else
+                {
                     ent.Hit(this, level, _direction);
+                    Hit(ent, level, _direction * -1);
+
+                    if (OnHit != null)
+                        OnHit(this, new EntityEventArgs(ent, gameTime, level));
+                }
             }
+        }
+
+        public override void Hit(Entity attacker, Level level, Vector2 direction)
+        {
+            if (_flyingBack)
+            {
+                if (Parent != null && Parent.Category == "Player")
+                {
+                    Parent.RemoveWeapon(this);
+                    OverlapEntities = true;
+                }
+            }
+            else
+            {
+                //if (attacker is Weapon)
+                //    _hitParent = true;
+
+                _startTime = TimeSpan.MinValue;
+                _flyingBack = true;
+            }
+
+            base.Hit(attacker, level, direction);
         }
 
         public override void Unequiped(Level level) { }
