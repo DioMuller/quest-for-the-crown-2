@@ -11,9 +11,10 @@ namespace QuestForTheCrown2.Entities.Weapons
 {
     class Boomerang : Weapon
     {
+        bool _flyingBack;
         Vector2 _direction;
         TimeSpan _startTime;
-        TimeSpan _maxFlyTime = TimeSpan.FromSeconds(0.5);
+        TimeSpan _maxFlyTime;
         float _spinSpeed = (float)Math.PI / 8;
 
         public Boomerang()
@@ -26,16 +27,36 @@ namespace QuestForTheCrown2.Entities.Weapons
 
         public override void Attack(GameTime gameTime, Level level, bool attackButton, Vector2 direction)
         {
-            if (direction == Vector2.Zero)
-                direction = Parent.CurrentDirection;
+            var isOnMap = level.ContainsEntity(this);
 
-            if (!level.ContainsEntity(this) && attackButton)
+            if (!isOnMap)
             {
-                SoundManager.PlaySound("boomerang");
-                _direction = direction;
-                _startTime = gameTime.TotalGameTime;
-                Position = Parent.CenterPosition + _direction;
-                level.AddEntity(this);
+                if (attackButton)
+                {
+                    if (direction == Vector2.Zero)
+                        direction = Parent.CurrentDirection;
+
+                    _maxFlyTime = TimeSpan.FromSeconds(0.5);
+
+                    SoundManager.PlaySound("boomerang");
+                    _flyingBack = false;
+                    _direction = direction;
+                    _startTime = gameTime.TotalGameTime;
+                    Position = Parent.CenterPosition + _direction;
+                    level.AddEntity(this);
+                }
+            }
+            else if (Parent != null && direction != Vector2.Zero)
+            {
+                if (!_flyingBack && _startTime + _maxFlyTime < gameTime.TotalGameTime && Parent.Magic > 1)
+                {
+                    _maxFlyTime = TimeSpan.FromSeconds(0.2);
+                    Parent.Magic.Quantity--;
+                    _startTime = gameTime.TotalGameTime;
+                }
+
+                if (_startTime + _maxFlyTime >= gameTime.TotalGameTime)
+                    _direction = direction;
             }
         }
 
@@ -47,9 +68,9 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
 
-            bool flyingBack = gameTime.TotalGameTime > _startTime + _maxFlyTime;
+            _flyingBack = gameTime.TotalGameTime > _startTime + _maxFlyTime;
 
-            if (flyingBack)
+            if (_flyingBack)
             {
                 _direction = new Vector2(Parent.CenterPosition.X - Position.X, Parent.CenterPosition.Y - Position.Y);
                 _direction.Normalize();
@@ -61,7 +82,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             if (level.Map.Collides(CollisionRect, false, true))
             {
-                if (flyingBack)
+                if (_flyingBack)
                 {
                     Parent.RemoveWeapon(this);
                     OverlapEntities = true;
@@ -70,6 +91,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 else
                 {
                     _startTime = TimeSpan.MinValue;
+                    _flyingBack = true;
                 }
             }
 
@@ -80,7 +102,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
                 if (ent == Parent)
                 {
-                    if (flyingBack)
+                    if (_flyingBack)
                     {
                         level.RemoveEntity(this);
                         return;
