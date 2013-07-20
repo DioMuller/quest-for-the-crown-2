@@ -118,6 +118,7 @@
     <Compile Include="GUI\GameGUI\GameGUI.cs" />
     <Compile Include="GUI\Components\SelectionBox.cs" />
     <Compile Include="GUI\GameGUI\TitleCard.cs" />
+    <Compile Include="GUI\Screens\HowToPlay.cs" />
     <Compile Include="GUI\Screens\LoadingScreen.cs" />
     <Compile Include="GUI\Screens\SaveScreen.cs" />
     <Compile Include="GUI\Screens\LoadScreen.cs" />
@@ -181,6 +182,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\images\arrow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\images\controls.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\images\gameover.png">
