@@ -45,11 +45,12 @@ namespace QuestForTheCrown2.GUI.Screens
 
             _list = new ComponentList();
 
-            _list.ComponentHeight = 80;
+            _list.ComponentHeight = 50;
 
             _list.AddComponent(new Button("New Game", () => _parent.ChangeState(GameState.NewGame)));
             _list.AddComponent(new Button("Load Game", () => _parent.ChangeState(GameState.LoadGame)));
             _list.AddComponent(new Button("Options", () => _parent.ChangeState(GameState.Options)));
+            _list.AddComponent(new Button("How to Play", () => _parent.ChangeState(GameState.HowToPlay)));
             _list.AddComponent(new Button("Credits", () => _parent.ChangeState(GameState.Credits)));
             _list.AddComponent(new Button("Quit Game", () => _parent.ChangeState(GameState.Quiting)));
 

@@ -34,7 +34,8 @@ namespace QuestForTheCrown2
         Quiting,
         NewGame,
         LoadingGame,
-        Saving
+        Saving,
+        HowToPlay
     }
 
     /// <summary>
@@ -53,6 +54,7 @@ namespace QuestForTheCrown2
         LoadScreen _loadscreen;
         LoadingScreen _loadingScreen;
         SaveScreen _savescreen;
+        HowToPlay _howToPlay;
 
         int _inputDelay;
 
@@ -118,6 +120,7 @@ namespace QuestForTheCrown2
             _loadscreen = new LoadScreen(this);
             _savescreen = new SaveScreen(this);
             _loadingScreen = new LoadingScreen(this);
+            _howToPlay = new HowToPlay(this);
 
             GameStateManager.Parent = this;
 
@@ -201,6 +204,9 @@ namespace QuestForTheCrown2
                 case GameState.GameOver:
                     _gameOver.Update(gameTime);
                     break;
+                case GameState.HowToPlay:
+                    _howToPlay.Update(gameTime);
+                    break;
                 case GameState.Quiting:
                     Exit();
                     break;
@@ -246,6 +252,9 @@ namespace QuestForTheCrown2
                 case GameState.LoadingGame:
                 case GameState.NewGame:
                     _loadingScreen.Draw(gameTime, _spriteBatch);
+                    break;
+                case GameState.HowToPlay:
+                    _howToPlay.Draw(gameTime, _spriteBatch);
                     break;
                 case GameState.GameOver:
                     _gameOver.Draw(gameTime, _spriteBatch);
