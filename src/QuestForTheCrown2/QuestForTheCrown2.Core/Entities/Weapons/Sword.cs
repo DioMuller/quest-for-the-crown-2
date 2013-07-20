@@ -109,7 +109,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                     ent.CurrentDirection = CurrentDirection.Rotate(-_swingedAngle / 4).Normalized();
                     ent.Parent = Parent;
                 }
-                else if (ent != this && ent != Parent && ent.Health != null)
+                else if (ent != this && ent != Parent && (ent.Health != null || ent is Boomerang))
                 {
                     var direction = VectorHelper.AngleToV2(Angle, 5);
                     direction = new Vector2(-direction.Y, direction.X);

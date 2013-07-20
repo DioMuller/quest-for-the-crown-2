@@ -41,7 +41,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                     if (AutomaticAllowWeapons && !allowedWeapons.Contains(weaponName))
                         allowedWeapons.Add(weaponName);
 
-                    if (allowedWeapons.Contains(weaponName) || currentWeapons.Contains(weaponName))
+                    if (!currentWeapons.Contains(weaponName))
                     {
                         var enemyPosition = Entity.CenterPosition;
                         var dropDistance = VectorHelper.AngleToV2((float)(Random.NextDouble() * Math.PI - Math.PI / 2), 32);
@@ -51,6 +51,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                         {
                             itemsDropped = true;
                             weapon.Parent = null;
+                            weapon.OverlapEntities = true;
 
                             weapon.Position = dropPosition;
                             if (level.Map.Collides(weapon.CollisionRect))
