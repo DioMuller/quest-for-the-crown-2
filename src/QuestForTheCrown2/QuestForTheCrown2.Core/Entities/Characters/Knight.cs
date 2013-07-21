@@ -7,30 +7,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using QuestForTheCrown2.Levels.Mapping;
-using QuestForTheCrown2.Levels;
 using QuestForTheCrown2.Entities.Behaviors;
 using QuestForTheCrown2.Entities.Weapons;
-using QuestForTheCrown2.Base;
+using QuestForTheCrown2.Entities.Objects;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
-    public class Player : Entity
+    class Knight : Entity
     {
-        #region Constants
-        /// <summary>
-        /// Spritesheet path
-        /// </summary>
-        const string spriteSheetPath = @"sprites\Characters\main.png";
-        #endregion Constants
+        const string spriteSheetPath = @"sprites/Characters/knight.png";
 
-        #region Constructor
-        /// <summary>
-        /// Builds main character with its base spritesheet and animations.
-        /// </summary>
-        public Player()
+        public Knight()
             : base(spriteSheetPath, 9, 13)
         {
-            Category = "Player";
+            Category = "Enemy";
 
             TimeSpan walkFrameDuration = TimeSpan.FromMilliseconds(100);
             SpriteSheet.AddAnimation("stopped", "up", line: 0, count: 1, frameDuration: walkFrameDuration);
@@ -46,22 +36,37 @@ namespace QuestForTheCrown2.Entities.Characters
 
             SpriteSheet.AddAnimation("dying", "default", line: 12, count: 6, frameDuration: walkFrameDuration, repeat: false);
 
-            Padding = new Rectangle(22, 32, 22, 2);
+            Padding = new Rectangle(4, 20, 4, 2);
 
-            Speed = 32 * 5;
+            Speed = 32 * 2.5f;
 
-            Health = new Container(8);
             Look(new Vector2(0, 1), true);
 
-            GetBehavior<BlinkBehavior>().BlinkDuration = TimeSpan.FromSeconds(1);
-
             AddBehavior(
-                new InputBehavior(InputType.Controller),
-                new InputBehavior(InputType.Keyboard)
+                new HitOnTouchBehavior(e => e.Category == "Player"),
+                new SwordAttackBehavior("Player") { MaxDistance = 300 },
+                new WalkAroundBehavior()
             );
-            Arrows = new Container(50);
-            Magic = new Container(10);
+            AddWeapon(new Sword());
+
+            Hold(new HealthContainer());
         }
-        #endregion Constructor
+
+        public override void Hit(Entity attacker, GameTime gameTime, Levels.Level level, Vector2 direction)
+        {
+            var oldHealth = Health.Quantity;
+            base.Hit(attacker, gameTime, level, direction);
+
+            if (level.GetEntities<Poltergeist>().Any())
+                Health.Quantity = oldHealth;
+        }
+
+        public override void Update(GameTime gameTime, Levels.Level level)
+        {
+            if (Health == null)
+                Health = level.GetEntities<Poltergeist>().Select(p => p.Health).FirstOrDefault() ?? new Container(7);
+
+            base.Update(gameTime, level);
+        }
     }
 }

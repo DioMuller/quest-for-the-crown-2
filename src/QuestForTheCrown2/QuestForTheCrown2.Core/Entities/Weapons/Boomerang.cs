@@ -57,7 +57,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             {
                 if (_startTime + _maxFlyTime < gameTime.TotalGameTime)
                 {
-                    if (Parent.Magic > 1)
+                    if (Parent.Magic > 1 && !_flyingBack)
                     {
                         _maxFlyTime = TimeSpan.FromSeconds(0.2);
                         Parent.Magic.Quantity--;

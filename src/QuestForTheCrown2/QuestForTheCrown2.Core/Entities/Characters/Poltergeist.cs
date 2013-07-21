@@ -25,12 +25,13 @@ namespace QuestForTheCrown2.Entities.Characters
 
         public override void Hit(Entity attacker, GameTime gameTime, Levels.Level level, Vector2 direction)
         {
-            //TODO: Projectile base class.
+            var previewEnemy = PreviewEnemyLocation(gameTime, level, attacker.Parent, attacker.Speed);
 
+            //TODO: Projectile base class.
             var arrow = attacker as Arrow;
             if (arrow != null)
             {
-                attacker.CurrentDirection = (attacker.Parent.CenterPosition - CenterPosition).Normalized();
+                attacker.CurrentDirection = previewEnemy.Position.Normalized();
                 attacker.Parent = this;
                 arrow.HitEntity = null;
                 return;
@@ -39,13 +40,14 @@ namespace QuestForTheCrown2.Entities.Characters
             var fireBall = attacker as FireBall;
             if (fireBall != null)
             {
-                var preview = PreviewEnemyLocation(gameTime, level, attacker.Parent, FireBall.FlightSpeed);
-                attacker.CurrentDirection = preview.Position.Normalized();
+                attacker.CurrentDirection = previewEnemy.Position.Normalized();
                 attacker.Parent = this;
                 fireBall.HitEntity = null;
+                return;
             }
 
-            return;
+            if (attacker is Boomerang)
+                base.Hit(attacker, gameTime, level, direction);
         }
     }
 }

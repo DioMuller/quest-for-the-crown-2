@@ -98,7 +98,7 @@
     <Compile Include="Entities\Characters\MasterGoon.cs" />
     <Compile Include="Entities\Characters\WaterDragon.cs" />
     <Compile Include="Entities\Characters\Crab.cs" />
-    <Compile Include="Entities\Characters\Enemy1.cs" />
+    <Compile Include="Entities\Characters\Knight.cs" />
     <Compile Include="Entities\Characters\Goon.cs" />
     <Compile Include="Entities\Characters\Player.cs" />
     <Compile Include="Entities\Characters\Skeleton.cs" />

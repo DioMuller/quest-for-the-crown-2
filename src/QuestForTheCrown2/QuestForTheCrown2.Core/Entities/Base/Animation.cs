@@ -37,15 +37,15 @@ namespace QuestForTheCrown2.Entities.Base
             AddAnimation(name, view, new Animation(frameIndexes, frameDuration, repeat ? 0 : frameIndexes.Length - 1));
         }
 
-        public void AddAnimation(string name, string view, int line, TimeSpan frameDuration, bool repeat = true)
+        public void AddAnimation(string name, string view, int line, TimeSpan frameDuration, bool repeat = true, int skipFrames = 0)
         {
-            AddAnimation(name, view, line, Texture.Width / FrameSize.X, frameDuration, repeat);
+            AddAnimation(name, view, line, Texture.Width / FrameSize.X, frameDuration, repeat, skipFrames);
         }
 
-        public void AddAnimation(string name, string view, int line, int count, TimeSpan frameDuration, bool repeat = true)
+        public void AddAnimation(string name, string view, int line, int count, TimeSpan frameDuration, bool repeat = true, int skipFrames = 0)
         {
-            var startIndex = (Texture.Width / FrameSize.X) * line;
-            var indexes = Enumerable.Range(startIndex, count).ToArray();
+            var startIndex = (Texture.Width / FrameSize.X) * line + skipFrames;
+            var indexes = Enumerable.Range(startIndex, count - skipFrames).ToArray();
 
             AddAnimation(name, view, indexes, frameDuration, repeat);
         }
