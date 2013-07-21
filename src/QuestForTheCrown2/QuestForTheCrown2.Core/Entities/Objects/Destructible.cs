@@ -24,13 +24,13 @@ namespace QuestForTheCrown2.Entities.Objects
             Health.Quantity = int.MaxValue;
         }
 
-        public override void Hit(Entity attacker, Levels.Level level, Vector2 direction)
+        public override void Hit(Entity attacker, GameTime gameTime, Levels.Level level, Vector2 direction)
         {
             if (_canDestroy(attacker))
             {
                 Health.ValueChanged -= Health_ValueChanged;
                 Health.Quantity = 0;
-                base.Hit(attacker, level, direction);
+                base.Hit(attacker, gameTime, level, direction);
             }
         }
     }

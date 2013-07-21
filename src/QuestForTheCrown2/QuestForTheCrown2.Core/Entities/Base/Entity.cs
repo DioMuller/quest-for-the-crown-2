@@ -584,7 +584,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// </summary>
         /// <param name="level">Current level</param>
         /// <param name="angle">Projectile angle</param>
-        public virtual void Hit(Entity attacker, Level level, Vector2 direction)
+        public virtual void Hit(Entity attacker, GameTime gameTime, Level level, Vector2 direction)
         {
             if (Health != null && !IsBlinking)
             {

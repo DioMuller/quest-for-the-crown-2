@@ -34,7 +34,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
                             .FirstOrDefault(e => e != Entity && (_canHit == null || _canHit(e)));
 
             if (ent != null)
-                ent.Hit(Entity, level, Entity.CurrentDirection);
+                ent.Hit(Entity, gameTime, level, Entity.CurrentDirection);
         }
 
         public int ExtraHitAreaSize { get; set; }

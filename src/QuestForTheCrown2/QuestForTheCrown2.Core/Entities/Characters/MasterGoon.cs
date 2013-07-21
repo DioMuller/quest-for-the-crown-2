@@ -53,12 +53,12 @@ namespace QuestForTheCrown2.Entities.Characters
             Arrows = new Container(20);
         }
 
-        public override void Hit(Entity attacker, Levels.Level level, Vector2 direction)
+        public override void Hit(Entity attacker, GameTime gameTime, Levels.Level level, Vector2 direction)
         {
             if (attacker is Arrow)
                 Health.Quantity -= 2;
 
-            base.Hit(attacker, level, direction);
+            base.Hit(attacker, gameTime, level, direction);
         }
     }
 }

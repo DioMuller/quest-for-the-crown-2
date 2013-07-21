@@ -62,7 +62,7 @@ namespace QuestForTheCrown2.Entities.Characters
                 height: col.Height)).FirstOrDefault(e => e != this);
 
             if (ent != null)
-                ent.Hit(this, level, CurrentDirection);
+                ent.Hit(this, gameTime, level, CurrentDirection);
 
             base.Update(gameTime, level);
         }

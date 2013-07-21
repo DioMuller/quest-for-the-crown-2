@@ -114,7 +114,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                     var direction = VectorHelper.AngleToV2(Angle, 5);
                     direction = new Vector2(-direction.Y, direction.X);
 
-                    ent.Hit(this, level, direction);
+                    ent.Hit(this, gameTime, level, direction);
                 }
             }
 

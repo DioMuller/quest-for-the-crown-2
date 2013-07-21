@@ -12,8 +12,7 @@ namespace QuestForTheCrown2.Entities.Weapons
     {
         public const int FlightSpeed = 32 * 8;
 
-        Vector2 _direction;
-        Entity _hitEntity;
+        public Entity HitEntity { get; set; }
         TimeSpan _maxHitTime = TimeSpan.FromSeconds(1);
         TimeSpan _entHitTime;
         TimeSpan _timeFromCreation;
@@ -24,7 +23,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             : base(@"sprites\Objects\FireBall.png", null)
         {
             MaxFlyTime = TimeSpan.FromSeconds(0.5);
-            _direction = direction;
+            CurrentDirection = direction;
             OverlapEntities = true;
             Angle = (float)Math.Atan2(-direction.X, direction.Y);
             Origin = new Vector2(Size.X / 2, Size.Y / 2);
@@ -42,7 +41,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 return;
             }
 
-            if (_hitEntity != null)
+            if (HitEntity != null)
             {
                 SoundManager.PlaySound("onfire");
                 if (gameTime.TotalGameTime > _entHitTime + _maxHitTime)
@@ -54,23 +53,27 @@ namespace QuestForTheCrown2.Entities.Weapons
             }
 
             var timeFactor = gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-            Position += _direction * (float)timeFactor * Speed;
+            Position += CurrentDirection * (float)timeFactor * Speed;
 
             foreach (var ent in level.CollidesWith(CollisionRect).Distinct())
             {
                 if (ent != this && ent != Parent && ent.Health != null)
                 {
                     _entHitTime = gameTime.TotalGameTime;
-                    _hitEntity = ent;
+                    HitEntity = ent;
 
                     var direction = VectorHelper.AngleToV2(Angle, 5);
                     direction = new Vector2(-direction.Y, direction.X);
 
-                    ent.Hit(this, level, direction);
-                    OverlapEntities = false;
-                    Position = ent.CenterPosition;
-                    Angle = 0;
-                    return;
+                    ent.Hit(this, gameTime, level, direction);
+                    if (HitEntity != null)
+                    {
+                        OverlapEntities = false;
+                        Position = ent.CenterPosition;
+                        Angle = 0;
+                        return;
+                    }
+                    else _timeFromCreation = TimeSpan.Zero;
                 }
             }
 

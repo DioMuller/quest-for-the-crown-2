@@ -99,7 +99,7 @@ namespace QuestForTheCrown2.Entities.Weapons
 
             if (level.Map.Collides(CollisionRect, false, true))
             {
-                Hit(null, level, _direction * -1);
+                Hit(null, gameTime, level, _direction * -1);
                 return;
             }
 
@@ -114,15 +114,15 @@ namespace QuestForTheCrown2.Entities.Weapons
                     {
                         level.RemoveEntity(this);
                         if (_hitParent)
-                            Parent.Hit(this, level, _direction);
+                            Parent.Hit(this, gameTime, level, _direction);
                         _hitParent = false;
                         return;
                     }
                 }
                 else
                 {
-                    ent.Hit(this, level, _direction);
-                    Hit(ent, level, _direction * -1);
+                    ent.Hit(this, gameTime, level, _direction);
+                    Hit(ent, gameTime, level, _direction * -1);
 
                     if (OnHit != null)
                         OnHit(this, new EntityEventArgs(ent, gameTime, level));
@@ -130,7 +130,7 @@ namespace QuestForTheCrown2.Entities.Weapons
             }
         }
 
-        public override void Hit(Entity attacker, Level level, Vector2 direction)
+        public override void Hit(Entity attacker, GameTime gameTime, Level level, Vector2 direction)
         {
             if (_flyingBack)
             {
@@ -149,7 +149,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                 _flyingBack = true;
             }
 
-            base.Hit(attacker, level, direction);
+            base.Hit(attacker, gameTime, level, direction);
         }
 
         public override void Unequiped(Level level) { }
