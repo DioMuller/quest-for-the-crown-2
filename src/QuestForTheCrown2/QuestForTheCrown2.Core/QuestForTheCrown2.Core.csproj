@@ -243,6 +243,9 @@
     <Content Include="Content\sprites\Characters\goon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\sprites\Characters\knight.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\sprites\Characters\mage.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
