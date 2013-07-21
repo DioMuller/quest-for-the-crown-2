@@ -91,6 +91,7 @@
     <Compile Include="Entities\Behaviors\ChainBehavior.cs" />
     <Compile Include="Entities\Characters\BoomerangSkeleton.cs" />
     <Compile Include="Entities\Characters\FlameDragon.cs" />
+    <Compile Include="Entities\Characters\Poltergeist.cs" />
     <Compile Include="Entities\Objects\Bush.cs" />
     <Compile Include="Entities\Objects\HealthContainer.cs" />
     <Compile Include="Entities\Objects\Destructible.cs" />

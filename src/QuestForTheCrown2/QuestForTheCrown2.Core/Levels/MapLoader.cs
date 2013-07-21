@@ -144,6 +144,7 @@ namespace QuestForTheCrown2.Levels.Mapping
                     { "Goon", () => new Goon() },
                     { "MasterGoon", () => new MasterGoon() },
                     { "BoomerangSkeleton", () => new BoomerangSkeleton() },
+                    { "Poltergeist", () => new Poltergeist() },
                 };
                 var itemFactory = new Dictionary<string, Func<Entity>>
                 {
