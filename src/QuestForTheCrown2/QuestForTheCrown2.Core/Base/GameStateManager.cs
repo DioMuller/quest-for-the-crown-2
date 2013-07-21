@@ -215,7 +215,7 @@ namespace QuestForTheCrown2.Base
 
             player.CurrentLevel = playerStatus.CurrentLevel;
             player.Containers = playerStatus.Containers;
-            player.Weapons = playerStatus.Weapons.Select(name =>
+            player.Weapons = playerStatus.Weapons.Distinct().Select(name =>
                 {
                     var weapon = CreateWeapon(weaponFactory, name);
                     weapon.Parent = player;

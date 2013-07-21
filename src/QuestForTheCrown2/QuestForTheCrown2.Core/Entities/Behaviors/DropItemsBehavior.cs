@@ -19,7 +19,7 @@ namespace QuestForTheCrown2.Entities.Behaviors
             { "Bow", () => new Arrow { PickupCount = 10 } }
         };
 
-        List<Func<GameTime, Level, Entity>> _additionalItems = new List<Func<GameTime,Level,Entity>>();
+        List<Func<GameTime, Level, Entity>> _additionalItems = new List<Func<GameTime, Level, Entity>>();
 
         public bool AutomaticAllowWeapons { get; set; }
 
@@ -51,9 +51,10 @@ namespace QuestForTheCrown2.Entities.Behaviors
 
                     if (currentWeapons.Contains(weaponName))
                     {
-                        if (Random.NextDouble() > 0.1)
-                            continue;
-                        dropEntity = CreateAmmo[weaponName]();
+                        if (CreateAmmo.ContainsKey(weaponName) && Random.NextDouble() > 0.1)
+                            dropEntity = CreateAmmo[weaponName]();
+
+                        continue;
                     }
                 }
 
