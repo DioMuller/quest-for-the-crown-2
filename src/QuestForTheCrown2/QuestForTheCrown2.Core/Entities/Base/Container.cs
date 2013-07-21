@@ -132,5 +132,13 @@ namespace QuestForTheCrown2.Entities.Base
         }
 
         public bool IsFull { get { return _maximum != null && _quantity >= _maximum; } }
+
+        public void Fill()
+        {
+            if (Maximum == null)
+                throw new InvalidOperationException("This container does not have a maximum set");
+
+            Quantity = Maximum.Value;
+        }
     }
 }

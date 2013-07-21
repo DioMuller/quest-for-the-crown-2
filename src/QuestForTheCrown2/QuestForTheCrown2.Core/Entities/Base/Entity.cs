@@ -95,6 +95,11 @@ namespace QuestForTheCrown2.Entities.Base
         public List<Weapon> Weapons { get; set; }
 
         /// <summary>
+        /// A list of everything this entity is holding.
+        /// </summary>
+        public List<Entity> Holding { get; set; }
+
+        /// <summary>
         /// Reference to the current entity's weapon.
         /// </summary>
         public Weapon CurrentWeapon
@@ -337,6 +342,17 @@ namespace QuestForTheCrown2.Entities.Base
 
             foreach (var weapon in weapons)
                 weapon.Parent = this;
+        }
+
+        public void Hold(params Entity[] entities)
+        {
+            if (Holding == null)
+                Holding = new List<Entity>();
+
+            Holding.AddRange(entities);
+
+            foreach (var ent in entities)
+                ent.Parent = this;
         }
 
         public void RemoveWeapon(Weapon weapon)

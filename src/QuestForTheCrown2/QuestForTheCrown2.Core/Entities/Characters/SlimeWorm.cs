@@ -2,6 +2,7 @@
 using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Behaviors;
+using QuestForTheCrown2.Entities.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,6 +98,13 @@ namespace QuestForTheCrown2.Entities.Characters
                 new SpiralAttackBehavior("Player", 32 * 8) { MaxDistance = 32 * 12 },
                 new WalkAroundBehavior { MaxStoppedTime = TimeSpan.Zero, MaxWalkingTime = TimeSpan.MaxValue, SpeedMultiplier = 1 }
             );
+
+            GetBehavior<DropItemsBehavior>().DropOnDeath((gameTime, level) =>
+            {
+                if(!level.GetEntities<SlimeWorm>().Any(e => e != this))
+                    return new HealthContainer();
+                return null;
+            });
         }
         #endregion Constructor
     }

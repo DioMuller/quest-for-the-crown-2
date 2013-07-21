@@ -6,12 +6,12 @@ using System.Text;
 
 namespace QuestForTheCrown2.Entities.Objects
 {
-    class Health : Entity
+    class HealthContainer : Entity
     {
         public int PickupCount { get; set; }
 
-        public Health()
-            : base("sprites/Objects/health.png", null)
+        public HealthContainer()
+            : base("gui/health_full.png", null)
         {
             OverlapEntities = true;
             PickupCount = 4;
@@ -23,9 +23,10 @@ namespace QuestForTheCrown2.Entities.Objects
             {
                 if (Parent == null)
                 {
-                    if (ent.Health != null && ent.Health.Quantity < ent.Health.Maximum)
+                    if (ent.Health != null)
                     {
-                        ent.Health.Quantity += PickupCount;
+                        ent.Health.Maximum += PickupCount;
+                        ent.Health.Fill();
                         level.RemoveEntity(this);
                     }
                     return;
