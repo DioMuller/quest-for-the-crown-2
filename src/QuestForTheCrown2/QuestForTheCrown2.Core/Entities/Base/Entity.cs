@@ -341,7 +341,19 @@ namespace QuestForTheCrown2.Entities.Base
             Weapons.AddRange(weapons);
 
             foreach (var weapon in weapons)
+            {
                 weapon.Parent = this;
+                if (Category == "Player")
+                {
+                    var weaponName = weapon.GetType().Name;
+                    var currentWeapons = GameStateManager.CurrentState.Player.Weapons;
+                    var allowedWeapons = GameStateManager.CurrentState.AllowWeapon;
+                    if (!currentWeapons.Contains(weaponName))
+                        currentWeapons.Add(weaponName);
+                    if (!allowedWeapons.Contains(weaponName))
+                        allowedWeapons.Add(weaponName);
+                }
+            }
         }
 
         public void Hold(params Entity[] entities)
@@ -362,6 +374,9 @@ namespace QuestForTheCrown2.Entities.Base
 
             Weapons.Remove(weapon);
             weapon.Parent = null;
+
+            if (Category == "Player")
+                GameStateManager.CurrentState.Player.Weapons.Remove(weapon.GetType().Name);
         }
 
         public virtual void Look(Vector2 direction, bool updateDirection)
