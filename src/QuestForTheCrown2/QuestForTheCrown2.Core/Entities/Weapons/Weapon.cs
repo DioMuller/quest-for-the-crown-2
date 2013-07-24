@@ -30,8 +30,13 @@ namespace QuestForTheCrown2.Entities.Weapons
             // If Weapon has no owner!
             if (Parent == null)
             {
+                var allowedWeapons = GameStateManager.CurrentState.AllowWeapon;
+                var currentWeapons = GameStateManager.CurrentState.Player.Weapons;
+
+                var weaponName = GetType().Name;
+
                 // Check if weapon is not allowed
-                if (!GameStateManager.CurrentState.AllowWeapon.Contains(GetType().Name))
+                if (!allowedWeapons.Contains(weaponName) || currentWeapons.Contains(weaponName))
                     IsInvisible = true;
                 else
                 {
@@ -39,7 +44,7 @@ namespace QuestForTheCrown2.Entities.Weapons
                     Parent = level.CollidesWith(CollisionRect).FirstOrDefault(e => e.Category == "Player");
                     if (Parent != null)
                     {
-                        GameStateManager.CurrentState.Player.Weapons.Add(GetType().Name);
+                        currentWeapons.Add(weaponName);
 
                         Parent.AddWeapon(this);
                         level.RemoveEntity(this);
