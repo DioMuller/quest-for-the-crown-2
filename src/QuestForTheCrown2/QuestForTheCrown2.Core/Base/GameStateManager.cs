@@ -212,7 +212,7 @@ namespace QuestForTheCrown2.Base
                             };
 
             var playerStatus = GameStateManager.CurrentState.Player;
-
+            player.Position = playerStatus.Position;
             player.CurrentLevel = playerStatus.CurrentLevel;
             player.Containers = playerStatus.Containers;
             player.Weapons = playerStatus.Weapons.Distinct().Select(name =>

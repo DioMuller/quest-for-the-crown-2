@@ -187,7 +187,16 @@ namespace QuestForTheCrown2
                 case GameState.LoadingGame:
                     if (_overworld != null && _overworld.Parent != null)
                     {
-                        GameStateManager.LoadPlayerState(_overworld.Players.First());
+                        var loadingPlayer = _overworld.Players.First();
+                        var playerState = GameStateManager.CurrentState.Player;
+                        var oldLevel = loadingPlayer.CurrentLevel;
+
+                        GameStateManager.LoadPlayerState(loadingPlayer);
+                        if (oldLevel != playerState.CurrentLevel)
+                        {
+                            _overworld.GetLevel(oldLevel).RemoveEntity(loadingPlayer);
+                            _overworld.GetLevel(loadingPlayer.CurrentLevel).AddEntity(loadingPlayer);
+                        }
                         ChangeState(GameState.Playing);
                     }
                     else
@@ -278,6 +287,7 @@ namespace QuestForTheCrown2
             _currentState = state;
             if (state == GameState.Saving)
             {
+                GameStateManager.CurrentState.Player = GameStateManager.GetPlayerState(_overworld.Players.First());
                 _savescreen = new SaveScreen(this);
             }
             if (state == GameState.LoadGame)
