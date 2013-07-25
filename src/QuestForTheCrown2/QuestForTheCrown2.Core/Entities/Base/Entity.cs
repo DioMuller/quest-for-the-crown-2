@@ -404,6 +404,7 @@ namespace QuestForTheCrown2.Entities.Base
 
             if (updateDirection)
                 CurrentDirection = direction;
+            else CurrentView = _nextView;
         }
 
         public virtual void ChangeWeapon(Weapon nextWeapon, Level level)
