@@ -92,6 +92,7 @@
     <Compile Include="Entities\Characters\Bat.cs" />
     <Compile Include="Entities\Behaviors\ChainBehavior.cs" />
     <Compile Include="Entities\Characters\BoomerangSkeleton.cs" />
+    <Compile Include="Entities\Characters\Player2.cs" />
     <Compile Include="Entities\Characters\FlameDragon.cs" />
     <Compile Include="Entities\Characters\Poltergeist.cs" />
     <Compile Include="Entities\Objects\Bush.cs" />

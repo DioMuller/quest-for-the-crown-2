@@ -70,7 +70,7 @@ namespace QuestForTheCrown2
 
             OptionsManager.LoadOptions();
 
-            #if OUYA
+#if OUYA
             _graphics.IsFullScreen = true;
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
@@ -79,11 +79,11 @@ namespace QuestForTheCrown2
             InactiveSleepTime = TimeSpan.FromSeconds(1);
  
             _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft;
-            #else
+#else
             _graphics.IsFullScreen = OptionsManager.CurrentOptions.Fullscreen;
             _graphics.PreferredBackBufferHeight = OptionsManager.CurrentOptions.ResolutionHeight;
             _graphics.PreferredBackBufferWidth = OptionsManager.CurrentOptions.ResolutionWidth;
-            #endif
+#endif
 
             _currentState = GameState.MainMenu;
 
@@ -165,12 +165,17 @@ namespace QuestForTheCrown2
 
                     var player = _overworld.Players.First();
                     //GameStateManager.DeleteAllSaves();
+                    LevelCollection.StoredWaypoints = new Dictionary<Entity, List<Waypoint>>
+                    {
+                        { player, new List<Waypoint>() }
+                    };
+
                     GameStateManager.SelectSaveData(new Base.GameState
                     {
                         AllowWeapon = new List<string> { "Sword" },
                         DungeonsComplete = new List<string>(),
                         Player = GameStateManager.GetPlayerState(player),
-                        StoredWaypoints = _overworld.StoredWaypoints = new List<Waypoint>()
+                        StoredWaypoints = LevelCollection.StoredWaypoints[player]
                     });
                     //player.AddWeapon(new Sword(), new Bow(), new Boomerang(), new FireWand());
                     //GameStateManager.SaveData();
@@ -178,7 +183,7 @@ namespace QuestForTheCrown2
                     ChangeState(GameState.Playing);
                     break;
                 case GameState.Playing:
-                    if( _overworld != null ) 
+                    if (_overworld != null)
                     {
                         _overworld.Update(gameTime);
                     }
@@ -199,7 +204,7 @@ namespace QuestForTheCrown2
                             _overworld.GetLevel(oldLevel).RemoveEntity(loadingPlayer);
                             _overworld.GetLevel(loadingPlayer.CurrentLevel).AddEntity(loadingPlayer);
                         }
-                        _overworld.StoredWaypoints = GameStateManager.CurrentState.StoredWaypoints;
+                        LevelCollection.StoredWaypoints = new Dictionary<Entity, List<Waypoint>> { { loadingPlayer, GameStateManager.CurrentState.StoredWaypoints } };
                         ChangeState(GameState.Playing);
                     }
                     else
@@ -247,7 +252,7 @@ namespace QuestForTheCrown2
                     _mainMenu.Draw(gameTime, _spriteBatch);
                     break;
                 case GameState.Playing:
-                    if( _overworld != null )
+                    if (_overworld != null)
                     {
                         _overworld.Draw(gameTime, _spriteBatch, Window.ClientBounds);
                     }

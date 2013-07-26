@@ -37,7 +37,7 @@ namespace QuestForTheCrown2.Levels
         /// <summary>
         /// Stored waypoints: Where the player was when he quit this collection.
         /// </summary>
-        public List<Waypoint> StoredWaypoints { get; set; }
+        public static Dictionary<Entity, List<Waypoint>> StoredWaypoints { get; set; }
 
         /// <summary>
         /// Game GUI.
@@ -126,7 +126,7 @@ namespace QuestForTheCrown2.Levels
         /// <param name="dungeon">Dungeon ID</param>
         internal void GoToDungeon(Entity entity, int map)
         {
-            StoredWaypoints.Add(new Waypoint { LevelId = GetLevelByEntity(entity).Id, Position = entity.Position } );
+            StoredWaypoints[entity].Add(new Waypoint { LevelId = GetLevelByEntity(entity).Id, Position = entity.Position } );
 
             GetLevelByEntity(entity).RemoveEntity(entity);
 
@@ -147,7 +147,7 @@ namespace QuestForTheCrown2.Levels
         /// <param name="entity">The entity that will return to the waypoint</param>
         internal void BackToWaypoint(Entity entity)
         {
-            Waypoint wp = StoredWaypoints.Last();
+            Waypoint wp = StoredWaypoints[entity].Last();
 
             GetLevelByEntity(entity).RemoveEntity(entity);
 
@@ -157,7 +157,7 @@ namespace QuestForTheCrown2.Levels
 
             entity.Position = new Vector2(wp.Position.X, wp.Position.Y + 5);
 
-            StoredWaypoints.Remove(wp);
+            StoredWaypoints[entity].Remove(wp);
         }
 
         /// <summary>
@@ -351,5 +351,10 @@ namespace QuestForTheCrown2.Levels
         #endregion Camera Methods
 
         #endregion Methods
+
+        internal static void CloneWaypoints(Entity p1, Entity p2)
+        {
+            StoredWaypoints.Add(p2, StoredWaypoints[p1].ToList());
+        }
     }
 }
