@@ -43,6 +43,7 @@ namespace QuestForTheCrown2.Entities.Characters
             Look(new Vector2(0, 1), true);
 
             AddBehavior(
+                new AttackTheAttackerBehavior(),
                 new HitOnTouchBehavior(e => e.Category == "Player"),
                 new FollowBehavior("Player", 5) { MaxDistance = 32 * 3 },
                 new BowAttackBehavior("Player", shootDistance: 32 * 30, maxDistance: 32 * 32),

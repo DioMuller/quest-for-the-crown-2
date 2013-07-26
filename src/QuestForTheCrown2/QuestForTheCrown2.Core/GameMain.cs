@@ -17,6 +17,7 @@ using QuestForTheCrown2.Entities.Behaviors;
 using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Weapons;
 using QuestForTheCrown2.GUI.Screens;
+using QuestForTheCrown2.Levels;
 
 namespace QuestForTheCrown2
 {
@@ -168,7 +169,8 @@ namespace QuestForTheCrown2
                     {
                         AllowWeapon = new List<string> { "Sword" },
                         DungeonsComplete = new List<string>(),
-                        Player = GameStateManager.GetPlayerState(player)
+                        Player = GameStateManager.GetPlayerState(player),
+                        StoredWaypoints = _overworld.StoredWaypoints = new List<Waypoint>()
                     });
                     //player.AddWeapon(new Sword(), new Bow(), new Boomerang(), new FireWand());
                     //GameStateManager.SaveData();
@@ -197,6 +199,7 @@ namespace QuestForTheCrown2
                             _overworld.GetLevel(oldLevel).RemoveEntity(loadingPlayer);
                             _overworld.GetLevel(loadingPlayer.CurrentLevel).AddEntity(loadingPlayer);
                         }
+                        _overworld.StoredWaypoints = GameStateManager.CurrentState.StoredWaypoints;
                         ChangeState(GameState.Playing);
                     }
                     else

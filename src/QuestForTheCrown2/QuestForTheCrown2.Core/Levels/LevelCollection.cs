@@ -8,16 +8,18 @@ using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Characters;
 using QuestForTheCrown2.GUI.Components;
 using QuestForTheCrown2.GUI.GameGUI;
+using QuestForTheCrown2.Base;
 
 namespace QuestForTheCrown2.Levels
 {
     /// <summary>
     /// Class to represent a waypoint (where the player stoped).
     /// </summary>
-    internal class Waypoint
+    [Serializable]
+    public class Waypoint
     {
-        public Entity Entity { get; set; }
-        public Level Level { get; set; }
+        //public Entity Entity { get; set; }
+        public int LevelId { get; set; }
         public Vector2 Position { get; set; }
     }
 
@@ -35,7 +37,7 @@ namespace QuestForTheCrown2.Levels
         /// <summary>
         /// Stored waypoints: Where the player was when he quit this collection.
         /// </summary>
-        List<Waypoint> _storedWaypoints;
+        public List<Waypoint> StoredWaypoints { get; set; }
 
         /// <summary>
         /// Game GUI.
@@ -83,7 +85,6 @@ namespace QuestForTheCrown2.Levels
         public LevelCollection()
         {
             _levels = new List<Level>();
-            _storedWaypoints = new List<Waypoint>();
 
             _gui = new GameGUI();
             _card = new TitleCard();
@@ -125,7 +126,7 @@ namespace QuestForTheCrown2.Levels
         /// <param name="dungeon">Dungeon ID</param>
         internal void GoToDungeon(Entity entity, int map)
         {
-            _storedWaypoints.Add(new Waypoint { Entity = entity, Level = GetLevelByEntity(entity), Position = entity.Position } );
+            StoredWaypoints.Add(new Waypoint { LevelId = GetLevelByEntity(entity).Id, Position = entity.Position } );
 
             GetLevelByEntity(entity).RemoveEntity(entity);
 
@@ -146,17 +147,17 @@ namespace QuestForTheCrown2.Levels
         /// <param name="entity">The entity that will return to the waypoint</param>
         internal void BackToWaypoint(Entity entity)
         {
-            Waypoint wp = _storedWaypoints.Where(w => w.Entity == entity).Last();
+            Waypoint wp = StoredWaypoints.Last();
 
             GetLevelByEntity(entity).RemoveEntity(entity);
 
-            entity.CurrentLevel = wp.Level.Id;
+            entity.CurrentLevel = wp.LevelId;
 
-            wp.Level.AddEntity(entity);
+            GetLevel(wp.LevelId).AddEntity(entity);
 
             entity.Position = new Vector2(wp.Position.X, wp.Position.Y + 5);
 
-            _storedWaypoints.Remove(wp);
+            StoredWaypoints.Remove(wp);
         }
 
         /// <summary>

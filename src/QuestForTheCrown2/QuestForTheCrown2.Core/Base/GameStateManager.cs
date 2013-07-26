@@ -2,6 +2,7 @@
 using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Entities.Characters;
 using QuestForTheCrown2.Entities.Weapons;
+using QuestForTheCrown2.Levels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -78,6 +79,11 @@ namespace QuestForTheCrown2.Base
         /// Weapons allowed.
         /// </summary>
         public List<string> AllowWeapon { get; set; }
+
+        /// <summary>
+        /// Stored waypoints: Where the player was when he quit this collection.
+        /// </summary>
+        public List<Waypoint> StoredWaypoints { get; set; }
 
         /// <summary>
         /// Creates Game State.

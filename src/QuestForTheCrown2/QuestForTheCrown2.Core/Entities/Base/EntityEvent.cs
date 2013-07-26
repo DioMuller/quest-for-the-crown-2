@@ -7,7 +7,7 @@ using System.Text;
 
 namespace QuestForTheCrown2.Entities.Base
 {
-    class EntityEventArgs : GameEventArgs
+    public class EntityEventArgs : GameEventArgs
     {
         public EntityEventArgs(Entity entity, GameTime gameTime, Level level)
             : base(gameTime, level)
@@ -19,5 +19,5 @@ namespace QuestForTheCrown2.Entities.Base
         
     }
 
-    delegate void EntityEventHandler(object sender, EntityEventArgs e);
+    public delegate void EntityEventHandler(object sender, EntityEventArgs e);
 }
