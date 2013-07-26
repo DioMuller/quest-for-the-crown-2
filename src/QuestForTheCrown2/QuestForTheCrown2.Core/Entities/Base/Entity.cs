@@ -268,6 +268,7 @@ namespace QuestForTheCrown2.Entities.Base
 
         #region Events
         public event EventHandler AnimationEnded;
+        public event HitEventHandler OnHit;
         #endregion
 
         #region Constructors
@@ -316,6 +317,7 @@ namespace QuestForTheCrown2.Entities.Base
                     Behaviors[group].Add(behavior);
                 else
                     Behaviors[group] = new List<EntityUpdateBehavior> { behavior };
+                behavior.Attached();
             }
         }
 
@@ -615,6 +617,9 @@ namespace QuestForTheCrown2.Entities.Base
                 if (level.CollidesWith(CollisionRect).Any(e => e != this) || level.Map.Collides(CollisionRect))
                     Position = oldPos;
             }
+
+            if (OnHit != null)
+                OnHit(this, new HitEventArgs(this, attacker, gameTime, level));
         }
         #endregion
 

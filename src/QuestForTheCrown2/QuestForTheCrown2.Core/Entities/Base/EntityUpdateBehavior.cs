@@ -26,6 +26,13 @@ namespace QuestForTheCrown2.Entities.Base
         }
 
         /// <summary>
+        /// This methos is called when the behavior is attached to an entity.
+        /// </summary>
+        public virtual void Attached()
+        {
+        }
+
+        /// <summary>
         /// The group in which this update operates.
         /// Only one update per group is executed (except for an empty group).
         /// </summary>
