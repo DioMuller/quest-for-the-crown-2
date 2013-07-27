@@ -162,7 +162,7 @@ namespace QuestForTheCrown2.GUI.Screens
 
             foreach( string st in _credits )
             {
-                _list.AddComponent(new Button(st.Trim(), null));
+                _list.AddComponent(new Label(st.Trim()));
             }
         }
         #endregion Constructor

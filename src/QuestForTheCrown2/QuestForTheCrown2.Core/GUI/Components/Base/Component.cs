@@ -28,6 +28,12 @@ namespace QuestForTheCrown2.GUI.Components
         /// Is the component currently selected?
         /// </summary>
         public bool Selected { get; set; }
+        
+        /// <summary>
+        /// Will component highlight when selected? 
+        /// </summary>
+        public bool Selectable { get; set; }
+        
         /// <summary>
         /// Component Position.
         /// </summary>
@@ -57,6 +63,7 @@ namespace QuestForTheCrown2.GUI.Components
         {
             SelectedTexture = GameContent.LoadContent<Texture2D>("images/menuselected.png");
             Name = name;
+            Selectable = true;
         }
         #endregion Constructor
         
@@ -67,7 +74,7 @@ namespace QuestForTheCrown2.GUI.Components
         /// <param name="spriteBatch"></param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if( Selected ) spriteBatch.Draw(SelectedTexture, Position, Color.White);
+            if( Selected && Selectable ) spriteBatch.Draw(SelectedTexture, Position, Color.White);
         }
         #endregion Methods
     }

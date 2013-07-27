@@ -122,7 +122,9 @@
     <Compile Include="GUI\Components\Base\Component.cs" />
     <Compile Include="GUI\Components\Button.cs" />
     <Compile Include="GUI\Components\ComponentList.cs" />
+    <Compile Include="GUI\Components\Label.cs" />
     <Compile Include="GUI\Components\SaveDataButton.cs" />
+    <Compile Include="GUI\Components\ScrollingList.cs" />
     <Compile Include="GUI\GameGUI\GameGUI.cs" />
     <Compile Include="GUI\Components\SelectionBox.cs" />
     <Compile Include="GUI\GameGUI\TitleCard.cs" />
