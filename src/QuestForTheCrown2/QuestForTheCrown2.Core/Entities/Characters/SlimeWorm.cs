@@ -102,7 +102,7 @@ namespace QuestForTheCrown2.Entities.Characters
             GetBehavior<DropItemsBehavior>().DropOnDeath((gameTime, level) =>
             {
                 if(!level.GetEntities<SlimeWorm>().Any(e => e != this))
-                    return new HealthContainer();
+                    return new HealthContainer("SlimeWorm");
                 return null;
             });
         }

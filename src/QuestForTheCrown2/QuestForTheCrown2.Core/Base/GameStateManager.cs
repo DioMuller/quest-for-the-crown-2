@@ -85,6 +85,8 @@ namespace QuestForTheCrown2.Base
         /// </summary>
         public List<Waypoint> StoredWaypoints { get; set; }
 
+        public List<string> ContainersUsed { get; set; }
+
         /// <summary>
         /// Creates Game State.
         /// </summary>
@@ -93,6 +95,7 @@ namespace QuestForTheCrown2.Base
             CreationDate = DateTime.Now;
             DungeonsComplete = new List<string>();
             AllowWeapon = new List<string>();
+            ContainersUsed = new List<string>();
         }
     }
 

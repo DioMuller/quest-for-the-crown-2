@@ -1,4 +1,5 @@
-﻿using QuestForTheCrown2.Entities.Base;
+﻿using QuestForTheCrown2.Base;
+using QuestForTheCrown2.Entities.Base;
 using QuestForTheCrown2.Levels;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,24 @@ namespace QuestForTheCrown2.Entities.Objects
     class HealthContainer : Entity
     {
         public int PickupCount { get; set; }
+        string _id;
 
-        public HealthContainer()
+        public HealthContainer(string id)
             : base("gui/health_full.png", null)
         {
+            _id = id;
             OverlapEntities = true;
             PickupCount = 4;
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
+            if (GameStateManager.CurrentState.ContainersUsed.Contains(_id))
+            {
+                level.RemoveEntity(this);
+                return;
+            }
+
             if(level.CollidesWith(CollisionRect).Where(e => e.Category == "Player" && !e.IsDead).Any())
             {
                 if (Parent == null)
@@ -30,6 +39,7 @@ namespace QuestForTheCrown2.Entities.Objects
                         p.Health.Fill();
                     }
                     level.RemoveEntity(this);
+                    GameStateManager.CurrentState.ContainersUsed.Add(_id);
                     return;
                 }
             }

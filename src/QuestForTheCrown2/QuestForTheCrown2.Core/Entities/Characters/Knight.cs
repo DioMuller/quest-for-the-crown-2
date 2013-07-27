@@ -49,7 +49,7 @@ namespace QuestForTheCrown2.Entities.Characters
             );
             AddWeapon(new Sword());
 
-            Hold(new HealthContainer());
+            Hold(new HealthContainer("Knight"));
         }
 
         public override void Hit(Entity attacker, GameTime gameTime, Levels.Level level, Vector2 direction)

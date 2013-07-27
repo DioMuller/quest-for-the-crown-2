@@ -10,6 +10,7 @@ using QuestForTheCrown2.Levels.Mapping;
 using QuestForTheCrown2.Entities.Behaviors;
 using QuestForTheCrown2.Base;
 using QuestForTheCrown2.Entities.Weapons;
+using QuestForTheCrown2.Entities.Objects;
 
 namespace QuestForTheCrown2.Entities.Characters
 {
@@ -53,6 +54,8 @@ namespace QuestForTheCrown2.Entities.Characters
                 new WalkAroundBehavior { MaxStoppedTime = TimeSpan.Zero, SpeedMultiplier = 1 }
             );
             AddWeapon(new FireWand { MaxFireBallFlyTime = TimeSpan.FromSeconds(2) });
+
+            Hold(new HealthContainer("WaterDragon"));
         }
 
         void Magic_ValueChanged(object sender, EventArgs e)
