@@ -244,7 +244,8 @@ namespace QuestForTheCrown2
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin();
+            if (_currentState != GameState.Playing)
+                _spriteBatch.Begin();
 
             switch (_currentState)
             {
@@ -254,7 +255,7 @@ namespace QuestForTheCrown2
                 case GameState.Playing:
                     if (_overworld != null)
                     {
-                        _overworld.Draw(gameTime, _spriteBatch, Window.ClientBounds);
+                        _overworld.Draw(GraphicsDevice, gameTime, _spriteBatch, Window.ClientBounds);
                     }
                     break;
                 case GameState.LoadGame:
@@ -281,7 +282,8 @@ namespace QuestForTheCrown2
                     break;
             }
 
-            _spriteBatch.End();
+            if (_currentState != GameState.Playing)
+                _spriteBatch.End();
 
             base.Draw(gameTime);
         }

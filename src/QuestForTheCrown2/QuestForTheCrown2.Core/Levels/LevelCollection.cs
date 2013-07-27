@@ -107,7 +107,7 @@ namespace QuestForTheCrown2.Levels
 
             int neighbor = level.GetNeighbor(direction);
 
-            if( neighbor == -1 )
+            if (neighbor == -1)
             {
                 BackToWaypoint(entity);
             }
@@ -126,7 +126,7 @@ namespace QuestForTheCrown2.Levels
         /// <param name="dungeon">Dungeon ID</param>
         internal void GoToDungeon(Entity entity, int map)
         {
-            StoredWaypoints[entity].Add(new Waypoint { LevelId = GetLevelByEntity(entity).Id, Position = entity.Position } );
+            StoredWaypoints[entity].Add(new Waypoint { LevelId = GetLevelByEntity(entity).Id, Position = entity.Position });
 
             GetLevelByEntity(entity).RemoveEntity(entity);
 
@@ -167,7 +167,7 @@ namespace QuestForTheCrown2.Levels
         /// <returns>The level.</returns>
         internal Level GetLevel(int id)
         {
-            return _levels.Where( l => l.Id == id).First();
+            return _levels.Where(l => l.Id == id).First();
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Update(GameTime gameTime)
         {
-            if( CurrentLevels.Count() == 0 ) Parent.ChangeState(GameState.GameOver);
+            if (CurrentLevels.Count() == 0) Parent.ChangeState(GameState.GameOver);
 
             foreach (Level lv in CurrentLevels)
             {
@@ -199,31 +199,74 @@ namespace QuestForTheCrown2.Levels
         /// Draws current active levels and their entities.
         /// </summary>
         /// <param name="gameTime">Game time.</param>
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds)
+        public void Draw(GraphicsDevice graphicsDevice, GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds)
         {
-            foreach (Level lv in CurrentLevels)
+            Vector2? cameraPos = null;
+            var split = CurrentLevels.Count() > 1;
+            if (!split)
             {
-                var player = lv.Players.FirstOrDefault();
-                               
-                if (player.TransitioningToLevel != 0)
+                var level = CurrentLevels.First();
+                if (level.Players.Count() > 1)
                 {
-                    SlideScreen(gameTime, spriteBatch, clientBounds, lv, player);
-                }
-                else
-                {
-                    //TODO: Calculate camera for split screen?
-                    Vector2 camera = GetCameraPosition(player, lv.Map.PixelSize, clientBounds);
-                    lv.Draw(gameTime, spriteBatch, camera);
+                    var p1Pos = level.Players.Last().CenterPosition;
+                    var p2Pos = level.Players.First().CenterPosition;
+                    var dist = p1Pos - p2Pos;
+                    if (dist.X > clientBounds.Width || dist.Y > clientBounds.Height)
+                        split = true;
+                    else cameraPos = (p2Pos + p1Pos) / 2;
                 }
             }
 
-            #region GUI Drawing
-            int guiSize = 100;
-            Rectangle GUIRect = new Rectangle(clientBounds.X, clientBounds.Y, clientBounds.Width, guiSize);
-            _gui.Draw(spriteBatch, GUIRect, Players);
-            #endregion GUI Drawing
+            if (split)
+            {
+                var oldViewport = graphicsDevice.Viewport;
+                Rectangle? pBounds = null;
+                foreach (var pInfo in CurrentLevels.SelectMany(l => l.Players.Select(p => new { Player = p, Level = l })))
+                {
+                    if (pBounds == null)
+                        pBounds = new Rectangle(0, 0, clientBounds.Width / 2, clientBounds.Height);
+                    else
+                        pBounds = new Rectangle(clientBounds.Width / 2, 0, clientBounds.Width / 2, clientBounds.Height);
 
-            _card.Draw(gameTime, spriteBatch, clientBounds); //Title Card
+                    graphicsDevice.Viewport = new Viewport(pBounds.Value);
+
+                    var transformMatrix = Matrix.CreateScale(new Vector3(1, 1, 0));
+                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, transformMatrix);
+
+                    var lv = pInfo.Level;
+                    Vector2 camera = GetCameraPosition(pInfo.Player.CenterPosition, lv.Map.PixelSize, pBounds.Value);
+                    lv.Draw(gameTime, spriteBatch, camera);
+
+                    #region GUI Drawing
+                    int guiSize = 100;
+                    Rectangle GUIRect = new Rectangle(pBounds.Value.X, pBounds.Value.Y, pBounds.Value.Width, guiSize);
+                    _gui.Draw(spriteBatch, GUIRect, new[] { pInfo.Player });
+                    #endregion GUI Drawing
+
+                    _card.Draw(gameTime, spriteBatch, pBounds.Value); //Title Card
+
+                    spriteBatch.End();
+                }
+
+                graphicsDevice.Viewport = oldViewport;
+            }
+            else
+            {
+                spriteBatch.Begin();
+                var lv = CurrentLevels.First();
+                Vector2 camera = GetCameraPosition(cameraPos ?? lv.Players.First().CenterPosition, lv.Map.PixelSize, clientBounds);
+                lv.Draw(gameTime, spriteBatch, camera);
+
+                #region GUI Drawing
+                int guiSize = 100;
+                Rectangle GUIRect = new Rectangle(clientBounds.X, clientBounds.Y, clientBounds.Width, guiSize);
+                _gui.Draw(spriteBatch, GUIRect, Players);
+                #endregion GUI Drawing
+
+                _card.Draw(gameTime, spriteBatch, clientBounds); //Title Card
+
+                spriteBatch.End();
+            }
         }
         #endregion Public Methods
 
@@ -251,11 +294,11 @@ namespace QuestForTheCrown2.Levels
         /// <param name="mapSize">Complete map size.</param>
         /// <param name="screenSize">Screen total size.</param>
         /// <returns></returns>
-        static Vector2 GetCameraPosition(Entity entity, Point mapSize, Rectangle screenSize)
+        static Vector2 GetCameraPosition(Vector2 basePosition, Point mapSize, Rectangle screenSize)
         {
-            var camera = entity.Position;
-            var newX = entity.Position.X;
-            var newY = entity.Position.Y;
+            var camera = basePosition;
+            var newX = basePosition.X;
+            var newY = basePosition.Y;
 
             if (newX < screenSize.Width / 2)
                 newX = screenSize.Width / 2;
@@ -284,8 +327,8 @@ namespace QuestForTheCrown2.Levels
         private void SlideScreen(GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds, Level lv, Entity player)
         {
             var newLevel = GetLevel(player.TransitioningToLevel);
-            Vector2 camera = GetCameraPosition(player, lv.Map.PixelSize, clientBounds);
-            Vector2 camera2 = GetCameraPosition(player, newLevel.Map.PixelSize, clientBounds);
+            Vector2 camera = GetCameraPosition(player.CenterPosition, lv.Map.PixelSize, clientBounds);
+            Vector2 camera2 = GetCameraPosition(player.CenterPosition, newLevel.Map.PixelSize, clientBounds);
 
             var cameraXTranslation = clientBounds.Width * player.LevelTransitionPercent;
             var cameraYTranslation = clientBounds.Height * player.LevelTransitionPercent;

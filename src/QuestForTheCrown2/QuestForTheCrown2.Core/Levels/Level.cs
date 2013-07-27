@@ -260,7 +260,7 @@ namespace QuestForTheCrown2.Levels
             {
                 if (_entitiesByCategory.ContainsKey(cat))
                 {
-                    foreach (var ent in _entitiesByCategory[cat])
+                    foreach (var ent in _entitiesByCategory[cat].ToList())
                         yield return ent;
                 }
             }
