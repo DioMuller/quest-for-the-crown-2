@@ -208,10 +208,12 @@ namespace QuestForTheCrown2.Levels
                 var level = CurrentLevels.First();
                 if (level.Players.Count() > 1)
                 {
-                    var p1Pos = level.Players.Last().CenterPosition;
-                    var p2Pos = level.Players.First().CenterPosition;
+                    var p1 = level.Players.First();
+                    var p2 = level.Players.Last();
+                    var p1Pos = p1.CenterPosition;
+                    var p2Pos = p2.CenterPosition;
                     var dist = p1Pos - p2Pos;
-                    if (dist.X > clientBounds.Width || dist.Y > clientBounds.Height)
+                    if (dist.X > clientBounds.Width || dist.Y > clientBounds.Height || p1.TransitioningToLevel != 0 || p2.TransitioningToLevel != 0)
                         split = true;
                     else cameraPos = (p2Pos + p1Pos) / 2;
                 }
@@ -234,8 +236,14 @@ namespace QuestForTheCrown2.Levels
                     spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, transformMatrix);
 
                     var lv = pInfo.Level;
-                    Vector2 camera = GetCameraPosition(pInfo.Player.CenterPosition, lv.Map.PixelSize, pBounds.Value);
-                    lv.Draw(gameTime, spriteBatch, camera);
+
+                    if (pInfo.Player.TransitioningToLevel != 0)
+                        SlideScreen(gameTime, spriteBatch, pBounds.Value, lv, pInfo.Player);
+                    else
+                    {
+                        Vector2 camera = GetCameraPosition(pInfo.Player.CenterPosition, lv.Map.PixelSize, pBounds.Value);
+                        lv.Draw(gameTime, spriteBatch, camera);
+                    }
 
                     #region GUI Drawing
                     int guiSize = 100;
@@ -254,8 +262,17 @@ namespace QuestForTheCrown2.Levels
             {
                 spriteBatch.Begin();
                 var lv = CurrentLevels.First();
-                Vector2 camera = GetCameraPosition(cameraPos ?? lv.Players.First().CenterPosition, lv.Map.PixelSize, clientBounds);
-                lv.Draw(gameTime, spriteBatch, camera);
+                var player = lv.Players.First();
+
+                if (player.TransitioningToLevel == 0)
+                {
+                    Vector2 camera = GetCameraPosition(cameraPos ?? lv.Players.First().CenterPosition, lv.Map.PixelSize, clientBounds);
+                    lv.Draw(gameTime, spriteBatch, camera);
+                }
+                else
+                {
+                    SlideScreen(gameTime, spriteBatch, clientBounds, lv, player);
+                }
 
                 #region GUI Drawing
                 int guiSize = 100;
