@@ -69,7 +69,7 @@ namespace QuestForTheCrown2.Base
         /// Current player state.
         /// </summary>
         public PlayerState Player { get; set; }
-        
+
         /// <summary>
         /// Completed dungeons. 
         /// </summary>
@@ -104,6 +104,16 @@ namespace QuestForTheCrown2.Base
         /// </summary>
         private const string SaveFile = "SavedGames.xml";
         #endregion Constants
+
+        #region Static
+        public static Dictionary<string, Func<Weapon>> WeaponFactory = new Dictionary<string, Func<Weapon>>
+        {
+            { "Sword", () => new Sword() },
+            { "Bow", () => new Bow() },
+            { "Boomerang", () => new Boomerang() },
+            { "FireWand", () => new FireWand() },
+        };
+        #endregion
 
         #region Constructors
         /// <summary>
@@ -147,9 +157,9 @@ namespace QuestForTheCrown2.Base
         public static void SaveData(int slot)
         {
             List<GameState> allStates = LoadData();
-            
-            if( slot == -1 ) allStates.Insert(0, CurrentState);
-            else if( allStates.Count > slot )
+
+            if (slot == -1) allStates.Insert(0, CurrentState);
+            else if (allStates.Count > slot)
             {
                 allStates.Insert(slot, CurrentState);
             }
@@ -160,7 +170,7 @@ namespace QuestForTheCrown2.Base
         public static void SaveDataOverwriting(GameState state)
         {
             List<GameState> allStates = LoadData();
-            allStates.Remove( allStates.Where((s) => s.LastPlayDate == state.LastPlayDate).First());
+            allStates.Remove(allStates.Where((s) => s.LastPlayDate == state.LastPlayDate).First());
             allStates.Add(CurrentState);
 
             allStates.Save(SaveFile);
@@ -198,8 +208,8 @@ namespace QuestForTheCrown2.Base
                         {
                             CurrentLevel = player.CurrentLevel,
                             Position = player.Position,
-                            Containers = player.Containers,
-                            Weapons = (player.Weapons?? Enumerable.Empty<Weapon>()).Select(w => w.GetType().Name).ToList()
+                            Containers = player.Containers.Select(c => c.Key == "Health" ? (new KeyValuePair<string, Container>(c.Key, new Container(LevelCollection.CurrentPlayers.Count() > 1 ? c.Value.Quantity * 2 : c.Value.Quantity, c.Value.Maximum))) : c).ToDictionary(c => c.Key, c => c.Value),
+                            Weapons = (player.Weapons ?? Enumerable.Empty<Weapon>()).Select(w => w.GetType().Name).ToList()
                         };
         }
 
@@ -209,21 +219,13 @@ namespace QuestForTheCrown2.Base
         /// <param name="player">Player to be loaded.</param>
         public static void LoadPlayerState(Entity player)
         {
-            var weaponFactory = new Dictionary<string, Func<Weapon>>
-                            {
-                                { "Sword", () => new Sword() },
-                                { "Bow", () => new Bow() },
-                                { "Boomerang", () => new Boomerang() },
-                                { "FireWand", () => new FireWand() },
-                            };
-
             var playerStatus = GameStateManager.CurrentState.Player;
             player.Position = playerStatus.Position;
             player.CurrentLevel = playerStatus.CurrentLevel;
             player.Containers = playerStatus.Containers;
             player.Weapons = playerStatus.Weapons.Distinct().Select(name =>
                 {
-                    var weapon = CreateWeapon(weaponFactory, name);
+                    var weapon = CreateWeapon(WeaponFactory, name);
                     weapon.Parent = player;
                     return weapon;
                 }).ToList();
@@ -245,7 +247,7 @@ namespace QuestForTheCrown2.Base
 
         public static void CallSaveScreen()
         {
-            if( Parent != null )
+            if (Parent != null)
             {
                 Parent.ChangeState(QuestForTheCrown2.GameState.Saving);
             }

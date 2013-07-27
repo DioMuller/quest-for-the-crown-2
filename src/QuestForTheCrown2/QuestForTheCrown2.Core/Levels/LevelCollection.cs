@@ -32,12 +32,14 @@ namespace QuestForTheCrown2.Levels
         /// <summary>
         /// This world/dungeon levels.
         /// </summary>
-        List<Level> _levels;
+        static List<Level> _levels;
 
         /// <summary>
         /// Stored waypoints: Where the player was when he quit this collection.
         /// </summary>
         public static Dictionary<Entity, List<Waypoint>> StoredWaypoints { get; set; }
+
+        public static IEnumerable<Entity> CurrentPlayers { get { return CurrentLevels.SelectMany(l => l.Players); } }
 
         /// <summary>
         /// Game GUI.
@@ -59,7 +61,7 @@ namespace QuestForTheCrown2.Levels
         /// <summary>
         /// Current Level (May be changed to CurrentLevel array)
         /// </summary>
-        private IEnumerable<Level> CurrentLevels
+        private static IEnumerable<Level> CurrentLevels
         {
             get
             {

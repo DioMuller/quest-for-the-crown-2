@@ -88,9 +88,25 @@ namespace QuestForTheCrown2.Entities.Characters
                 e.Level.AddEntity(p2);
                 beh.OnEnter -= controllerBehavior_OnEnter;
                 var oldHealth = Health.Quantity;
+
+                LevelCollection.CloneWaypoints(this, p2);
+
+                if (Weapons != null)
+                {
+                    foreach (var weapon in Weapons)
+                        p2.AddWeapon(GameStateManager.WeaponFactory[weapon.GetType().Name]());
+                }
+
+                foreach (var ctn in Containers)
+                    p2.Containers[ctn.Key].Quantity = ctn.Value.Quantity / 2;
+
                 Health.Quantity /= 2;
                 p2.Health.Quantity = oldHealth - Health.Quantity;
-                LevelCollection.CloneWaypoints(this, p2);
+                if (Health.Quantity <= 0)
+                    Health.Quantity = 1;
+                if (p2.Health.Quantity <= 0)
+                    p2.Health.Quantity = 1;
+
                 _keyboardBehavior = null;
             }
         }

@@ -42,7 +42,6 @@ namespace QuestForTheCrown2.GUI.GameGUI
 
             for (int i = 0; i < list.Count; i++)
             {
-                //TODO: Change position depending on player.
                 Rectangle bg_rect = new Rectangle(i == 0 ? 0 : clientBounds.Width / 2, 0, 360, 80);
 
                 int maxhealth = list[i].Health.Maximum ?? list[i].Health;
@@ -94,7 +93,7 @@ namespace QuestForTheCrown2.GUI.GameGUI
 
                 #region Draw Weapon
                 difference = original_difference + 130;
-                Rectangle weapon_rect = new Rectangle(difference, 25, 30, 30);
+                Rectangle weapon_rect = new Rectangle(bg_rect.X + difference, bg_rect.Y + 25, 30, 30);
 
                 spritebatch.Draw(_magic, weapon_rect, Color.Black);
                 if (list[i].CurrentWeapon != null)
