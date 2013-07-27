@@ -218,7 +218,7 @@ namespace QuestForTheCrown2.Levels
                     var p1Pos = p1.CenterPosition;
                     var p2Pos = p2.CenterPosition;
                     var dist = p1Pos - p2Pos;
-                    if (dist.X > clientBounds.Width || dist.Y > clientBounds.Height || p1.TransitioningToLevel != 0 || p2.TransitioningToLevel != 0)
+                    if (dist.X > clientBounds.Width - p1.CollisionRect.Width - p2.CollisionRect.Width || dist.Y > clientBounds.Height - p1.CollisionRect.Height - p2.CollisionRect.Height || p1.TransitioningToLevel != 0 || p2.TransitioningToLevel != 0)
                         split = true;
                     else cameraPos = (p2Pos + p1Pos) / 2;
                 }
@@ -228,7 +228,7 @@ namespace QuestForTheCrown2.Levels
             {
                 var oldViewport = graphicsDevice.Viewport;
                 Rectangle? pBounds = null;
-                foreach (var pInfo in CurrentLevels.SelectMany(l => l.Players.Select(p => new { Player = p, Level = l })))
+                foreach (var pInfo in CurrentLevels.SelectMany(l => l.Players.Select(p => new { Player = p, Level = l })).OrderBy(p => p.Player.DisplayName))
                 {
                     if (pBounds == null)
                         pBounds = new Rectangle(0, 0, clientBounds.Width / 2, clientBounds.Height);

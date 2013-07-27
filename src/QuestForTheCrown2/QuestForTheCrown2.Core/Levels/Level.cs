@@ -30,6 +30,7 @@ namespace QuestForTheCrown2.Levels
     public class Level
     {
         #region Attributes
+        private bool _bgmStarted = false;
         private Map _map;
         private List<Entity> _entities;
         private int[] _neighbors;
@@ -98,7 +99,11 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Update(GameTime gameTime)
         {
-            SoundManager.PlayBGM(BGM);
+            if (!_bgmStarted)
+            {
+                SoundManager.PlayBGM(BGM);
+                _bgmStarted = true;
+            }
 
             if (Players.Any(p => p.LevelTransitionPercent != 0))
                 return;
