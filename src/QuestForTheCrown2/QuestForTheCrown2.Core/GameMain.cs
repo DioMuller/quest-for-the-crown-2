@@ -37,7 +37,8 @@ namespace QuestForTheCrown2
         NewGame,
         LoadingGame,
         Saving,
-        HowToPlay
+        HowToPlay,
+        DemoMode
     }
 
     /// <summary>
@@ -163,6 +164,7 @@ namespace QuestForTheCrown2
                     _mainMenu.Update(gameTime);
                     break;
                 case GameState.NewGame:
+                case GameState.DemoMode:
                     if (_overworld == null || _overworld.Parent == null)
                     {
                         _loadingScreen.Update(gameTime);
@@ -176,15 +178,27 @@ namespace QuestForTheCrown2
                         { player, new List<Waypoint>() }
                     };
 
-                    GameStateManager.SelectSaveData(new Base.GameState
+                    if( _currentState == GameState.DemoMode )
                     {
-                        AllowWeapon = new List<string> { "Sword" },
-                        DungeonsComplete = new List<string>(),
-                        Player = GameStateManager.GetPlayerState(player),
-                        StoredWaypoints = LevelCollection.StoredWaypoints[player]
-                    });
-                    //player.AddWeapon(new Sword(), new Bow(), new Boomerang(), new FireWand());
-                    //GameStateManager.SaveData();
+                        GameStateManager.SelectSaveData(new Base.GameState
+                        {
+                            AllowWeapon = new List<string> { "Sword", "Bow", "Boomerang", "FireWand" },
+                            DungeonsComplete = new List<string>(),
+                            Player = GameStateManager.GetPlayerState(player),
+                            StoredWaypoints = LevelCollection.StoredWaypoints[player]
+                        });  
+                        player.AddWeapon(new Sword(), new Bow(), new Boomerang(), new FireWand());
+                    }
+                    else
+                    {
+                        GameStateManager.SelectSaveData(new Base.GameState
+                        {
+                            AllowWeapon = new List<string> { "Sword" },
+                            DungeonsComplete = new List<string>(),
+                            Player = GameStateManager.GetPlayerState(player),
+                            StoredWaypoints = LevelCollection.StoredWaypoints[player]
+                        });
+                    }
 
                     ChangeState(GameState.Playing);
                     break;
@@ -313,7 +327,7 @@ namespace QuestForTheCrown2
             {
                 _loadscreen = new LoadScreen(this);
             }
-            if (state == GameState.NewGame || state == GameState.LoadingGame)
+            if (state == GameState.NewGame || state == GameState.LoadingGame || state == GameState.DemoMode)
             {
                 _overworld = null;
                 System.Threading.ThreadPool.QueueUserWorkItem(LoadContentAsync);
