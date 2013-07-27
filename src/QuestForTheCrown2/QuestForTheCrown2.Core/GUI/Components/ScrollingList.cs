@@ -103,7 +103,7 @@ namespace QuestForTheCrown2.GUI.Components
             }
             else if( _currentStart >= _components.Count )
             {
-                _currentStart = 0;
+                ResetPosition();
                 RecalculateSizes();
             }
         }
@@ -118,7 +118,7 @@ namespace QuestForTheCrown2.GUI.Components
             for (int i = _currentStart; i < (_currentStart + _componentsOnScreen); i++ )
             {
                 float transparency = (i == _currentStart) ? 1.0f - ((float) _offset/ComponentHeight.GetValueOrDefault() ) : 1.0f;
-                if( i < _components.Count ) _components[i].Draw(spriteBatch, transparency);
+                if( i >= 0 && i < _components.Count ) _components[i].Draw(spriteBatch, transparency);
             }
         }
 
@@ -158,7 +158,7 @@ namespace QuestForTheCrown2.GUI.Components
 
                 for (int i = _currentStart; i < (_currentStart + _componentsOnScreen); i++)
                 {
-                    if( i < _components.Count ) _components[i].Position = new Rectangle(_position.X, diff + _position.Y + ((i - _currentStart) * y), _position.Width, y);
+                    if( i >= 0 && i < _components.Count ) _components[i].Position = new Rectangle(_position.X, diff + _position.Y + ((i - _currentStart) * y), _position.Width, y);
                 }
             }
             else
@@ -167,6 +167,12 @@ namespace QuestForTheCrown2.GUI.Components
                 _componentsOnScreen = 0;
                 _currentStart = 0;
             }
+        }
+
+        public void ResetPosition()
+        {
+            RecalculateSizes();
+            _currentStart = -_componentsOnScreen + 1;
         }
         #endregion Methods
     }

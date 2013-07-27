@@ -13,12 +13,6 @@ namespace QuestForTheCrown2.GUI.Screens
     {
         #region Attributes
         /// <summary>
-        /// Current window.
-        /// </summary>
-        private Rectangle _window;
-
-
-        /// <summary>
         /// Screen parent.
         /// </summary>
         private GameMain _parent;
@@ -52,32 +46,29 @@ namespace QuestForTheCrown2.GUI.Screens
         {
             _font = GameContent.LoadContent<SpriteFont>("fonts/DefaultFont");
 
-            _window = Rectangle.Empty;
-
             _parent = parent;
 
             _input = new Input();
 
             _credits = new List<string>();
             _credits.Add("A long time ago, an distant kingdom lived in peace");
-            _credits.Add("thanks to a magic crown. ");
-            _credits.Add("That until, one day, it was stolen");
-            _credits.Add("by an evil wizard.");
+            _credits.Add("thanks to a magic crown. The peace was kept until ");
+            _credits.Add("one day, when a Evil Wizard stole the crown.");
             _credits.Add("The Prince couldn't let the worst happen,");
-            _credits.Add("and saved the day, killing the wizard.");
+            _credits.Add("and saved the day, killing the villain.");
             _credits.Add("");
             _credits.Add("Two hundred years have passed since then.");
             _credits.Add("A group of cultists stole the crown and");
             _credits.Add("captured the king, so they could");
             _credits.Add("get enough power to ressurrect the wizard.");
             _credits.Add("");
-            _credits.Add("Now, all of the kingdom's hopes rest on.");
+            _credits.Add("Now, all of the kingdom's hopes rest on");
             _credits.Add("the shoulders of the king's bodyguard.");
-            _credits.Add("He needs to get the sacred weapons and");
+            _credits.Add("He needs to get the sacred weapons to");
             _credits.Add("destroy the evil cult, saving the king,");
             _credits.Add("the kingdom and the crown.");
             _credits.Add("");
-            _credits.Add("But first... where did he left his sword?");
+            _credits.Add("But first... he would need a sword.");
 
 
             _list = new ScrollingList();
@@ -88,6 +79,9 @@ namespace QuestForTheCrown2.GUI.Screens
             {
                 _list.AddComponent(new Label(st));
             }
+
+            _list.Position = new Rectangle(20, 20, parent.Window.ClientBounds.Width - 40, parent.Window.ClientBounds.Height - 40);
+            _list.ResetPosition();
         }
         #endregion Constructor
 
@@ -118,7 +112,7 @@ namespace QuestForTheCrown2.GUI.Screens
         {
             Rectangle window = _parent.Window.ClientBounds;
 
-            _list.Position = new Rectangle(20, 20, _window.Width - 40, _window.Height - 40);
+            _list.Position = new Rectangle(20, 20, window.Width - 40, window.Height - 40);
             _list.Draw(gameTime, spriteBatch);
         }
         #endregion Methods
