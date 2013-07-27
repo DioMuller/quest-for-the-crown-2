@@ -11,6 +11,17 @@ namespace QuestForTheCrown2.GUI.Screens
 {
     class IntroScreen
     {
+        #region Constants
+        /// <summary>
+        /// Show time.
+        /// </summary>
+        public const int ShowTime = 2000;
+        /// <summary>
+        /// Fade time.
+        /// </summary>
+        public const int FadeTime = 2000;
+        #endregion Constants
+
         #region Attributes
         /// <summary>
         /// Screen parent.
@@ -32,10 +43,15 @@ namespace QuestForTheCrown2.GUI.Screens
         /// </summary>
         private SpriteFont _font;
 
+        private ComponentList _titleList;
+
         /// <summary>
         /// List component.
         /// </summary>
         private ScrollingList _list;
+
+        private int _showningTime;
+        private int _fadingTime;
         #endregion Attributes
 
         #region Constructor
@@ -70,6 +86,9 @@ namespace QuestForTheCrown2.GUI.Screens
             _credits.Add("");
             _credits.Add("But first... he would need a sword.");
 
+            _titleList = new ComponentList();
+            _titleList.AddComponent(new Label("Diogo Muller & João Vitor present..."));
+            _titleList.Position = new Rectangle(20, 20, parent.Window.ClientBounds.Width - 40, parent.Window.ClientBounds.Height - 40);
 
             _list = new ScrollingList();
 
@@ -82,6 +101,9 @@ namespace QuestForTheCrown2.GUI.Screens
 
             _list.Position = new Rectangle(20, 20, parent.Window.ClientBounds.Width - 40, parent.Window.ClientBounds.Height - 40);
             _list.ResetPosition();
+
+            _showningTime = ShowTime;
+            _fadingTime = FadeTime;
         }
         #endregion Constructor
 
@@ -99,7 +121,18 @@ namespace QuestForTheCrown2.GUI.Screens
                 _parent.ChangeState(GameState.MainMenu);
             }
 
-            _list.Update(gameTime);
+            if( _showningTime > 0 )
+            {
+                _showningTime -= gameTime.ElapsedGameTime.Milliseconds;
+            }
+            else if( _fadingTime > 0 )
+            {
+                _fadingTime -= gameTime.ElapsedGameTime.Milliseconds;
+            }
+            else
+            {
+                _list.Update(gameTime);
+            }
         }
 
         /// <summary>
@@ -110,10 +143,18 @@ namespace QuestForTheCrown2.GUI.Screens
         /// <param name="window">Window position.</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Rectangle window = _parent.Window.ClientBounds;
-
-            _list.Position = new Rectangle(20, 20, window.Width - 40, window.Height - 40);
-            _list.Draw(gameTime, spriteBatch);
+            if (_showningTime > 0)
+            {
+                _titleList.Draw(gameTime, spriteBatch);
+            }
+            else if (_fadingTime > 0)
+            {
+                _titleList.Draw(gameTime, spriteBatch, (float)_fadingTime/(float) FadeTime);
+            }
+            else
+            {
+                _list.Draw(gameTime, spriteBatch);
+            }
         }
         #endregion Methods
     }

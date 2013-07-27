@@ -146,14 +146,14 @@ namespace QuestForTheCrown2.GUI.Components
         /// </summary>
         /// <param name="gameTime">The current game time.</param>
         /// <param name="spriteBatch">Sprite batch for drawing.</param>
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, float transparency = 1.0f)
         {
             if( _currentStart != 0 ) spriteBatch.Draw(_arrow, new Rectangle(Position.Center.X, Position.Y + 16, 32, 32), null, Color.White, (float)Math.PI/2, new Vector2(16,16), SpriteEffects.None, 0f);
             if (_currentStart + _componentsOnScreen != _componentNumber) spriteBatch.Draw(_arrow, new Rectangle(Position.Center.X, Position.Y + Position.Height - 32, 32, 32), null, Color.White, (float)(-Math.PI/2), new Vector2(16, 16), SpriteEffects.None, 0f);
 
             for (int i = _currentStart; i < (_currentStart + _componentsOnScreen); i++ )
             {
-                _components[i].Draw(spriteBatch);
+                _components[i].Draw(spriteBatch, transparency);
             }
         }
 
