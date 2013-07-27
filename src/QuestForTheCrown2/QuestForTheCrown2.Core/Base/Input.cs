@@ -113,7 +113,7 @@ namespace QuestForTheCrown2.Base
                         break;
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
-                        nextState = Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.F1);
+                        nextState = Keyboard.GetState((PlayerIndex)Index).IsKeyDown(Keys.Enter);
                         break;
                     default:
                         return false;

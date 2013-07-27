@@ -321,14 +321,37 @@ namespace QuestForTheCrown2.Entities.Base
             }
         }
 
+        public void RemoveBehaviors(Func<EntityUpdateBehavior, bool> predicate)
+        {
+            foreach (var behaviors in Behaviors)
+            {
+                foreach (var remove in behaviors.Value.Where(b => predicate(b)).ToList())
+                    behaviors.Value.Remove(remove);
+            }
+        }
+
+        public bool RemoveBehavior(EntityUpdateBehavior behavior)
+        {
+            if (Behaviors == null || behavior == null)
+                return false;
+
+            foreach (var behaviors in Behaviors)
+            {
+                if (behaviors.Value.Remove(behavior))
+                    return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Finds the behavior of the specified type.
         /// </summary>
         /// <typeparam name="TBehavior"></typeparam>
         /// <returns></returns>
-        public TBehavior GetBehavior<TBehavior>() where TBehavior : EntityUpdateBehavior
+        public TBehavior GetBehavior<TBehavior>(Func<TBehavior, bool> predicate = null) where TBehavior : EntityUpdateBehavior
         {
-            return Behaviors.SelectMany(b => b.Value.OfType<TBehavior>()).FirstOrDefault();
+            return Behaviors.SelectMany(b => b.Value.OfType<TBehavior>()).FirstOrDefault(b => predicate == null || predicate(b));
         }
 
         /// <summary>
@@ -542,7 +565,7 @@ namespace QuestForTheCrown2.Entities.Base
             {
                 var activeBehaviors = new List<EntityUpdateBehavior>();
 
-                foreach (var behaviorGroup in Behaviors)
+                foreach (var behaviorGroup in Behaviors.ToList())
                 {
                     if (behaviorGroup.Key == string.Empty)
                         foreach (var behavior in behaviorGroup.Value.Where(b => b.IsActive(gameTime, level)))
@@ -555,7 +578,7 @@ namespace QuestForTheCrown2.Entities.Base
                     }
                 }
 
-                foreach (var bh in Behaviors.SelectMany(b => b.Value))
+                foreach (var bh in Behaviors.SelectMany(b => b.Value).ToList())
                 {
                     if (activeBehaviors.Contains(bh))
                         bh.Update(gameTime, level);

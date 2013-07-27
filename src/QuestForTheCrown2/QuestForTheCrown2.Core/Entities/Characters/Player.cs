@@ -23,6 +23,11 @@ namespace QuestForTheCrown2.Entities.Characters
         const string spriteSheetPath = @"sprites\Characters\main.png";
         #endregion Constants
 
+        #region Attributes
+        InputBehavior _keyboardBehavior;
+        InputBehavior _controllerBehavior;
+        #endregion
+
         #region Constructor
         /// <summary>
         /// Builds main character with its base spritesheet and animations.
@@ -55,12 +60,48 @@ namespace QuestForTheCrown2.Entities.Characters
 
             GetBehavior<BlinkBehavior>().BlinkDuration = TimeSpan.FromSeconds(1);
 
+            _controllerBehavior = new InputBehavior(InputType.Controller);
+            _keyboardBehavior = new InputBehavior(InputType.Keyboard);
+            _keyboardBehavior.OnEnter += controllerBehavior_OnEnter;
+
             AddBehavior(
-                new InputBehavior(InputType.Controller),
-                new InputBehavior(InputType.Keyboard)
+                _controllerBehavior,
+                _keyboardBehavior
             );
             Arrows = new Container(50);
             Magic = new Container(10);
+        }
+
+        void controllerBehavior_OnEnter(object sender, GameEventArgs e)
+        {
+            var beh = (InputBehavior)sender;
+            //TODO: criar entidade e adicionar este behavior na próxima
+            var p2 = new Player2 { Position = Position + new Vector2(Size.X), CurrentLevel = CurrentLevel };
+
+            if (!e.Level.Map.Collides(p2.CollisionRect) && !e.Level.CollidesWith(p2.CollisionRect, true).Any())
+            {
+                RemoveBehavior(beh);
+                p2.RemoveBehaviors(b => b is InputBehavior);
+                p2.AddBehavior(beh);
+                e.Level.AddEntity(p2);
+                beh.OnEnter -= controllerBehavior_OnEnter;
+                var oldHealth = Health.Quantity;
+                Health.Quantity /= 2;
+                p2.Health.Quantity = oldHealth - Health.Quantity;
+                LevelCollection.CloneWaypoints(this, p2);
+                _keyboardBehavior = null;
+            }
+        }
+
+        public override void Update(GameTime gameTime, Level level)
+        {
+            if (_keyboardBehavior != null && _controllerBehavior.IsConnected)
+            {
+                var beh = GetBehavior<InputBehavior>(b => b.InputType == InputType.Keyboard);
+                if (beh != null)
+                    beh.CheckEnter(gameTime, level);
+            }
+            base.Update(gameTime, level);
         }
         #endregion Constructor
     }
