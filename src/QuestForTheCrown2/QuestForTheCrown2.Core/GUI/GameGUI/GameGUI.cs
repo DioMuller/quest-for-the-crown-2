@@ -33,7 +33,7 @@ namespace QuestForTheCrown2.GUI.GameGUI
             _font = GameContent.LoadContent<SpriteFont>("fonts/DefaultFont");
         }
 
-        public void Draw(SpriteBatch spritebatch, Rectangle rectangle, IEnumerable<Entity> players)
+        public void Draw(SpriteBatch spritebatch, Rectangle rectangle, IEnumerable<Entity> players, Rectangle clientBounds)
         {
             List<Entity> list = players.ToList<Entity>();
             int width = rectangle.X / 4;
@@ -43,7 +43,7 @@ namespace QuestForTheCrown2.GUI.GameGUI
             for (int i = 0; i < list.Count; i++)
             {
                 //TODO: Change position depending on player.
-                Rectangle bg_rect = new Rectangle(0,0, 360, 80);
+                Rectangle bg_rect = new Rectangle(i == 0 ? 0 : clientBounds.Width / 2, 0, 360, 80);
 
                 int maxhealth = list[i].Health.Maximum ?? list[i].Health;
                 int health = list[i].Health;
@@ -55,12 +55,12 @@ namespace QuestForTheCrown2.GUI.GameGUI
                 int difference = original_difference;
 
                 spritebatch.Draw(_shadow, bg_rect, Color.White);
-                spritebatch.DrawString(_font, "Player " + (i + 1), new Vector2(20 + (i * width), 20), Color.White);
+                spritebatch.DrawString(_font, list[i].DisplayName, new Vector2(bg_rect.X + 20 + (i * width), bg_rect.Y + 20), Color.White);
 
                 #region Draw Health
                 while (maxhealth > 0)
                 {
-                    Rectangle rect = new Rectangle(difference, 25, 10, 10);
+                    Rectangle rect = new Rectangle(bg_rect.X + difference, bg_rect.Y + 25, 10, 10);
 
                     if (health >= 4)
                     {
@@ -84,8 +84,8 @@ namespace QuestForTheCrown2.GUI.GameGUI
                 #region Draw Magic
                 difference = original_difference;
 
-                Rectangle rect_full = new Rectangle(difference, 40, 120, 10);
-                Rectangle rect_life = new Rectangle(difference, 40, Convert.ToInt32(120 * ((float)magic / (float)maxmagic)), 10);
+                Rectangle rect_full = new Rectangle(bg_rect.X + difference, bg_rect.Y + 40, 120, 10);
+                Rectangle rect_life = new Rectangle(bg_rect.X + difference, bg_rect.Y + 40, Convert.ToInt32(120 * ((float)magic / (float)maxmagic)), 10);
 
                 spritebatch.Draw(_magic, rect_full, Color.Black);
                 spritebatch.Draw(_magic, rect_life, Color.CornflowerBlue);
@@ -94,14 +94,14 @@ namespace QuestForTheCrown2.GUI.GameGUI
 
                 #region Draw Weapon
                 difference = original_difference + 130;
-                Rectangle weapon_rect = new Rectangle( difference, 25, 30, 30);
+                Rectangle weapon_rect = new Rectangle(difference, 25, 30, 30);
 
                 spritebatch.Draw(_magic, weapon_rect, Color.Black);
-                if( list[i].CurrentWeapon != null )
+                if (list[i].CurrentWeapon != null)
                 {
                     spritebatch.Draw(list[i].CurrentWeapon.CurrentFrame.Texture, weapon_rect, list[i].CurrentWeapon.CurrentFrame.Rectangle, Color.White);
 
-                    if( list[i].CurrentWeapon is Bow )
+                    if (list[i].CurrentWeapon is Bow)
                     {
                         spritebatch.DrawString(_font, list[i].Arrows.Quantity.ToString(), new Vector2(difference + 40, 20), Color.White);
                     }

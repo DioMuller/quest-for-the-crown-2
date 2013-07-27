@@ -680,5 +680,7 @@ namespace QuestForTheCrown2.Entities.Base
                 frame.Rectangle, Color.White, Angle, Origin, 1, SpriteEffects.None, 1);
         }
         #endregion Draw
+
+        public string DisplayName { get; set; }
     }
 }

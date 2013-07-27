@@ -70,6 +70,8 @@ namespace QuestForTheCrown2.Entities.Characters
             );
             Arrows = new Container(50);
             Magic = new Container(10);
+
+            DisplayName = "Player 1";
         }
 
         void controllerBehavior_OnEnter(object sender, GameEventArgs e)
