@@ -49,7 +49,7 @@ namespace QuestForTheCrown2.Levels
         /// <summary>
         /// Title Card.
         /// </summary>
-        TitleCard _card;
+        Dictionary<Entity, TitleCard> _cards;
         #endregion Attributes
 
         #region Properties
@@ -89,7 +89,7 @@ namespace QuestForTheCrown2.Levels
             _levels = new List<Level>();
 
             _gui = new GameGUI();
-            _card = new TitleCard();
+            _cards = new Dictionary<Entity, TitleCard>();
         }
         #endregion Constructor
 
@@ -137,7 +137,10 @@ namespace QuestForTheCrown2.Levels
             Level newLevel = GetLevelByEntity(entity);
             newLevel.AddEntity(entity);
 
-            _card.CurrentTitle = newLevel.Title;
+            if (!_cards.ContainsKey(entity))
+                _cards[entity] = new TitleCard { CurrentTitle = newLevel.Title };
+            else
+                _cards[entity].CurrentTitle = newLevel.Title;
 
             //TODO: Load this from an XML file, maybe?
             entity.Position = new Vector2(newLevel.Map.PixelSize.X / 2 - 20, newLevel.Map.PixelSize.Y - entity.Size.Y - 1);
@@ -256,7 +259,9 @@ namespace QuestForTheCrown2.Levels
                     _gui.Draw(spriteBatch, GUIRect, new[] { pInfo.Player }, clientBounds);
                     #endregion GUI Drawing
 
-                    _card.Draw(gameTime, spriteBatch, pBounds.Value); //Title Card
+                    //Title Card
+                    if (_cards.ContainsKey(pInfo.Player))
+                        _cards[pInfo.Player].Draw(gameTime, spriteBatch, pBounds.Value);
 
                     spriteBatch.End();
                 }
@@ -285,7 +290,9 @@ namespace QuestForTheCrown2.Levels
                 _gui.Draw(spriteBatch, GUIRect, Players, clientBounds);
                 #endregion GUI Drawing
 
-                _card.Draw(gameTime, spriteBatch, clientBounds); //Title Card
+                //Title Card
+                if(_cards.ContainsKey(player))
+                    _cards[player].Draw(gameTime, spriteBatch, clientBounds);
 
                 spriteBatch.End();
             }
@@ -389,7 +396,10 @@ namespace QuestForTheCrown2.Levels
                 newLevel.AddEntity(player);
                 lv.RemoveEntity(player);
 
-                _card.CurrentTitle = newLevel.Title;
+                if (!_cards.ContainsKey(player))
+                    _cards[player] = new TitleCard { CurrentTitle = newLevel.Title };
+                else
+                    _cards[player].CurrentTitle = newLevel.Title;
 
                 player.CurrentLevel = player.TransitioningToLevel;
                 player.TransitioningToLevel = 0;

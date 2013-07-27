@@ -90,7 +90,7 @@ namespace QuestForTheCrown2.GUI.GameGUI
             if( _showTime <= 0 && _fadeTime <= 0 ) return; //Returns here so it won't do the rectangle calculation.
             
             Vector2 size = _font.MeasureString(_currentTitle);
-            Vector2 place = new Vector2(window.Center.X - size.X/2, window.Center.Y - size.Y/2);
+            Vector2 place = new Vector2((window.Center.X - window.Left) - size.X/2, (window.Center.Y - window.Top) - size.Y/2);
 
             if( _showTime > 0 )
             {
