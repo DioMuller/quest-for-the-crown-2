@@ -95,15 +95,13 @@ namespace QuestForTheCrown2.GUI.Components
                 _timeToChange = SlideTime;
                 RecalculateSizes();
             }
-
-            if( _offset >= ComponentHeight )
+            else if( _offset > ComponentHeight )
             {
                 _offset = 0;
                 _currentStart++;
                 RecalculateSizes();
             }
-
-            if( _currentStart >= _components.Count )
+            else if( _currentStart >= _components.Count )
             {
                 _currentStart = 0;
                 RecalculateSizes();
@@ -119,7 +117,8 @@ namespace QuestForTheCrown2.GUI.Components
         {
             for (int i = _currentStart; i < (_currentStart + _componentsOnScreen); i++ )
             {
-                _components[i].Draw(spriteBatch);
+                float transparency = (i == _currentStart) ? 1.0f - ((float) _offset/ComponentHeight.GetValueOrDefault() ) : 1.0f;
+                if( i < _components.Count ) _components[i].Draw(spriteBatch, transparency);
             }
         }
 
@@ -148,18 +147,18 @@ namespace QuestForTheCrown2.GUI.Components
             if (_components.Count > 0)
             {
                 int y = ComponentHeight != null ? ComponentHeight.GetValueOrDefault() : (_position.Height - _position.Y) / _components.Count;
-                int diff = ComponentHeight != null ? 32 : 0;
+                int diff = (ComponentHeight != null ? 32 : 0) - _offset;
 
                 //_selectedOption = 0;
                 _componentNumber = _components.Count;
-                _componentsOnScreen = y != 0 ? Math.Min( ((this.Position.Height - (2*diff))/ y), _componentNumber) : 0;
+                _componentsOnScreen = y != 0 ? Math.Min( ((this.Position.Height - (2*diff))/ y) + 2, _componentNumber) : 0;
                 //_currentStart = 0;
 
 
 
                 for (int i = _currentStart; i < (_currentStart + _componentsOnScreen); i++)
                 {
-                    _components[i].Position = new Rectangle(_position.X, diff + _position.Y + ((i - _currentStart) * y), _position.Width, y);
+                    if( i < _components.Count ) _components[i].Position = new Rectangle(_position.X, diff + _position.Y + ((i - _currentStart) * y), _position.Width, y);
                 }
             }
             else

@@ -51,7 +51,7 @@ namespace QuestForTheCrown2.GUI.Screens
         /// <summary>
         /// List component.
         /// </summary>
-        private ComponentList _list;
+        private ScrollingList _list;
         #endregion Attributes
 
         #region Constructor
@@ -73,13 +73,13 @@ namespace QuestForTheCrown2.GUI.Screens
             _credits = new List<string>();
             _credits.Add("Students:");
             _credits.Add("    Diogo Muller de Miranda");
-            _credits.Add("    Joao Vitor Pietsiaki Moraes");
+            _credits.Add("    João Vitor Pietsiaki Moraes");
             _credits.Add("");
             _credits.Add("Tecnicas de Implementacao de Jogos");
             _credits.Add("Teacher: Fabio Binder");
             _credits.Add("");
             _credits.Add("PROGRAMMING:");
-            _credits.Add("      Joao Vitor Pietsiaki Moraes");
+            _credits.Add("      João Vitor Pietsiaki Moraes");
             _credits.Add("      Diogo Muller de Miranda");
             _credits.Add("");
             _credits.Add("ART:");
@@ -142,10 +142,10 @@ namespace QuestForTheCrown2.GUI.Screens
             _credits.Add("");
             _credits.Add("WEAPON DESIGN:");
             _credits.Add("      Diogo Muller de Miranda");
-            _credits.Add("      Joao Vitor Pietsiaki Moraes");
+            _credits.Add("      João Vitor Pietsiaki Moraes");
             _credits.Add("");
             _credits.Add("ENEMY AND CHARACTER AI:");
-            _credits.Add("      Joao Vitor Pietsiaki Moraes");
+            _credits.Add("      João Vitor Pietsiaki Moraes");
             _credits.Add("");
             _credits.Add("SPECIAL THANKS:");
             _credits.Add("      Enzo Augusto Marchiorato");
@@ -156,13 +156,13 @@ namespace QuestForTheCrown2.GUI.Screens
             _credits.Add("Made using MonoGame.");
             _credits.Add("http://www.monogame.net/");
 
-            _list = new ComponentList();
+            _list = new ScrollingList();
 
             _list.ComponentHeight = 50;
 
             foreach( string st in _credits )
             {
-                _list.AddComponent(new Label(st.Trim()));
+                _list.AddComponent(new Label(st));
             }
         }
         #endregion Constructor

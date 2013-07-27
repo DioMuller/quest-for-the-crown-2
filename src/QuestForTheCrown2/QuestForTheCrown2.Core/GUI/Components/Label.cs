@@ -38,14 +38,14 @@ namespace QuestForTheCrown2.GUI.Components
         /// Draws the Component
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, float transparency = 1.0f)
         {
-            base.Draw(spriteBatch);
+            base.Draw(spriteBatch, transparency);
             Color fontColor = Color.White;
             Vector2 size = Font.MeasureString(Text);
-            Vector2 fontPosition = new Vector2( Position.Center.X - size.X/2 , Position.Center.Y - size.Y/2);
+            Vector2 fontPosition = new Vector2( Position.X , Position.Center.Y - size.Y/2);
 
-            spriteBatch.DrawString(Font, Text, fontPosition, fontColor);
+            spriteBatch.DrawString(Font, Text, fontPosition, fontColor * transparency);
         }
         #endregion Methods
     }

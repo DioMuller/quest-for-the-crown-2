@@ -51,9 +51,15 @@ namespace QuestForTheCrown2.GUI.Screens
 
             _text = "Loading";
 
-            for (int i = 0; i <= pointCount; i++)
+            int i;
+
+            for (i = 0; i <= pointCount; i++)
             {
                 _text += ".";
+            }
+            for( ; i <= 3; i++ )
+            {
+                _text += " ";
             }
         }
 

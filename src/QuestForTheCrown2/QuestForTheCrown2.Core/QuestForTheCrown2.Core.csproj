@@ -129,6 +129,7 @@
     <Compile Include="GUI\GameGUI\GameGUI.cs" />
     <Compile Include="GUI\Components\SelectionBox.cs" />
     <Compile Include="GUI\GameGUI\TitleCard.cs" />
+    <Compile Include="GUI\Screens\IntroScreen.cs" />
     <Compile Include="GUI\Screens\HowToPlay.cs" />
     <Compile Include="GUI\Screens\LoadingScreen.cs" />
     <Compile Include="GUI\Screens\SaveScreen.cs" />

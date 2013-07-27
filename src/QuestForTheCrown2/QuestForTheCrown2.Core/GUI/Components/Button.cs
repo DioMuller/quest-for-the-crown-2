@@ -39,7 +39,7 @@ namespace QuestForTheCrown2.GUI.Components
         /// Draws the Component
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, float transparency = 1.0f)
         {
             base.Draw(spriteBatch);
             Color fontColor = Selected ? Color.Black : Color.White;

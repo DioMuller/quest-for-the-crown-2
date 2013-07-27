@@ -26,6 +26,7 @@ namespace QuestForTheCrown2
     /// </summary>
     public enum GameState
     {
+        IntroScreen,
         MainMenu,
         Playing,
         LoadGame,
@@ -48,6 +49,7 @@ namespace QuestForTheCrown2
         SpriteBatch _spriteBatch;
         GameState _currentState;
 
+        IntroScreen _introScreen;
         TitleScreen _mainMenu;
         CreditsScreen _credits;
         GameOverScreen _gameOver;
@@ -85,7 +87,7 @@ namespace QuestForTheCrown2
             _graphics.PreferredBackBufferWidth = OptionsManager.CurrentOptions.ResolutionWidth;
 #endif
 
-            _currentState = GameState.MainMenu;
+            _currentState = GameState.IntroScreen;
 
             Content.RootDirectory = "Content";
         }
@@ -114,6 +116,7 @@ namespace QuestForTheCrown2
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            _introScreen = new IntroScreen(this);
             _mainMenu = new TitleScreen(this);
             _credits = new CreditsScreen(this);
             _gameOver = new GameOverScreen(this);
@@ -152,6 +155,9 @@ namespace QuestForTheCrown2
         {
             switch (_currentState)
             {
+                case GameState.IntroScreen:
+                    _introScreen.Update(gameTime);
+                    break;
                 case GameState.MainMenu:
                     SoundManager.PlayBGM("Call to Adventure");
                     _mainMenu.Update(gameTime);
@@ -249,6 +255,9 @@ namespace QuestForTheCrown2
 
             switch (_currentState)
             {
+                case GameState.IntroScreen:
+                    _introScreen.Draw(gameTime, _spriteBatch);
+                    break;
                 case GameState.MainMenu:
                     _mainMenu.Draw(gameTime, _spriteBatch);
                     break;
