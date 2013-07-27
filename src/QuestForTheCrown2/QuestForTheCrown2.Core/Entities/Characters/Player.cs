@@ -25,7 +25,7 @@ namespace QuestForTheCrown2.Entities.Characters
 
         #region Attributes
         InputBehavior _keyboardBehavior;
-        InputBehavior _controllerBehavior;
+        InputBehavior _controller1Behavior, _controller2Behavior;
         #endregion
 
         #region Constructor
@@ -60,12 +60,15 @@ namespace QuestForTheCrown2.Entities.Characters
 
             GetBehavior<BlinkBehavior>().BlinkDuration = TimeSpan.FromSeconds(1);
 
-            _controllerBehavior = new InputBehavior(InputType.Controller);
+            _controller1Behavior = new InputBehavior(InputType.Controller, 0);
+            _controller2Behavior = new InputBehavior(InputType.Controller, 1);
+            _controller2Behavior.OnEnter += controllerBehavior_OnEnter;
+
             _keyboardBehavior = new InputBehavior(InputType.Keyboard);
             _keyboardBehavior.OnEnter += controllerBehavior_OnEnter;
 
             AddBehavior(
-                _controllerBehavior,
+                _controller1Behavior,
                 _keyboardBehavior
             );
             Arrows = new Container(50);
@@ -98,7 +101,7 @@ namespace QuestForTheCrown2.Entities.Characters
                 }
 
                 foreach (var ctn in Containers)
-                    p2.Containers[ctn.Key].Quantity = ctn.Value.Quantity / 2;
+                    p2.Containers[ctn.Key].Quantity = ctn.Key == "Magic" ? ctn.Value.Quantity : ctn.Value.Quantity / 2;
 
                 Health.Quantity /= 2;
                 p2.Health.Quantity = oldHealth - Health.Quantity;
@@ -107,13 +110,17 @@ namespace QuestForTheCrown2.Entities.Characters
                 if (p2.Health.Quantity <= 0)
                     p2.Health.Quantity = 1;
 
+                _controller2Behavior = null;
                 _keyboardBehavior = null;
             }
         }
 
         public override void Update(GameTime gameTime, Level level)
         {
-            if (_keyboardBehavior != null && _controllerBehavior.IsConnected)
+            if (_controller2Behavior != null)
+                _controller2Behavior.CheckEnter(gameTime, level);
+
+            if (_keyboardBehavior != null && _controller1Behavior.IsConnected)
             {
                 var beh = GetBehavior<InputBehavior>(b => b.InputType == InputType.Keyboard);
                 if (beh != null)
