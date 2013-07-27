@@ -44,6 +44,12 @@ namespace QuestForTheCrown2.Entities.Weapons
                     Parent = level.CollidesWith(CollisionRect).FirstOrDefault(e => e.Category == "Player");
                     if (Parent != null)
                     {
+                        foreach (var p in LevelCollection.CurrentPlayers)
+                        {
+                            if (p != Parent)
+                                p.AddWeapon(GameStateManager.WeaponFactory[weaponName]());
+                        }
+
                         Parent.AddWeapon(this);
                         level.RemoveEntity(this);
                         OverlapEntities = true;

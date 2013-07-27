@@ -32,12 +32,14 @@ namespace QuestForTheCrown2.Levels
         /// <summary>
         /// This world/dungeon levels.
         /// </summary>
-        List<Level> _levels;
+        static List<Level> _levels;
 
         /// <summary>
         /// Stored waypoints: Where the player was when he quit this collection.
         /// </summary>
         public static Dictionary<Entity, List<Waypoint>> StoredWaypoints { get; set; }
+
+        public static IEnumerable<Entity> CurrentPlayers { get { return CurrentLevels.SelectMany(l => l.Players); } }
 
         /// <summary>
         /// Game GUI.
@@ -59,7 +61,7 @@ namespace QuestForTheCrown2.Levels
         /// <summary>
         /// Current Level (May be changed to CurrentLevel array)
         /// </summary>
-        private IEnumerable<Level> CurrentLevels
+        private static IEnumerable<Level> CurrentLevels
         {
             get
             {
@@ -202,6 +204,9 @@ namespace QuestForTheCrown2.Levels
         public void Draw(GraphicsDevice graphicsDevice, GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds)
         {
             Vector2? cameraPos = null;
+            if (!CurrentLevels.Any())
+                return;
+
             var split = CurrentLevels.Count() > 1;
             if (!split)
             {
@@ -213,7 +218,7 @@ namespace QuestForTheCrown2.Levels
                     var p1Pos = p1.CenterPosition;
                     var p2Pos = p2.CenterPosition;
                     var dist = p1Pos - p2Pos;
-                    if (dist.X > clientBounds.Width || dist.Y > clientBounds.Height || p1.TransitioningToLevel != 0 || p2.TransitioningToLevel != 0)
+                    if (dist.X > clientBounds.Width - p1.CollisionRect.Width - p2.CollisionRect.Width || dist.Y > clientBounds.Height - p1.CollisionRect.Height - p2.CollisionRect.Height || p1.TransitioningToLevel != 0 || p2.TransitioningToLevel != 0)
                         split = true;
                     else cameraPos = (p2Pos + p1Pos) / 2;
                 }
@@ -223,7 +228,7 @@ namespace QuestForTheCrown2.Levels
             {
                 var oldViewport = graphicsDevice.Viewport;
                 Rectangle? pBounds = null;
-                foreach (var pInfo in CurrentLevels.SelectMany(l => l.Players.Select(p => new { Player = p, Level = l })))
+                foreach (var pInfo in CurrentLevels.SelectMany(l => l.Players.Select(p => new { Player = p, Level = l })).OrderBy(p => p.Player.DisplayName))
                 {
                     if (pBounds == null)
                         pBounds = new Rectangle(0, 0, clientBounds.Width / 2, clientBounds.Height);
@@ -248,7 +253,7 @@ namespace QuestForTheCrown2.Levels
                     #region GUI Drawing
                     int guiSize = 100;
                     Rectangle GUIRect = new Rectangle(pBounds.Value.X, pBounds.Value.Y, pBounds.Value.Width, guiSize);
-                    _gui.Draw(spriteBatch, GUIRect, new[] { pInfo.Player });
+                    _gui.Draw(spriteBatch, GUIRect, new[] { pInfo.Player }, clientBounds);
                     #endregion GUI Drawing
 
                     _card.Draw(gameTime, spriteBatch, pBounds.Value); //Title Card
@@ -277,7 +282,7 @@ namespace QuestForTheCrown2.Levels
                 #region GUI Drawing
                 int guiSize = 100;
                 Rectangle GUIRect = new Rectangle(clientBounds.X, clientBounds.Y, clientBounds.Width, guiSize);
-                _gui.Draw(spriteBatch, GUIRect, Players);
+                _gui.Draw(spriteBatch, GUIRect, Players, clientBounds);
                 #endregion GUI Drawing
 
                 _card.Draw(gameTime, spriteBatch, clientBounds); //Title Card
