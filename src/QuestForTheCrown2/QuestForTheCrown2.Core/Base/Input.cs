@@ -49,10 +49,20 @@ namespace QuestForTheCrown2.Base
                 switch (Type)
                 {
                     case InputType.Controller:
-                        var leftStick = GamePad.GetState((PlayerIndex)Index).ThumbSticks.Left;
-                        return new Vector2(
+                        var gpState = GamePad.GetState((PlayerIndex)Index);
+                        var leftStick = gpState.ThumbSticks.Left;
+                        var raw = new Vector2(
                             x: leftStick.X,
                             y: -leftStick.Y);
+                        if (raw.Length() > 0.4)
+                            return raw;
+                        var dPadMovement = new Vector2(
+                            x: (gpState.IsButtonDown(Buttons.DPadLeft) ? -1 : 0) + (gpState.IsButtonDown(Buttons.DPadRight) ? +1 : 0),
+                            y: (gpState.IsButtonDown(Buttons.DPadUp) ? -1 : 0) + (gpState.IsButtonDown(Buttons.DPadDown) ? +1 : 0));
+                        if (dPadMovement.X != 0 && dPadMovement.Y != 0)
+                            dPadMovement.Normalize();
+                        return dPadMovement;
+
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
                         var state = Keyboard.GetState((PlayerIndex)Index);
@@ -245,7 +255,7 @@ namespace QuestForTheCrown2.Base
                 switch (Type)
                 {
                     case InputType.Controller:
-                        nextState = GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.RightShoulder) || GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.DPadRight);
+                        nextState = GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.RightShoulder) || GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.B);
                         break;
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
@@ -279,7 +289,7 @@ namespace QuestForTheCrown2.Base
                 switch (Type)
                 {
                     case InputType.Controller:
-                        nextState = GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.LeftShoulder) || GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.DPadLeft);
+                        nextState = GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.LeftShoulder) || GamePad.GetState((PlayerIndex)Index).IsButtonDown(Buttons.Y);
                         break;
                     case InputType.Keyboard:
                     case InputType.KeyboardAndMouse:
