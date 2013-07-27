@@ -99,7 +99,7 @@ namespace QuestForTheCrown2.Levels
         /// <param name="gameTime">Game time.</param>
         public void Update(GameTime gameTime)
         {
-            if (!_bgmStarted)
+            if (!_bgmStarted || LevelCollection.CurrentPlayers.Count() == 1)
             {
                 SoundManager.PlayBGM(BGM);
                 _bgmStarted = true;
@@ -163,6 +163,9 @@ namespace QuestForTheCrown2.Levels
 
                 existingCategoryList.Add(entity);
             }
+
+            if (entity.Category == "Player")
+                _bgmStarted = false;
         }
 
         /// <summary>

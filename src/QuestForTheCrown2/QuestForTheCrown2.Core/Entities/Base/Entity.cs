@@ -627,7 +627,7 @@ namespace QuestForTheCrown2.Entities.Base
         /// <param name="angle">Projectile angle</param>
         public virtual void Hit(Entity attacker, GameTime gameTime, Level level, Vector2 direction)
         {
-            if (Health != null && !IsBlinking)
+            if (Health != null && !IsBlinking && !IsDead)
             {
                 SoundManager.PlaySound("hit");
                 Health.Quantity--;
