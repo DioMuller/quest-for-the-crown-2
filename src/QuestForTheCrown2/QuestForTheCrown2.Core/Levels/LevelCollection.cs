@@ -202,6 +202,9 @@ namespace QuestForTheCrown2.Levels
         public void Draw(GraphicsDevice graphicsDevice, GameTime gameTime, SpriteBatch spriteBatch, Rectangle clientBounds)
         {
             Vector2? cameraPos = null;
+            if (!CurrentLevels.Any())
+                return;
+
             var split = CurrentLevels.Count() > 1;
             if (!split)
             {
@@ -248,7 +251,7 @@ namespace QuestForTheCrown2.Levels
                     #region GUI Drawing
                     int guiSize = 100;
                     Rectangle GUIRect = new Rectangle(pBounds.Value.X, pBounds.Value.Y, pBounds.Value.Width, guiSize);
-                    _gui.Draw(spriteBatch, GUIRect, new[] { pInfo.Player });
+                    _gui.Draw(spriteBatch, GUIRect, new[] { pInfo.Player }, clientBounds);
                     #endregion GUI Drawing
 
                     _card.Draw(gameTime, spriteBatch, pBounds.Value); //Title Card
@@ -277,7 +280,7 @@ namespace QuestForTheCrown2.Levels
                 #region GUI Drawing
                 int guiSize = 100;
                 Rectangle GUIRect = new Rectangle(clientBounds.X, clientBounds.Y, clientBounds.Width, guiSize);
-                _gui.Draw(spriteBatch, GUIRect, Players);
+                _gui.Draw(spriteBatch, GUIRect, Players, clientBounds);
                 #endregion GUI Drawing
 
                 _card.Draw(gameTime, spriteBatch, clientBounds); //Title Card
