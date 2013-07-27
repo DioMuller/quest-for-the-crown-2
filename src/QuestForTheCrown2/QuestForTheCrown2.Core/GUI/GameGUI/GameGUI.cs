@@ -102,7 +102,7 @@ namespace QuestForTheCrown2.GUI.GameGUI
 
                     if (list[i].CurrentWeapon is Bow)
                     {
-                        spritebatch.DrawString(_font, list[i].Arrows.Quantity.ToString(), new Vector2(difference + 40, 20), Color.White);
+                        spritebatch.DrawString(_font, list[i].Arrows.Quantity.ToString(), new Vector2(bg_rect.X + difference + 40, bg_rect.Y + 20), Color.White);
                     }
                 }
                 #endregion Draw Weapon
