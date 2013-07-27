@@ -1,4 +1,5 @@
 ﻿using QuestForTheCrown2.Entities.Base;
+using QuestForTheCrown2.Levels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +20,16 @@ namespace QuestForTheCrown2.Entities.Objects
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, Levels.Level level)
         {
-            foreach (var ent in level.CollidesWith(CollisionRect).Where(e => !e.IsDead).Distinct())
+            if(level.CollidesWith(CollisionRect).Where(e => e.Category == "Player" && !e.IsDead).Any())
             {
                 if (Parent == null)
                 {
-                    if (ent.Health != null)
+                    foreach (var p in LevelCollection.CurrentPlayers)
                     {
-                        ent.Health.Maximum += PickupCount;
-                        ent.Health.Fill();
-                        level.RemoveEntity(this);
+                        p.Health.Maximum += PickupCount;
+                        p.Health.Fill();
                     }
+                    level.RemoveEntity(this);
                     return;
                 }
             }
