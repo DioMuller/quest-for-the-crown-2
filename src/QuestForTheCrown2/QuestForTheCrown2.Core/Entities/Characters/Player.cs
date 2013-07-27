@@ -26,6 +26,7 @@ namespace QuestForTheCrown2.Entities.Characters
         #region Attributes
         InputBehavior _keyboardBehavior;
         InputBehavior _controller1Behavior, _controller2Behavior;
+        Entity _player2;
         #endregion
 
         #region Constructor
@@ -80,38 +81,55 @@ namespace QuestForTheCrown2.Entities.Characters
         void controllerBehavior_OnEnter(object sender, GameEventArgs e)
         {
             var beh = (InputBehavior)sender;
-            //TODO: criar entidade e adicionar este behavior na próxima
-            var p2 = new Player2 { Position = Position + new Vector2(Size.X), CurrentLevel = CurrentLevel };
 
-            if (!e.Level.Map.Collides(p2.CollisionRect) && !e.Level.CollidesWith(p2.CollisionRect, true).Any())
+            _player2 = new Player2 { Position = Position + new Vector2(Size.X), CurrentLevel = CurrentLevel };
+
+            if (!e.Level.Map.Collides(_player2.CollisionRect) && !e.Level.CollidesWith(_player2.CollisionRect, true).Any())
             {
+                _player2.Health.ValueChanged += Health_ValueChanged;
+
                 RemoveBehavior(beh);
-                p2.RemoveBehaviors(b => b is InputBehavior);
-                p2.AddBehavior(beh);
-                e.Level.AddEntity(p2);
+                _player2.RemoveBehaviors(b => b is InputBehavior);
+                _player2.AddBehavior(beh);
+                e.Level.AddEntity(_player2);
                 beh.OnEnter -= controllerBehavior_OnEnter;
                 var oldHealth = Health.Quantity;
 
-                LevelCollection.CloneWaypoints(this, p2);
+                LevelCollection.CloneWaypoints(this, _player2);
 
                 if (Weapons != null)
                 {
                     foreach (var weapon in Weapons)
-                        p2.AddWeapon(GameStateManager.WeaponFactory[weapon.GetType().Name]());
+                        _player2.AddWeapon(GameStateManager.WeaponFactory[weapon.GetType().Name]());
                 }
 
                 foreach (var ctn in Containers)
-                    p2.Containers[ctn.Key].Quantity = ctn.Key == "Magic" ? ctn.Value.Quantity : ctn.Value.Quantity / 2;
+                    _player2.Containers[ctn.Key].Quantity = ctn.Key == "Magic" ? ctn.Value.Quantity : ctn.Value.Quantity / 2;
 
                 Health.Quantity /= 2;
-                p2.Health.Quantity = oldHealth - Health.Quantity;
+                _player2.Health.Quantity = oldHealth - Health.Quantity;
                 if (Health.Quantity <= 0)
                     Health.Quantity = 1;
-                if (p2.Health.Quantity <= 0)
-                    p2.Health.Quantity = 1;
+                if (_player2.Health.Quantity <= 0)
+                    _player2.Health.Quantity = 1;
 
                 _controller2Behavior = null;
                 _keyboardBehavior = null;
+            }
+        }
+
+        void Health_ValueChanged(object sender, EventArgs e)
+        {
+            if (_player2 != null && _player2.Health <= 0)
+            {
+                foreach (var beh in _player2.Behaviors.SelectMany(b => b.Value.OfType<InputBehavior>()).ToList())
+                {
+                    _player2.RemoveBehavior(beh);
+                    AddBehavior(beh);
+                }
+
+                _player2.Health.ValueChanged -= Health_ValueChanged;
+                _player2 = null;
             }
         }
 
