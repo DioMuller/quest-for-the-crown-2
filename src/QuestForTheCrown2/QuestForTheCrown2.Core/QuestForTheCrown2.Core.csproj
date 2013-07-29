@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>QuestForTheCrown2</RootNamespace>
-    <AssemblyName>QuestForTheCrown2.Core</AssemblyName>
+    <AssemblyName>QuestForTheCrown.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

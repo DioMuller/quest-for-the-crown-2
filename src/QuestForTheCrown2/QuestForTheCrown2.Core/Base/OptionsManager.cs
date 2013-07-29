@@ -43,7 +43,7 @@ namespace QuestForTheCrown2.Base
         {
             ResolutionWidth = 1280;
             ResolutionHeight = 720;
-            Fullscreen = true;
+            Fullscreen = false;
             InvertAim = false;
         }
         #endregion Constructor

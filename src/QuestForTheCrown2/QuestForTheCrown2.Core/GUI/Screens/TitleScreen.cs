@@ -49,9 +49,7 @@ namespace QuestForTheCrown2.GUI.Screens
 
             _list.AddComponent(new Button("New Game", () => _parent.ChangeState(GameState.NewGame)));
             _list.AddComponent(new Button("Load Game", () => _parent.ChangeState(GameState.LoadGame)));
-            #if DEBUG
             _list.AddComponent(new Button("Demo Mode", () => _parent.ChangeState(GameState.DemoMode)));
-            #endif
             _list.AddComponent(new Button("Options", () => _parent.ChangeState(GameState.Options)));
             _list.AddComponent(new Button("How to Play", () => _parent.ChangeState(GameState.HowToPlay)));
             _list.AddComponent(new Button("Credits", () => _parent.ChangeState(GameState.Credits)));
