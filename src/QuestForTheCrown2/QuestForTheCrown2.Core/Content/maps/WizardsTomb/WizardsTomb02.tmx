@@ -85,25 +85,25 @@
  </layer>
  <objectgroup name="Objects" width="60" height="34">
   <object name="Skelleton" type="Enemy" x="897" y="343" width="32" height="32"/>
-  <object name="Skelleton" type="Enemy" x="611" y="515" width="32" height="32"/>
+  <object name="Skelleton" type="Enemy" x="503" y="34" width="32" height="32"/>
   <object name="Skelleton" type="Enemy" x="419" y="423" width="32" height="32"/>
   <object name="Skelleton" type="Enemy" x="41" y="383" width="32" height="32"/>
-  <object name="Skelleton" type="Enemy" x="1479" y="297" width="32" height="32"/>
-  <object name="Skelleton" type="Enemy" x="447" y="735" width="32" height="32"/>
+  <object name="Skelleton" type="Enemy" x="1494" y="287" width="32" height="32"/>
+  <object name="Skelleton" type="Enemy" x="174" y="846" width="32" height="32"/>
   <object name="Skelleton" type="Enemy" x="840" y="699" width="32" height="32"/>
   <object name="Skelleton" type="Enemy" x="333" y="228" width="32" height="32"/>
   <object name="Skelleton" type="Enemy" x="491" y="233" width="32" height="32"/>
-  <object name="Skelleton" type="Enemy" x="941" y="208" width="32" height="32"/>
+  <object name="Skelleton" type="Enemy" x="945" y="153" width="32" height="32"/>
   <object name="Skelleton" type="Enemy" x="367" y="1012" width="32" height="32"/>
-  <object name="Skelleton" type="Enemy" x="1171" y="1012" width="32" height="32"/>
-  <object name="Skelleton" type="Enemy" x="1839" y="1011" width="32" height="32"/>
-  <object name="Skelleton" type="Enemy" x="1671" y="565" width="32" height="32"/>
+  <object name="Skelleton" type="Enemy" x="1249" y="993" width="32" height="32"/>
+  <object name="Skelleton" type="Enemy" x="1840" y="956" width="32" height="32"/>
+  <object name="Skelleton" type="Enemy" x="1655" y="544" width="32" height="32"/>
   <object name="Skelleton" type="Enemy" x="1123" y="565" width="32" height="32"/>
-  <object name="Skelleton" type="Enemy" x="1113" y="55" width="32" height="32"/>
+  <object name="Skelleton" type="Enemy" x="1112" y="32" width="32" height="32"/>
   <object name="Skelleton" type="Enemy" x="1839" y="56" width="32" height="32"/>
   <object name="Skelleton" type="Enemy" x="1133" y="389" width="32" height="32"/>
   <object name="Skelleton" type="Enemy" x="647" y="68" width="32" height="32"/>
-  <object name="Skelleton" type="Enemy" x="1475" y="765" width="32" height="32"/>
+  <object name="Skelleton" type="Enemy" x="1707" y="705" width="32" height="32"/>
   <object name="Skelleton" type="Enemy" x="1088" y="673" width="32" height="32"/>
  </objectgroup>
 </map>
