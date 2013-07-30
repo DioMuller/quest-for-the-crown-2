@@ -9,6 +9,12 @@ using System.Xml.Linq;
 
 namespace QuestForTheCrown2.Base
 {
+    public enum Language
+    {
+        Portuguese = 0,
+        English = 1
+    }
+
     public class Options
     {
         #region Graphical Options
@@ -35,6 +41,10 @@ namespace QuestForTheCrown2.Base
         public bool InvertAim { get; set; }
         #endregion Controller Options
 
+        #region Language Options
+        public Language Language { get; set; }
+        #endregion Language Options
+
         #region Constructor
         /// <summary>
         /// Creates an Options instance with the default settings.
@@ -45,6 +55,7 @@ namespace QuestForTheCrown2.Base
             ResolutionHeight = 720;
             Fullscreen = false;
             InvertAim = false;
+
         }
         #endregion Constructor
     }
@@ -122,6 +133,7 @@ namespace QuestForTheCrown2.Base
                 content.AppendLine("<ResolutionHeight>" + CurrentOptions.ResolutionHeight.ToString() + "</ResolutionHeight>");
                 content.AppendLine("<Fullscreen>" + CurrentOptions.Fullscreen.ToString() + "</Fullscreen>");
                 content.AppendLine("<InvertAim>" + CurrentOptions.InvertAim.ToString() + "</InvertAim>");
+                content.AppendLine("<Language>" + ((int) CurrentOptions.Language).ToString() + "</Language>");
 
                 content.AppendLine("</options>");
 
