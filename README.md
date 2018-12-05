@@ -21,6 +21,7 @@ Since this project is a personal project created for education pruposes, no exte
 The contents of this repository are covered under the [MIT License](LICENSE).
 
 ART:
+
       Tilesets by David Gervais, licensed under Creative Commons 3.0
       Website: http://pousse.rapiere.free.fr/tome/
 
@@ -56,6 +57,7 @@ ART:
       http://kootation.com/grayman-sprites-rpg-maker-vx-community.html
 
 MUSIC:
+
       All music by Kevin MacLeod
       http://incompetech.com/
 
@@ -72,5 +74,6 @@ MUSIC:
       Brittle Rille
 
 SOUND EFFECTS:
+
       Sword and Bow by Qat from http://www.freesound.org
       All other sounds by Diogo Muller de Miranda.
